@@ -29,42 +29,42 @@ namespace XMLToDataClass.Data
 		/// <summary>
 		///   Represents a 64-bit integer.
 		/// </summary>
-		Int64 = 1,
+		Long = 1,
 
 		/// <summary>
 		///   Represents a 64-bit unsigned integer.
 		/// </summary>
-		UInt64 = 2,
+		ULong = 2,
 
 		/// <summary>
 		///   Represents a 64-bit unsigned integer.
 		/// </summary>
-		Int32 = 3,
+		Int = 3,
 
 		/// <summary>
 		///   Represents a 32-bit unsigned integer.
 		/// </summary>
-		UInt32 = 4,
+		UInt = 4,
 
 		/// <summary>
 		///   Represents a 16-bit integer.
 		/// </summary>
-		Int16 = 5,
+		Short = 5,
 
 		/// <summary>
 		///   Represents a 16-bit unsigned integer.
 		/// </summary>
-		UInt16 = 6,
+		UShort = 6,
 
 		/// <summary>
 		///   Represents a 8-bit integer.
 		/// </summary>
-		Int8 = 7,
+		SByte = 7,
 
 		/// <summary>
 		///   Represents a 8-bit unsigned integer.
 		/// </summary>
-		UInt8 = 8,
+		Byte = 8,
 
 		/// <summary>
 		///   Represents a 32-bit floating point value.
@@ -85,5 +85,10 @@ namespace XMLToDataClass.Data
 		///   Represents a boolean value type.
 		/// </summary>
 		Boolean = 12,
+
+		/// <summary>
+		///  Represents an enumerated type.
+		/// </summary>
+		//Enum = 13,
 	}
 }

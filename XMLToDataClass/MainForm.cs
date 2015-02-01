@@ -34,6 +34,13 @@ namespace XMLToDataClass
 		{
 			InitializeComponent();
 
+			namespaceTextBox.Text = Properties.Settings.Default.Namespace;
+
+			if (Properties.Settings.Default.OutputFolder.Length != 0)
+				codeTextBox.Text = Properties.Settings.Default.OutputFolder;
+			else
+				codeTextBox.Text = Environment.CurrentDirectory;
+
 			listView.Rows.Clear();
 			mainDataGridView.Rows.Clear();
 			foreach (int val in Enum.GetValues(typeof(DataType)))
@@ -41,6 +48,27 @@ namespace XMLToDataClass
 				string type = Enum.GetName(typeof(DataType), val);
 				DataTypeColumn.Items.Add(type);
 				textDataComboBox.Items.Add(type);
+			}
+			mainDataGridView.EditingControlShowing += mainDataGridView_EditingControlShowing;
+		}
+
+		void mainDataGridView_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+		{
+			ComboBox combo = e.Control as ComboBox;
+			if(combo != null)
+			{
+				combo.SelectedIndexChanged -= new EventHandler(DataTypeComboBox_SelectedIndexChanged);
+				combo.SelectedIndexChanged += new EventHandler(DataTypeComboBox_SelectedIndexChanged);
+			}
+		}
+
+		private void DataTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			ComboBox cb = (ComboBox)sender;
+			foreach (DataGridViewRow row in mainDataGridView.SelectedRows)
+			{
+				AttributeInfo aInfo = row.Tag as AttributeInfo;
+				aInfo.AttributeType = (DataType)Enum.Parse(typeof(DataType), cb.Text);
 			}
 		}
 
@@ -59,6 +87,7 @@ namespace XMLToDataClass
 		private void processButton_Click(object sender, EventArgs e)
 		{
 			string codePath = codeTextBox.Text;
+			string nameSpace = namespaceTextBox.Text;
 
 			if(codePath.Length == 0)
 			{
@@ -77,7 +106,19 @@ namespace XMLToDataClass
 				return;
 			}
 
-			CodeGen.GenerateCodeClasses(mInfo, codePath);
+			if (nameSpace.Length == 0)
+			{
+				MessageBox.Show("The Namespace cannot be empty", "Error Processing XML", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return;
+			}
+
+			CodeGen.GenerateCodeClasses(mInfo, codePath, nameSpace);
+
+			Properties.Settings.Default.Namespace = namespaceTextBox.Text;
+			Properties.Settings.Default.OutputFolder = codeTextBox.Text;
+			Properties.Settings.Default.Save();
+
+			MessageBox.Show("Code files were generated successfully", "Processing Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
 
 		private void UpdateList()

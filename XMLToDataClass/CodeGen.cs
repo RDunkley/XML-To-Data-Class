@@ -36,12 +36,16 @@ namespace XMLToDataClass
 		/// <exception cref="ArgumentNullException"><i>lookup</i> or <i>codeOutputFolder</i> is a null reference.</exception>
 		/// <exception cref="ArgumentException"><i>codeOutputFolder</i> is a non-existing folder or invalid folder path.</exception>
 		/// <remarks>All code files with the same name in <i>codeOutputFolder</i> as the newly generated classes will be overwritten.</remarks>
-		public static void GenerateCodeClasses(XMLInfo lookup, string codeOutputFolder)
+		public static void GenerateCodeClasses(XMLInfo lookup, string codeOutputFolder, string nameSpace)
 		{
 			if (lookup == null)
 				throw new ArgumentNullException("lookup");
 			if (codeOutputFolder == null)
 				throw new ArgumentNullException("codeOutputFolder");
+			if (nameSpace == null)
+				throw new ArgumentNullException("nameSpace");
+			if (nameSpace.Length == 0)
+				throw new ArgumentException("nameSpace cannot be an empty string");
 
 			try
 			{
@@ -57,13 +61,13 @@ namespace XMLToDataClass
 
 			// Create all the data classes.
 			foreach (ElementInfo el in lookup.AllElements)
-				DataClassCodeGen.GenerateDataClass(el, codeOutputFolder);
+				DataClassCodeGen.GenerateDataClass(el, codeOutputFolder, nameSpace);
 
 			// Create the main importer class.
-			ImporterCodeGen.GenerateImporterClass(lookup, codeOutputFolder);
+			ImporterCodeGen.GenerateImporterClass(lookup, codeOutputFolder, nameSpace);
 
 			// Create the main exporter class.
-			ExporterCodeGen.GenerateExporterClass(lookup, codeOutputFolder);
+			ExporterCodeGen.GenerateExporterClass(lookup, codeOutputFolder, nameSpace);
 		}
 
 		/// <summary>

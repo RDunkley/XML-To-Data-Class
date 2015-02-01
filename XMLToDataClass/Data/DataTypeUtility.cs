@@ -43,23 +43,23 @@ namespace XMLToDataClass.Data
 					return "double";
 				case DataType.Float:
 					return "float";
-				case DataType.Int16:
+				case DataType.Short:
 					return "short";
-				case DataType.Int32:
+				case DataType.Int:
 					return "int";
-				case DataType.Int64:
+				case DataType.Long:
 					return "long";
-				case DataType.Int8:
+				case DataType.SByte:
 					return "sbyte";
 				case DataType.String:
 					return "string";
-				case DataType.UInt16:
+				case DataType.UShort:
 					return "ushort";
-				case DataType.UInt32:
+				case DataType.UInt:
 					return "uint";
-				case DataType.UInt64:
+				case DataType.ULong:
 					return "ulong";
-				case DataType.UInt8:
+				case DataType.Byte:
 					return "byte";
 				default:
 					throw new InvalidOperationException("An DataType was used that was not recognized.");
@@ -78,14 +78,14 @@ namespace XMLToDataClass.Data
 				case DataType.Boolean:
 				case DataType.Double:
 				case DataType.Float:
-				case DataType.Int16:
-				case DataType.Int32:
-				case DataType.Int64:
-				case DataType.Int8:
-				case DataType.UInt16:
-				case DataType.UInt32:
-				case DataType.UInt64:
-				case DataType.UInt8:
+				case DataType.Short:
+				case DataType.Int:
+				case DataType.Long:
+				case DataType.SByte:
+				case DataType.UShort:
+				case DataType.UInt:
+				case DataType.ULong:
+				case DataType.Byte:
 				case DataType.DateTime:
 					return true;
 			}
@@ -101,10 +101,10 @@ namespace XMLToDataClass.Data
 		{
 			switch (type)
 			{
-				case DataType.UInt8:
-				case DataType.UInt16:
-				case DataType.UInt32:
-				case DataType.UInt64:
+				case DataType.Byte:
+				case DataType.UShort:
+				case DataType.UInt:
+				case DataType.ULong:
 					return true;
 				default:
 					return false;
@@ -137,37 +137,37 @@ namespace XMLToDataClass.Data
 			{
 			}
 
-			// Determine if it is an Int8.
-			if (ParseInteger(value, DataType.Int8))
-				return DataType.Int8;
+			// Determine if it is an SByte.
+			if (ParseInteger(value, DataType.SByte))
+				return DataType.SByte;
 
-			// Determine if it is an UInt8.
-			if (ParseInteger(value, DataType.UInt8))
-				return DataType.UInt8;
+			// Determine if it is an Byte.
+			if (ParseInteger(value, DataType.Byte))
+				return DataType.Byte;
 
-			// Determine if it is an Int16.
-			if (ParseInteger(value, DataType.Int16))
-				return DataType.Int16;
+			// Determine if it is an Short.
+			if (ParseInteger(value, DataType.Short))
+				return DataType.Short;
 
-			// Determine if it is an UInt16.
-			if (ParseInteger(value, DataType.UInt16))
-				return DataType.UInt16;
+			// Determine if it is an UShort.
+			if (ParseInteger(value, DataType.UShort))
+				return DataType.UShort;
 
-			// Determine if it is an Int32.
-			if (ParseInteger(value, DataType.Int32))
-				return DataType.Int32;
+			// Determine if it is an Int.
+			if (ParseInteger(value, DataType.Int))
+				return DataType.Int;
 
-			// Determine if it is an UInt32.
-			if (ParseInteger(value, DataType.UInt32))
-				return DataType.UInt32;
+			// Determine if it is an UInt.
+			if (ParseInteger(value, DataType.UInt))
+				return DataType.UInt;
 
-			// Determine if it is an Int64.
-			if (ParseInteger(value, DataType.Int64))
-				return DataType.Int64;
+			// Determine if it is an Long.
+			if (ParseInteger(value, DataType.Long))
+				return DataType.Long;
 
-			// Determine if it is an UInt64.
-			if (ParseInteger(value, DataType.UInt64))
-				return DataType.UInt64;
+			// Determine if it is an ULong.
+			if (ParseInteger(value, DataType.ULong))
+				return DataType.ULong;
 
 			// Determine if it is a floating type.
 			try
@@ -209,28 +209,28 @@ namespace XMLToDataClass.Data
 		{
 			switch (intType)
 			{
-				case DataType.UInt8:
+				case DataType.Byte:
 					byte byteValue;
 					return byte.TryParse(numberString, style, null, out byteValue);
-				case DataType.Int8:
+				case DataType.SByte:
 					sbyte sbyteValue;
 					return sbyte.TryParse(numberString, style, null, out sbyteValue);
-				case DataType.UInt16:
+				case DataType.UShort:
 					ushort ushortValue;
 					return ushort.TryParse(numberString, style, null, out ushortValue);
-				case DataType.Int16:
+				case DataType.Short:
 					short shortValue;
 					return short.TryParse(numberString, style, null, out shortValue);
-				case DataType.UInt32:
+				case DataType.UInt:
 					uint uintValue;
 					return uint.TryParse(numberString, style, null, out uintValue);
-				case DataType.Int32:
+				case DataType.Int:
 					int intValue;
 					return int.TryParse(numberString, style, null, out intValue);
-				case DataType.UInt64:
+				case DataType.ULong:
 					ulong ulongValue;
 					return ulong.TryParse(numberString, style, null, out ulongValue);
-				case DataType.Int64:
+				case DataType.Long:
 					long longValue;
 					return long.TryParse(numberString, style, null, out longValue);
 				default:
@@ -247,17 +247,17 @@ namespace XMLToDataClass.Data
 		{
 			switch (intType)
 			{
-				case DataType.UInt8:
-				case DataType.Int8:
+				case DataType.Byte:
+				case DataType.SByte:
 					return 8;
-				case DataType.UInt16:
-				case DataType.Int16:
+				case DataType.UShort:
+				case DataType.Short:
 					return 16;
-				case DataType.UInt32:
-				case DataType.Int32:
+				case DataType.UInt:
+				case DataType.Int:
 					return 32;
-				case DataType.UInt64:
-				case DataType.Int64:
+				case DataType.ULong:
+				case DataType.Long:
 					return 64;
 				default:
 					return 0;

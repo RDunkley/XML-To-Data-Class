@@ -49,57 +49,58 @@ namespace XMLToDataClass
 			this.processButton = new System.Windows.Forms.Button();
 			this.mainTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
 			this.mainSplitContainer = new System.Windows.Forms.SplitContainer();
+			this.elementGroupBox = new System.Windows.Forms.GroupBox();
 			this.listView = new System.Windows.Forms.DataGridView();
 			this.NameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.ClassName = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.dataTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-			this.mainDataGridView = new System.Windows.Forms.DataGridView();
 			this.attributeGroupBox = new System.Windows.Forms.GroupBox();
-			this.CDATAGroupBox = new System.Windows.Forms.GroupBox();
-			this.CDATACheckBox = new System.Windows.Forms.CheckBox();
-			this.optionFlowPanel = new System.Windows.Forms.FlowLayoutPanel();
-			this.textCheckBox = new System.Windows.Forms.CheckBox();
-			this.CDATAOptionalCheckBox = new System.Windows.Forms.CheckBox();
-			this.textGroupBox = new System.Windows.Forms.GroupBox();
-			this.textFlowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
-			this.textOptionalCheckBox = new System.Windows.Forms.CheckBox();
-			this.label1 = new System.Windows.Forms.Label();
-			this.textDataComboBox = new System.Windows.Forms.ComboBox();
-			this.elementGroupBox = new System.Windows.Forms.GroupBox();
+			this.mainDataGridView = new System.Windows.Forms.DataGridView();
 			this.AttributeNameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.PropertyNameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.DataTypeColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
 			this.OptionalColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 			this.emptyColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.CDATAGroupBox = new System.Windows.Forms.GroupBox();
+			this.CDATAOptionalCheckBox = new System.Windows.Forms.CheckBox();
+			this.optionFlowPanel = new System.Windows.Forms.FlowLayoutPanel();
+			this.CDATACheckBox = new System.Windows.Forms.CheckBox();
+			this.textCheckBox = new System.Windows.Forms.CheckBox();
+			this.textGroupBox = new System.Windows.Forms.GroupBox();
+			this.textFlowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
+			this.textOptionalCheckBox = new System.Windows.Forms.CheckBox();
+			this.label1 = new System.Windows.Forms.Label();
+			this.textDataComboBox = new System.Windows.Forms.ComboBox();
+			this.label3 = new System.Windows.Forms.Label();
+			this.namespaceTextBox = new System.Windows.Forms.TextBox();
 			this.mainTableLayoutPanel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.mainSplitContainer)).BeginInit();
 			this.mainSplitContainer.Panel1.SuspendLayout();
 			this.mainSplitContainer.Panel2.SuspendLayout();
 			this.mainSplitContainer.SuspendLayout();
+			this.elementGroupBox.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.listView)).BeginInit();
 			this.dataTableLayoutPanel.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.mainDataGridView)).BeginInit();
 			this.attributeGroupBox.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.mainDataGridView)).BeginInit();
 			this.CDATAGroupBox.SuspendLayout();
 			this.optionFlowPanel.SuspendLayout();
 			this.textGroupBox.SuspendLayout();
 			this.textFlowLayoutPanel.SuspendLayout();
-			this.elementGroupBox.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// codeTextBox
 			// 
 			this.codeTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.codeTextBox.Location = new System.Drawing.Point(84, 3);
+			this.codeTextBox.Location = new System.Drawing.Point(84, 32);
 			this.codeTextBox.Name = "codeTextBox";
 			this.codeTextBox.Size = new System.Drawing.Size(415, 20);
 			this.codeTextBox.TabIndex = 2;
-			this.codeTextBox.Text = "D:\\Cloudstation\\VSProjects\\TotalEmu\\Example\\Example\\Data";
 			// 
 			// codeBrowseButton
 			// 
 			this.codeBrowseButton.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.codeBrowseButton.Location = new System.Drawing.Point(505, 3);
+			this.codeBrowseButton.Location = new System.Drawing.Point(505, 32);
 			this.codeBrowseButton.Name = "codeBrowseButton";
 			this.codeBrowseButton.Size = new System.Drawing.Size(75, 23);
 			this.codeBrowseButton.TabIndex = 3;
@@ -111,11 +112,11 @@ namespace XMLToDataClass
 			// 
 			this.label2.AutoSize = true;
 			this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label2.Location = new System.Drawing.Point(3, 0);
+			this.label2.Location = new System.Drawing.Point(3, 29);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(75, 29);
 			this.label2.TabIndex = 5;
-			this.label2.Text = "Code Folder:";
+			this.label2.Text = "Output Folder:";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// processButton
@@ -135,19 +136,21 @@ namespace XMLToDataClass
 			this.mainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 81F));
 			this.mainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.mainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 81F));
-			this.mainTableLayoutPanel.Controls.Add(this.label2, 0, 0);
-			this.mainTableLayoutPanel.Controls.Add(this.processButton, 0, 2);
-			this.mainTableLayoutPanel.Controls.Add(this.codeBrowseButton, 2, 0);
-			this.mainTableLayoutPanel.Controls.Add(this.codeTextBox, 1, 0);
-			this.mainTableLayoutPanel.Controls.Add(this.mainSplitContainer, 0, 1);
+			this.mainTableLayoutPanel.Controls.Add(this.label2, 0, 1);
+			this.mainTableLayoutPanel.Controls.Add(this.processButton, 0, 3);
+			this.mainTableLayoutPanel.Controls.Add(this.codeBrowseButton, 2, 1);
+			this.mainTableLayoutPanel.Controls.Add(this.codeTextBox, 1, 1);
+			this.mainTableLayoutPanel.Controls.Add(this.mainSplitContainer, 0, 2);
+			this.mainTableLayoutPanel.Controls.Add(this.label3, 0, 0);
+			this.mainTableLayoutPanel.Controls.Add(this.namespaceTextBox, 1, 0);
 			this.mainTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.mainTableLayoutPanel.Location = new System.Drawing.Point(0, 0);
 			this.mainTableLayoutPanel.Name = "mainTableLayoutPanel";
-			this.mainTableLayoutPanel.RowCount = 3;
+			this.mainTableLayoutPanel.RowCount = 4;
+			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
-			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.mainTableLayoutPanel.Size = new System.Drawing.Size(583, 467);
 			this.mainTableLayoutPanel.TabIndex = 7;
 			// 
@@ -155,7 +158,7 @@ namespace XMLToDataClass
 			// 
 			this.mainTableLayoutPanel.SetColumnSpan(this.mainSplitContainer, 3);
 			this.mainSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.mainSplitContainer.Location = new System.Drawing.Point(3, 32);
+			this.mainSplitContainer.Location = new System.Drawing.Point(3, 61);
 			this.mainSplitContainer.Name = "mainSplitContainer";
 			// 
 			// mainSplitContainer.Panel1
@@ -165,9 +168,20 @@ namespace XMLToDataClass
 			// mainSplitContainer.Panel2
 			// 
 			this.mainSplitContainer.Panel2.Controls.Add(this.dataTableLayoutPanel);
-			this.mainSplitContainer.Size = new System.Drawing.Size(577, 403);
+			this.mainSplitContainer.Size = new System.Drawing.Size(577, 374);
 			this.mainSplitContainer.SplitterDistance = 191;
 			this.mainSplitContainer.TabIndex = 7;
+			// 
+			// elementGroupBox
+			// 
+			this.elementGroupBox.Controls.Add(this.listView);
+			this.elementGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.elementGroupBox.Location = new System.Drawing.Point(0, 0);
+			this.elementGroupBox.Name = "elementGroupBox";
+			this.elementGroupBox.Size = new System.Drawing.Size(191, 374);
+			this.elementGroupBox.TabIndex = 0;
+			this.elementGroupBox.TabStop = false;
+			this.elementGroupBox.Text = "Unique XML Elements";
 			// 
 			// listView
 			// 
@@ -186,7 +200,7 @@ namespace XMLToDataClass
 			this.listView.Name = "listView";
 			this.listView.RowHeadersVisible = false;
 			this.listView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.listView.Size = new System.Drawing.Size(185, 384);
+			this.listView.Size = new System.Drawing.Size(185, 355);
 			this.listView.TabIndex = 2;
 			this.listView.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.listView_CellValueChanged);
 			this.listView.SelectionChanged += new System.EventHandler(this.listView_SelectionChanged);
@@ -223,8 +237,19 @@ namespace XMLToDataClass
 			this.dataTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.dataTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
 			this.dataTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-			this.dataTableLayoutPanel.Size = new System.Drawing.Size(382, 403);
+			this.dataTableLayoutPanel.Size = new System.Drawing.Size(382, 374);
 			this.dataTableLayoutPanel.TabIndex = 1;
+			// 
+			// attributeGroupBox
+			// 
+			this.attributeGroupBox.Controls.Add(this.mainDataGridView);
+			this.attributeGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.attributeGroupBox.Location = new System.Drawing.Point(3, 32);
+			this.attributeGroupBox.Name = "attributeGroupBox";
+			this.attributeGroupBox.Size = new System.Drawing.Size(376, 239);
+			this.attributeGroupBox.TabIndex = 2;
+			this.attributeGroupBox.TabStop = false;
+			this.attributeGroupBox.Text = "Attributes";
 			// 
 			// mainDataGridView
 			// 
@@ -246,62 +271,60 @@ namespace XMLToDataClass
 			this.mainDataGridView.Name = "mainDataGridView";
 			this.mainDataGridView.RowHeadersVisible = false;
 			this.mainDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.mainDataGridView.Size = new System.Drawing.Size(370, 249);
+			this.mainDataGridView.Size = new System.Drawing.Size(370, 220);
 			this.mainDataGridView.TabIndex = 0;
 			// 
-			// attributeGroupBox
+			// AttributeNameColumn
 			// 
-			this.attributeGroupBox.Controls.Add(this.mainDataGridView);
-			this.attributeGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.attributeGroupBox.Location = new System.Drawing.Point(3, 32);
-			this.attributeGroupBox.Name = "attributeGroupBox";
-			this.attributeGroupBox.Size = new System.Drawing.Size(376, 268);
-			this.attributeGroupBox.TabIndex = 2;
-			this.attributeGroupBox.TabStop = false;
-			this.attributeGroupBox.Text = "Attributes";
+			this.AttributeNameColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+			this.AttributeNameColumn.HeaderText = "Name";
+			this.AttributeNameColumn.Name = "AttributeNameColumn";
+			this.AttributeNameColumn.ReadOnly = true;
+			this.AttributeNameColumn.ToolTipText = "Name of the XML Attribute or CDATA if it represents a child CDATA element, or Tex" +
+    "t if it represents text inside the XML element.";
+			// 
+			// PropertyNameColumn
+			// 
+			this.PropertyNameColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+			this.PropertyNameColumn.HeaderText = "Property Name";
+			this.PropertyNameColumn.Name = "PropertyNameColumn";
+			this.PropertyNameColumn.ToolTipText = "Name of the property that will be created to store the data.";
+			// 
+			// DataTypeColumn
+			// 
+			this.DataTypeColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+			this.DataTypeColumn.HeaderText = "Data Type";
+			this.DataTypeColumn.Name = "DataTypeColumn";
+			this.DataTypeColumn.ToolTipText = "Type of data that the attribute can be.";
+			this.DataTypeColumn.Width = 63;
+			// 
+			// OptionalColumn
+			// 
+			this.OptionalColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+			this.OptionalColumn.HeaderText = "Is Optional";
+			this.OptionalColumn.Name = "OptionalColumn";
+			this.OptionalColumn.ToolTipText = "Uncheck if the data component must be specified in each element";
+			this.OptionalColumn.Width = 57;
+			// 
+			// emptyColumn
+			// 
+			this.emptyColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+			this.emptyColumn.HeaderText = "Can Be Empty";
+			this.emptyColumn.Name = "emptyColumn";
+			this.emptyColumn.ToolTipText = "If the Data Type is a string then this specifies whether the string can be empty " +
+    "or not";
+			this.emptyColumn.Width = 72;
 			// 
 			// CDATAGroupBox
 			// 
 			this.CDATAGroupBox.Controls.Add(this.CDATAOptionalCheckBox);
 			this.CDATAGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.CDATAGroupBox.Location = new System.Drawing.Point(3, 306);
+			this.CDATAGroupBox.Location = new System.Drawing.Point(3, 277);
 			this.CDATAGroupBox.Name = "CDATAGroupBox";
 			this.CDATAGroupBox.Size = new System.Drawing.Size(376, 44);
 			this.CDATAGroupBox.TabIndex = 3;
 			this.CDATAGroupBox.TabStop = false;
 			this.CDATAGroupBox.Text = "CDATA";
-			// 
-			// CDATACheckBox
-			// 
-			this.CDATACheckBox.AutoSize = true;
-			this.CDATACheckBox.Location = new System.Drawing.Point(3, 3);
-			this.CDATACheckBox.Name = "CDATACheckBox";
-			this.CDATACheckBox.Size = new System.Drawing.Size(110, 17);
-			this.CDATACheckBox.TabIndex = 4;
-			this.CDATACheckBox.Text = "Has CDATA Child";
-			this.CDATACheckBox.UseVisualStyleBackColor = true;
-			this.CDATACheckBox.CheckedChanged += new System.EventHandler(this.CDATACheckBox_CheckedChanged);
-			// 
-			// optionFlowPanel
-			// 
-			this.optionFlowPanel.Controls.Add(this.CDATACheckBox);
-			this.optionFlowPanel.Controls.Add(this.textCheckBox);
-			this.optionFlowPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.optionFlowPanel.Location = new System.Drawing.Point(3, 3);
-			this.optionFlowPanel.Name = "optionFlowPanel";
-			this.optionFlowPanel.Size = new System.Drawing.Size(376, 23);
-			this.optionFlowPanel.TabIndex = 4;
-			// 
-			// textCheckBox
-			// 
-			this.textCheckBox.AutoSize = true;
-			this.textCheckBox.Location = new System.Drawing.Point(119, 3);
-			this.textCheckBox.Name = "textCheckBox";
-			this.textCheckBox.Size = new System.Drawing.Size(95, 17);
-			this.textCheckBox.TabIndex = 5;
-			this.textCheckBox.Text = "Has Text Child";
-			this.textCheckBox.UseVisualStyleBackColor = true;
-			this.textCheckBox.CheckedChanged += new System.EventHandler(this.textCheckBox_CheckedChanged);
 			// 
 			// CDATAOptionalCheckBox
 			// 
@@ -314,11 +337,43 @@ namespace XMLToDataClass
 			this.CDATAOptionalCheckBox.UseVisualStyleBackColor = true;
 			this.CDATAOptionalCheckBox.CheckedChanged += new System.EventHandler(this.CDATAOptionalCheckBox_CheckedChanged);
 			// 
+			// optionFlowPanel
+			// 
+			this.optionFlowPanel.Controls.Add(this.CDATACheckBox);
+			this.optionFlowPanel.Controls.Add(this.textCheckBox);
+			this.optionFlowPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.optionFlowPanel.Location = new System.Drawing.Point(3, 3);
+			this.optionFlowPanel.Name = "optionFlowPanel";
+			this.optionFlowPanel.Size = new System.Drawing.Size(376, 23);
+			this.optionFlowPanel.TabIndex = 4;
+			// 
+			// CDATACheckBox
+			// 
+			this.CDATACheckBox.AutoSize = true;
+			this.CDATACheckBox.Location = new System.Drawing.Point(3, 3);
+			this.CDATACheckBox.Name = "CDATACheckBox";
+			this.CDATACheckBox.Size = new System.Drawing.Size(110, 17);
+			this.CDATACheckBox.TabIndex = 4;
+			this.CDATACheckBox.Text = "Has CDATA Child";
+			this.CDATACheckBox.UseVisualStyleBackColor = true;
+			this.CDATACheckBox.CheckedChanged += new System.EventHandler(this.CDATACheckBox_CheckedChanged);
+			// 
+			// textCheckBox
+			// 
+			this.textCheckBox.AutoSize = true;
+			this.textCheckBox.Location = new System.Drawing.Point(119, 3);
+			this.textCheckBox.Name = "textCheckBox";
+			this.textCheckBox.Size = new System.Drawing.Size(95, 17);
+			this.textCheckBox.TabIndex = 5;
+			this.textCheckBox.Text = "Has Text Child";
+			this.textCheckBox.UseVisualStyleBackColor = true;
+			this.textCheckBox.CheckedChanged += new System.EventHandler(this.textCheckBox_CheckedChanged);
+			// 
 			// textGroupBox
 			// 
 			this.textGroupBox.Controls.Add(this.textFlowLayoutPanel);
 			this.textGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.textGroupBox.Location = new System.Drawing.Point(3, 356);
+			this.textGroupBox.Location = new System.Drawing.Point(3, 327);
 			this.textGroupBox.Name = "textGroupBox";
 			this.textGroupBox.Size = new System.Drawing.Size(376, 44);
 			this.textGroupBox.TabIndex = 5;
@@ -368,57 +423,26 @@ namespace XMLToDataClass
 			this.textDataComboBox.TabIndex = 2;
 			this.textDataComboBox.SelectedIndexChanged += new System.EventHandler(this.textDataComboBox_SelectedIndexChanged);
 			// 
-			// elementGroupBox
+			// label3
 			// 
-			this.elementGroupBox.Controls.Add(this.listView);
-			this.elementGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.elementGroupBox.Location = new System.Drawing.Point(0, 0);
-			this.elementGroupBox.Name = "elementGroupBox";
-			this.elementGroupBox.Size = new System.Drawing.Size(191, 403);
-			this.elementGroupBox.TabIndex = 0;
-			this.elementGroupBox.TabStop = false;
-			this.elementGroupBox.Text = "Unique XML Elements";
+			this.label3.AutoSize = true;
+			this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.label3.Location = new System.Drawing.Point(3, 0);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(75, 29);
+			this.label3.TabIndex = 8;
+			this.label3.Text = "Namespace:";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// AttributeNameColumn
+			// namespaceTextBox
 			// 
-			this.AttributeNameColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-			this.AttributeNameColumn.HeaderText = "Name";
-			this.AttributeNameColumn.Name = "AttributeNameColumn";
-			this.AttributeNameColumn.ReadOnly = true;
-			this.AttributeNameColumn.ToolTipText = "Name of the XML Attribute or CDATA if it represents a child CDATA element, or Tex" +
-    "t if it represents text inside the XML element.";
-			// 
-			// PropertyNameColumn
-			// 
-			this.PropertyNameColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-			this.PropertyNameColumn.HeaderText = "Property Name";
-			this.PropertyNameColumn.Name = "PropertyNameColumn";
-			this.PropertyNameColumn.ToolTipText = "Name of the property that will be created to store the data.";
-			// 
-			// DataTypeColumn
-			// 
-			this.DataTypeColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-			this.DataTypeColumn.HeaderText = "Data Type";
-			this.DataTypeColumn.Name = "DataTypeColumn";
-			this.DataTypeColumn.ToolTipText = "Type of data that the attribute can be.";
-			this.DataTypeColumn.Width = 63;
-			// 
-			// OptionalColumn
-			// 
-			this.OptionalColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-			this.OptionalColumn.HeaderText = "Is Optional";
-			this.OptionalColumn.Name = "OptionalColumn";
-			this.OptionalColumn.ToolTipText = "Uncheck if the data component must be specified in each element";
-			this.OptionalColumn.Width = 63;
-			// 
-			// emptyColumn
-			// 
-			this.emptyColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-			this.emptyColumn.HeaderText = "Can Be Empty";
-			this.emptyColumn.Name = "emptyColumn";
-			this.emptyColumn.ToolTipText = "If the Data Type is a string then this specifies whether the string can be empty " +
-    "or not";
-			this.emptyColumn.Width = 72;
+			this.namespaceTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.namespaceTextBox.Location = new System.Drawing.Point(84, 3);
+			this.namespaceTextBox.Name = "namespaceTextBox";
+			this.namespaceTextBox.Size = new System.Drawing.Size(415, 20);
+			this.namespaceTextBox.TabIndex = 9;
+			this.namespaceTextBox.Text = "XMLToDataClass";
+			this.namespaceTextBox.WordWrap = false;
 			// 
 			// MainForm
 			// 
@@ -437,10 +461,11 @@ namespace XMLToDataClass
 			this.mainSplitContainer.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.mainSplitContainer)).EndInit();
 			this.mainSplitContainer.ResumeLayout(false);
+			this.elementGroupBox.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.listView)).EndInit();
 			this.dataTableLayoutPanel.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.mainDataGridView)).EndInit();
 			this.attributeGroupBox.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.mainDataGridView)).EndInit();
 			this.CDATAGroupBox.ResumeLayout(false);
 			this.CDATAGroupBox.PerformLayout();
 			this.optionFlowPanel.ResumeLayout(false);
@@ -448,7 +473,6 @@ namespace XMLToDataClass
 			this.textGroupBox.ResumeLayout(false);
 			this.textFlowLayoutPanel.ResumeLayout(false);
 			this.textFlowLayoutPanel.PerformLayout();
-			this.elementGroupBox.ResumeLayout(false);
 			this.ResumeLayout(false);
 
         }
@@ -483,6 +507,8 @@ namespace XMLToDataClass
 		private System.Windows.Forms.DataGridViewComboBoxColumn DataTypeColumn;
 		private System.Windows.Forms.DataGridViewCheckBoxColumn OptionalColumn;
 		private System.Windows.Forms.DataGridViewCheckBoxColumn emptyColumn;
+		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.TextBox namespaceTextBox;
     }
 }
 

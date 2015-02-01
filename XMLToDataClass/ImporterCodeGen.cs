@@ -507,16 +507,24 @@ namespace XMLToDataClass
 		/// </summary>
 		/// <param name="lookup"><see cref="XMLInfo"/> containing lookup information on the XML nodes.</param>
 		/// <param name="codeOutputFolder">Path to the folder that will contain the generated code file.</param>
+		/// <param name="nameSpace">Namespace that the class should belong to.</param>
 		/// <remarks>If the class file already exists it will be overwritten.</remarks>
 		/// <exception cref="ArgumentNullException">One of the input parameters is a null reference.</exception>
 		/// <exception cref="ArgumentException"><i>codeOutputFolder</i> is not valid.</exception>
-		public static void GenerateImporterClass(XMLInfo lookup, string codeOutputFolder)
+		/// <exception cref="ArgumentException"><i>nameSpace</i> is an empty string.</exception>
+		public static void GenerateImporterClass(XMLInfo lookup, string codeOutputFolder, string nameSpace)
 		{
 			if (lookup == null)
 				throw new ArgumentNullException("lookup");
 
 			if (codeOutputFolder == null)
 				throw new ArgumentNullException("codeOutputFolder");
+
+			if (nameSpace == null)
+				throw new ArgumentNullException("nameSpace");
+			if (nameSpace.Length == 0)
+				throw new ArgumentException("nameSpace cannot be an empty string");
+
 			try
 			{
 				codeOutputFolder = Path.GetFullPath(codeOutputFolder);
@@ -540,7 +548,7 @@ namespace XMLToDataClass
 				wr.WriteLine("using System.Security;");
 				wr.WriteLine("using System.Xml;");
 				wr.WriteLine();
-				wr.WriteLine("namespace XMLToDataClass");
+				wr.WriteLine(string.Format("namespace {0}", nameSpace));
 				wr.WriteLine("{");
 				string summary = "Imports an <see cref=\"XmlDocument\" into the corresponding data classes.";
 				string ws = CodeGenHelper.CreateWhiteSpace(1);
@@ -582,8 +590,8 @@ namespace XMLToDataClass
 		/// <exception cref="InvalidOperationException">The <i>type</i> provided is not a recognized integer type.</exception>
 		private static string GenerateIntegerParsingMethod(DataType type)
 		{
-			if (type != DataType.Int16 && type != DataType.Int32 && type != DataType.Int64 && type != DataType.Int8 &&
-				type != DataType.UInt16 && type != DataType.UInt32 && type != DataType.UInt64 && type != DataType.UInt8)
+			if (type != DataType.Short && type != DataType.Int && type != DataType.Long && type != DataType.SByte &&
+				type != DataType.UShort && type != DataType.UInt && type != DataType.ULong && type != DataType.Byte)
 			{
 				throw new InvalidOperationException(string.Format("An attempt was made to generate an integer parsing method with a non-integer type ({0}).", Enum.GetName(typeof(DataType), type)));
 			}
@@ -677,14 +685,14 @@ namespace XMLToDataClass
 				case DataType.Double:
 				case DataType.Float:
 					return GenerateFloatParsingMethod(type);
-				case DataType.Int16:
-				case DataType.Int32:
-				case DataType.Int64:
-				case DataType.Int8:
-				case DataType.UInt16:
-				case DataType.UInt32:
-				case DataType.UInt64:
-				case DataType.UInt8:
+				case DataType.Short:
+				case DataType.Int:
+				case DataType.Long:
+				case DataType.SByte:
+				case DataType.UShort:
+				case DataType.UInt:
+				case DataType.ULong:
+				case DataType.Byte:
 					return GenerateIntegerParsingMethod(type);
 				default:
 					return string.Empty;
