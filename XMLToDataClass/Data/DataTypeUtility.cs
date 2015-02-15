@@ -30,6 +30,8 @@ namespace XMLToDataClass.Data
 		/// </summary>
 		/// <param name="type"><see cref="DataType"/> to get the type of.</param>
 		/// <returns>String representation of the C# type.</returns>
+		/// <exception cref="ArgumentNullException">The <i>enumName</i> is null when <i>type</i> is <see cref="DataType.Enum"/>.</exception>
+		/// <exception cref="ArgumentException">The <i>enumName</i> is an empty string when <i>type</i> is <see cref="DataType.Enum"/>.</exception>
 		/// <exception cref="InvalidOperationException">The <i>type</i> was not recognized.</exception>
 		public static string GetDataTypeString(DataType type)
 		{
@@ -364,6 +366,32 @@ namespace XMLToDataClass.Data
 				else
 					return null;
 			}
+		}
+
+		public static bool IsIdentifierNameValid(string name)
+		{
+			if (name == null)
+				return false;
+			if (name.Length == 0)
+				return false;
+
+			// Check the first letter.
+			UnicodeCategory cat = char.GetUnicodeCategory(name[0]);
+			if(cat != UnicodeCategory.UppercaseLetter && cat != UnicodeCategory.LowercaseLetter && cat != UnicodeCategory.TitlecaseLetter
+				&& cat != UnicodeCategory.ModifierLetter && cat != UnicodeCategory.OtherLetter)
+				return false;
+
+			// Check the remaining letters.
+			for(int i = 1; i < name.Length; i++)
+			{
+				cat = char.GetUnicodeCategory(name, i);
+				if (cat != UnicodeCategory.UppercaseLetter && cat != UnicodeCategory.LowercaseLetter && cat != UnicodeCategory.TitlecaseLetter
+					&& cat != UnicodeCategory.ModifierLetter && cat != UnicodeCategory.OtherLetter && cat != UnicodeCategory.LetterNumber
+					&& cat != UnicodeCategory.NonSpacingMark && cat != UnicodeCategory.DecimalDigitNumber && cat != UnicodeCategory.SpacingCombiningMark
+					&& cat != UnicodeCategory.ConnectorPunctuation && cat != UnicodeCategory.Format)
+					return false;
+			}
+			return true;
 		}
 
 		#endregion Methods

@@ -85,10 +85,5 @@ namespace XMLToDataClass.Data
 		///   Represents a boolean value type.
 		/// </summary>
 		Boolean = 12,
-
-		/// <summary>
-		///  Represents an enumerated type.
-		/// </summary>
-		//Enum = 13,
 	}
 }

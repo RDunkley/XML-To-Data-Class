@@ -56,7 +56,7 @@ namespace XMLToDataClass.Data
 		/// <summary>
 		///   Gets the data class name associated with the XML node.
 		/// </summary>
-		public string ClassName { get; private set; }
+		public string ClassName { get; set; }
 
 		/// <summary>
 		///   True if at least one XML node has a child CDATA node, false otherwise.
@@ -77,6 +77,11 @@ namespace XMLToDataClass.Data
 		///   <see cref="DataType"/> that represents the information in the child Text nodes.
 		/// </summary>
 		public DataType TextDataType { get; set; }
+
+		/// <summary>
+		///   Contains an array of the strings that represent the text values found in the XML file.
+		/// </summary>
+		public string[] TextValueList { get; set; }
 
 		/// <summary>
 		///   False if all the XML nodes contain a child Text node, true if some do not.
@@ -179,14 +184,16 @@ namespace XMLToDataClass.Data
 		/// <param name="children">Child <see cref="ElementInfo"/> objects.</param>
 		/// <param name="textIsOptional">True if the Text child XML node is optional, false otherwise.</param>
 		/// <param name="textDataType"><see cref="DataType"/> of the Text.</param>
+		/// <param name="textValues">Values of the text found in the element. Can be empty.</param>
 		/// <exception cref="ArgumentNullException"><i>name</i>, <i>attributes</i>, or <i>children</i> is a null reference.</exception>
 		/// <exception cref="ArgumentException"><i>name</i> is an empty string or is entirely made up of whitespace.</exception>
-		public ElementInfo(string name, AttributeInfo[] attributes, ElementInfo[] children, bool textIsOptional, DataType textDataType)
+		public ElementInfo(string name, AttributeInfo[] attributes, ElementInfo[] children, bool textIsOptional, DataType textDataType, string[] textValues)
 			: this(name, attributes, children)
 		{
 			HasText = true;
 			TextIsOptional = textIsOptional;
 			TextDataType = textDataType;
+			TextValueList = textValues;
 
 			// Verify that none of the attribute names match the Text property name.
 			for (int i = 0; i < attributes.Length; i++)
@@ -206,14 +213,16 @@ namespace XMLToDataClass.Data
 		/// <param name="optionalCDATA">True if the CDATA child XML node is optional, false otherwise.</param>
 		/// <param name="textIsOptional">True if the Text child XML node is optional, false otherwise.</param>
 		/// <param name="textDataType"><see cref="DataType"/> of the Text.</param>
+		/// <param name="textValues">Values of the text found in the element. Can be empty.</param>
 		/// <exception cref="ArgumentNullException"><i>name</i>, <i>attributes</i>, or <i>children</i> is a null reference.</exception>
 		/// <exception cref="ArgumentException"><i>name</i> is an empty string or is entirely made up of whitespace.</exception>
-		public ElementInfo(string name, AttributeInfo[] attributes, ElementInfo[] children, bool optionalCDATA, bool textIsOptional, DataType textDataType)
+		public ElementInfo(string name, AttributeInfo[] attributes, ElementInfo[] children, bool optionalCDATA, bool textIsOptional, DataType textDataType, string[] textValues)
 			: this(name, attributes, children, optionalCDATA)
 		{
 			HasText = true;
 			TextIsOptional = textIsOptional;
 			TextDataType = textDataType;
+			TextValueList = textValues;
 
 			// Verify that none of the attribute names match the Text property name.
 			for (int i = 0; i < attributes.Length; i++)

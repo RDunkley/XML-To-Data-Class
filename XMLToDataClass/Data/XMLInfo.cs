@@ -45,8 +45,6 @@ namespace XMLToDataClass.Data
 				throw new ArgumentNullException("doc");
 
 			// Verify that all the nodes are lower case.
-			//VerifyNodeNamesAreLowerCase(doc);
-
 			Dictionary<string, XmlNode[]> xmlNodesByName = ParseAllXmlNodesFromXmlNodeName(doc);
 			Dictionary<string, ElementInfo> xmlElements = ParseElements(xmlNodesByName);
 			AddChildElements(xmlNodesByName, xmlElements);
@@ -140,6 +138,14 @@ namespace XMLToDataClass.Data
 					newAttrib.AttributeType = DetermineAttributeType(attribNames[i], nodesByName[name]);
 					newAttrib.IsOptional = IsAttributeOptional(attribNames[i], nodesByName[name]);
 					newAttrib.CanBeEmpty = CanAttributeBeEmpty(attribNames[i], nodesByName[name]);
+
+					if (newAttrib.AttributeType == DataType.String)
+					{
+						newAttrib.EnumValueList = FindAllValues(attribNames[i], nodesByName[name]);
+						newAttrib.EnumNameList = GetAllValueNames(newAttrib.EnumValueList);
+						newAttrib.EnumTypeName = GenerateEnumTypeName(name, attribNames[i]);
+					}
+
 					attribs[i] = newAttrib;
 				}
 
@@ -152,24 +158,61 @@ namespace XMLToDataClass.Data
 				DataType type;
 				bool textFound = ParseNodeText(nodesByName[name], out textOptional, out type);
 
+				string[] textValues = FindAllValues(nodesByName[name]);
+
 				// Create an element object without the child Element objects.
 				if(CDATAfound)
 				{
 					if(textFound)
-						lookup.Add(name, new ElementInfo(name, attribs, new ElementInfo[0], CDATAoptional, textOptional, type));
+						lookup.Add(name, new ElementInfo(name, attribs, new ElementInfo[0], CDATAoptional, textOptional, type, textValues));
 					else
 						lookup.Add(name, new ElementInfo(name, attribs, new ElementInfo[0], CDATAoptional));
 				}
 				else
 				{
 					if(textFound)
-						lookup.Add(name, new ElementInfo(name, attribs, new ElementInfo[0], textOptional, type));
+						lookup.Add(name, new ElementInfo(name, attribs, new ElementInfo[0], textOptional, type, textValues));
 					else
 						lookup.Add(name, new ElementInfo(name, attribs, new ElementInfo[0]));
 				}
 			}
 
 			return lookup;
+		}
+
+		/// <summary>
+		///   Generates the enumerated type name from the element name and attribute name.
+		/// </summary>
+		/// <param name="elementName">Name of the parent element node.</param>
+		/// <param name="attributeName">Name of the attribute.</param>
+		/// <returns>String representing the name.</returns>
+		private static string GenerateEnumTypeName(string elementName, string attributeName)
+		{
+			return AttributeInfo.GeneratePropertyName(string.Format("{0}_{1}", elementName, attributeName));
+		}
+
+		/// <summary>
+		///   Generates the enumerated type name from the element name.
+		/// </summary>
+		/// <param name="elementName">Name of the element node.</param>
+		/// <returns>String representing the name.</returns>
+		private static string GenerateEnumTypeName(string elementName)
+		{
+			return string.Format("{0}Type", AttributeInfo.GeneratePropertyName(elementName));
+			;
+		}
+
+		/// <summary>
+		///   Generates names from the values.
+		/// </summary>
+		/// <param name="values">Array of values to generate names for.</param>
+		/// <returns>Array of names associated with the values.</returns>
+		private static string[] GetAllValueNames(string[] values)
+		{
+			string[] names = new string[values.Length];
+			for (int i = 0; i < values.Length; i++)
+				names[i] = AttributeInfo.GeneratePropertyName(values[i]);
+			return names;
 		}
 
 		/// <summary>
@@ -263,6 +306,42 @@ namespace XMLToDataClass.Data
 
 			// If all the attributes are empty or null then assume it is a string.
 			return DataType.String;
+		}
+
+		/// <summary>
+		///   Finds all the values associated with a specific attribute.
+		/// </summary>
+		/// <param name="attribName">Name of the attribute.</param>
+		/// <param name="nodes">Array of <see cref="XmlNode"/>s to check for values.</param>
+		/// <returns>Array of all found values. Can be empty.</returns>
+		private static string[] FindAllValues(string attribName, XmlNode[] nodes)
+		{
+			List<string> valueList = new List<string>();
+			foreach (XmlNode node in nodes)
+			{
+				XmlAttribute attrib = node.Attributes[attribName];
+				if (attrib != null && attrib.Value.Length != 0 && !valueList.Contains(attrib.Value.ToLower()))
+					valueList.Add(attrib.Value.ToLower());
+			}
+
+			return valueList.ToArray();
+		}
+
+		private static string[] FindAllValues(XmlNode[] nodes)
+		{
+			List<string> valueList = new List<string>();
+			foreach (XmlNode node in nodes)
+			{
+				if (node.HasChildNodes)
+				{
+					foreach (XmlNode child in node.ChildNodes)
+					{
+						if (child.NodeType == XmlNodeType.Text && child.InnerText.Length != 0 && !valueList.Contains(child.InnerText))
+							valueList.Add(child.InnerText);
+					}
+				}
+			}
+			return valueList.ToArray();
 		}
 
 		/// <summary>
@@ -368,7 +447,7 @@ namespace XMLToDataClass.Data
 		}
 
 		/// <summary>
-		///   Parses the <i>nodes</i> and determines if a Text child elements exist.
+		///   Parses the <i>nodes</i> and determines if Text child elements exist.
 		/// </summary>
 		/// <param name="nodes">Array of <see cref="XmlNode"/>s to be parsed.</param>
 		/// <param name="isOptional">True if the Text was in some, but not in others. Only valid if method returns true.</param>

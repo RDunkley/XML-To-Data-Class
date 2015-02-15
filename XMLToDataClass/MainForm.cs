@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using XMLToDataClass.Data;
+using XMLToDataClass.View;
 
 namespace XMLToDataClass
 {
@@ -34,6 +37,7 @@ namespace XMLToDataClass
 		{
 			InitializeComponent();
 
+			xmlFilePathLabel.Text = "";
 			namespaceTextBox.Text = Properties.Settings.Default.Namespace;
 
 			if (Properties.Settings.Default.OutputFolder.Length != 0)
@@ -41,35 +45,13 @@ namespace XMLToDataClass
 			else
 				codeTextBox.Text = Environment.CurrentDirectory;
 
-			listView.Rows.Clear();
-			mainDataGridView.Rows.Clear();
-			foreach (int val in Enum.GetValues(typeof(DataType)))
-			{
-				string type = Enum.GetName(typeof(DataType), val);
-				DataTypeColumn.Items.Add(type);
-				textDataComboBox.Items.Add(type);
-			}
-			mainDataGridView.EditingControlShowing += mainDataGridView_EditingControlShowing;
+			mainTreeView.AfterSelect += mainTreeView_AfterSelect;
+			UpdateTreeView();
 		}
 
-		void mainDataGridView_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+		void mainTreeView_AfterSelect(object sender, TreeViewEventArgs e)
 		{
-			ComboBox combo = e.Control as ComboBox;
-			if(combo != null)
-			{
-				combo.SelectedIndexChanged -= new EventHandler(DataTypeComboBox_SelectedIndexChanged);
-				combo.SelectedIndexChanged += new EventHandler(DataTypeComboBox_SelectedIndexChanged);
-			}
-		}
-
-		private void DataTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			ComboBox cb = (ComboBox)sender;
-			foreach (DataGridViewRow row in mainDataGridView.SelectedRows)
-			{
-				AttributeInfo aInfo = row.Tag as AttributeInfo;
-				aInfo.AttributeType = (DataType)Enum.Parse(typeof(DataType), cb.Text);
-			}
+			UpdateDetailView();
 		}
 
 		private void codeBrowseButton_Click(object sender, EventArgs e)
@@ -121,47 +103,60 @@ namespace XMLToDataClass
 			MessageBox.Show("Code files were generated successfully", "Processing Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
 
-		private void UpdateList()
+		private void UpdateGUIAccess(bool enable)
 		{
-			listView.Rows.Clear();
-			foreach (ElementInfo info in mInfo.AllElements)
-			{
-				int index = listView.Rows.Add(info.Name, info.ClassName);
-				listView.Rows[index].Tag = info;
-			}
-			UpdateElementInfo();
+			mainSplitContainer.Enabled = enable;
+			processButton.Enabled = enable;
 		}
 
-		private void UpdateElementInfo()
+		private void UpdateTreeView()
 		{
-			mainDataGridView.Rows.Clear();
-			if(listView.SelectedRows.Count > 0 && listView.SelectedRows[0].Tag is ElementInfo)
-			{
-				ElementInfo info = listView.SelectedRows[0].Tag as ElementInfo;
+			mainTreeView.Nodes.Clear();
+			UpdateGUIAccess(false);
 
-				// Add the elements.
-				foreach(AttributeInfo aInfo in info.Attributes)
+			if (mInfo != null)
+			{
+				foreach (ElementInfo info in mInfo.AllElements)
 				{
-					int index = mainDataGridView.Rows.Add(aInfo.Name, aInfo.PropertyName, Enum.GetName(typeof(DataType), aInfo.AttributeType), aInfo.IsOptional, aInfo.CanBeEmpty);
-					mainDataGridView.Rows[index].Tag = aInfo;
+					int index = mainTreeView.Nodes.Add(new TreeNode(info.Name));
+					mainTreeView.Nodes[index].Tag = info;
+
+					// Add the attributes.
+					foreach (AttributeInfo aInfo in info.Attributes)
+					{
+						int aIndex = mainTreeView.Nodes[index].Nodes.Add(new TreeNode(aInfo.Name));
+						mainTreeView.Nodes[index].Nodes[aIndex].Tag = aInfo;
+					}
 				}
 
-				// Add CDATA if found.
-				CDATACheckBox.Checked = info.HasCDATA;
-				CDATAGroupBox.Enabled = info.HasCDATA;
-				CDATAOptionalCheckBox.Checked = info.CDATAIsOptional;
+				UpdateDetailView();
+				UpdateGUIAccess(true);
+			}
+		}
 
-				// Add Text if found.
-				textCheckBox.Checked = info.HasText;
-				textGroupBox.Enabled = info.HasText;
-				textOptionalCheckBox.Checked = info.TextIsOptional;
-				textDataComboBox.SelectedIndex = (int)info.TextDataType;
+		private void UpdateDetailView()
+		{
+			mainSplitContainer.Panel2.Controls.Clear();
+			if(mainTreeView.SelectedNode != null)
+			{
+				if(mainTreeView.SelectedNode.Tag is ElementInfo)
+				{
+					ElementInfoPanel panel = new ElementInfoPanel(mainTreeView.SelectedNode.Tag as ElementInfo, mInfo);
+					mainSplitContainer.Panel2.Controls.Add(panel);
+					panel.Dock = DockStyle.Fill;
+				}
+				else if(mainTreeView.SelectedNode.Tag is AttributeInfo)
+				{
+					AttributeInfoPanel panel = new AttributeInfoPanel(mainTreeView.SelectedNode.Tag as AttributeInfo);
+					mainSplitContainer.Panel2.Controls.Add(panel);
+					panel.Dock = DockStyle.Fill;
+				}
 			}
 		}
 
 		#endregion Methods
 
-		private void MainForm_Load(object sender, EventArgs e)
+		private void loadButton_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog fileDialog = new OpenFileDialog();
 			fileDialog.CheckFileExists = true;
@@ -174,6 +169,9 @@ namespace XMLToDataClass
 			if (fileDialog.ShowDialog() != DialogResult.OK)
 				return;
 
+			UpdateGUIAccess(false);
+			xmlFilePathLabel.Text = "";
+
 			try
 			{
 				mInfo = CodeGen.ParseXML(fileDialog.FileName);
@@ -183,54 +181,14 @@ namespace XMLToDataClass
 				MessageBox.Show(error.Message, "Error Parsing XML File", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				Application.Exit();
 			}
-
-			UpdateList();
-		}
-
-		private void listView_SelectionChanged(object sender, EventArgs e)
-		{
-			UpdateElementInfo();
-		}
-
-		private void listView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-		{
-			if (e.ColumnIndex > 0 && e.RowIndex > 0 && listView.Rows[e.RowIndex].Tag is ElementInfo)
+			catch (Exception error)
 			{
-				ElementInfo info = listView.Rows[e.RowIndex].Tag as ElementInfo;
-				info.ChangeClassName((string)listView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value);
+				MessageBox.Show(error.Message, "Error Parsing XML File", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				Application.Exit();
 			}
-		}
 
-		private void CDATACheckBox_CheckedChanged(object sender, EventArgs e)
-		{
-			ElementInfo el = listView.SelectedRows[0].Tag as ElementInfo;
-			el.HasCDATA = CDATACheckBox.Checked;
-			CDATAGroupBox.Enabled = CDATACheckBox.Checked;
-		}
-
-		private void textCheckBox_CheckedChanged(object sender, EventArgs e)
-		{
-			ElementInfo el = listView.SelectedRows[0].Tag as ElementInfo;
-			el.HasText = textCheckBox.Checked;
-			textGroupBox.Enabled = textCheckBox.Checked;
-		}
-
-		private void CDATAOptionalCheckBox_CheckedChanged(object sender, EventArgs e)
-		{
-			ElementInfo el = listView.SelectedRows[0].Tag as ElementInfo;
-			el.CDATAIsOptional = CDATAOptionalCheckBox.Checked;
-		}
-
-		private void textOptionalCheckBox_CheckedChanged(object sender, EventArgs e)
-		{
-			ElementInfo el = listView.SelectedRows[0].Tag as ElementInfo;
-			el.TextIsOptional = textOptionalCheckBox.Checked;
-		}
-
-		private void textDataComboBox_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			ElementInfo el = listView.SelectedRows[0].Tag as ElementInfo;
-			el.TextDataType = (DataType)textDataComboBox.SelectedIndex;
+			xmlFilePathLabel.Text = fileDialog.FileName;
+			UpdateTreeView();
 		}
 	}
 }

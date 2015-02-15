@@ -36,6 +36,21 @@ namespace XMLToDataClass.Data
 		public bool CanBeEmpty { get; set; }
 
 		/// <summary>
+		///   Contains an array of the enumerated type names for each of the values in the <see cref="EnumValueList"/>. Only valid if <see cref="AttributeType"/> is <see cref="DataType.Enum"/>.
+		/// </summary>
+		public string[] EnumNameList { get; set; }
+
+		/// <summary>
+		///   Contains the name of the enumerated type.  Only valid if <see cref="AttributeType"/> is <see cref="DataType.Enum"/>.
+		/// </summary>
+		public string EnumTypeName { get; set; }
+
+		/// <summary>
+		///   Contains an array of the strings that represent the enumerated types in the XML file. Only valid if <see cref="AttributeType"/> is <see cref="DataType.Enum"/>.
+		/// </summary>
+		public string[] EnumValueList { get; set; }
+
+		/// <summary>
 		///   True if the attribute is optional, false otherwise.
 		/// </summary>
 		public bool IsOptional { get; set; }
@@ -48,7 +63,7 @@ namespace XMLToDataClass.Data
 		/// <summary>
 		///   Name of the attribute property.
 		/// </summary>
-		public string PropertyName { get; private set; }
+		public string PropertyName { get; set; }
 
 		/// <summary>
 		///   Name of the property that defines whether the property is valid.
@@ -97,8 +112,15 @@ namespace XMLToDataClass.Data
 		/// </summary>
 		/// <param name="name">Name of the XML node.</param>
 		/// <returns>Generated property name.</returns>
-		private string GeneratePropertyName(string name)
+		/// <exception cref="ArgumentNullException"><i>name</i> is a null reference.</exception>
+		/// <exception cref="ArgumentException"><i>name</i> is an empty string.</exception>
+		public static string GeneratePropertyName(string name)
 		{
+			if (name == null)
+				throw new ArgumentNullException("name is a null reference");
+			if (name.Length == 0)
+				throw new ArgumentException("name is an empty string");
+
 			StringBuilder builder = new StringBuilder();
 			bool capNext = true;
 			for (int i = 0; i < name.Length; i++)
