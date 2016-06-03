@@ -13,8 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+using CSCodeGen;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Security;
 using System.Xml;
 
 namespace XMLToDataClass.Data
@@ -26,9 +29,19 @@ namespace XMLToDataClass.Data
 	{
 		#region Properties
 
-		public ElementInfo[] RootElements { get; private set; }
+		public Dictionary<string, ElementInfo> Elements { get; private set; }
 
-		public ElementInfo[] AllElements { get; private set; }
+		public bool HierarchyMaintained { get; private set; }
+
+		public bool CaseSensitive { get; private set; }
+
+		public string FilePath { get; private set; }
+
+		public string MainClassName { get; set; }
+
+		public string Version { get; set; }
+
+		public string Encoding { get; set; }
 
 		#endregion Properties
 
@@ -39,49 +52,83 @@ namespace XMLToDataClass.Data
 		/// </summary>
 		/// <param name="doc"><see cref="XmlDocument"/> object to be parsed.</param>
 		/// <exception cref="ArgumentNullException"><i>doc</i> is a null reference.</exception>
-		public XMLInfo(XmlDocument doc)
+		/// <exception cref="InvalidDataException">The XML file could not be loaded.</exception>
+		public XMLInfo(string filePath, bool maintainHierarchy, bool ignoreCase)
 		{
-			if (doc == null)
-				throw new ArgumentNullException("doc");
+			if (filePath == null)
+				throw new ArgumentNullException("filePath");
+			if (filePath.Length == 0)
+				throw new ArgumentException("filePath is an empty string.");
 
-			// Verify that all the nodes are lower case.
-			Dictionary<string, XmlNode[]> xmlNodesByName = ParseAllXmlNodesFromXmlNodeName(doc);
-			Dictionary<string, ElementInfo> xmlElements = ParseElements(xmlNodesByName);
-			AddChildElements(xmlNodesByName, xmlElements);
-
-			// Determine if multiple node names are the same when converted to a class name.
-			List<string> classNames = new List<string>(xmlElements.Count);
-			foreach (ElementInfo el in xmlElements.Values)
+			XmlDocument doc = new XmlDocument();
+			try
 			{
-				string className = el.ClassName;
-				int index = 1;
-				while (classNames.Contains(className))
-				{
-					// Add an incrementing number to the end of the name until we have a unique name.
-					className = string.Format("{0}{1}", el.ClassName, index);
-				}
-
-				// Change the name if needed.
-				if(className != el.ClassName)
-					el.ChangeClassName(className);
-				classNames.Add(className);
+				doc.Load(filePath);
+			}
+			catch (XmlException e)
+			{
+				throw new InvalidDataException(string.Format("The XML file specified ({0}) does not contain valid XML ({1}).", filePath, e.Message), e);
+			}
+			catch (ArgumentException e)
+			{
+				throw new InvalidDataException(string.Format("The path to the XML file ({0}) is not a valid path.", filePath), e);
+			}
+			catch (PathTooLongException e)
+			{
+				throw new InvalidDataException(string.Format("The path to the XML file ({0}) exceeds the maximum path length.", filePath), e);
+			}
+			catch (DirectoryNotFoundException e)
+			{
+				throw new InvalidDataException(string.Format("The path to the XML file ({0}) is not valid.", filePath), e);
+			}
+			catch (FileNotFoundException e)
+			{
+				throw new InvalidDataException(string.Format("The XML file specified {0} could not be found.", filePath), e);
+			}
+			catch (IOException e)
+			{
+				throw new InvalidDataException(string.Format("Unable to open the XML file ({0}).", filePath), e);
+			}
+			catch (UnauthorizedAccessException e)
+			{
+				throw new InvalidDataException(string.Format("Unable to access the XML file specified ({0}).", filePath), e);
+			}
+			catch (NotSupportedException e)
+			{
+				throw new InvalidDataException(string.Format("The XML file specified {0} is in an invalid format.", filePath), e);
+			}
+			catch (SecurityException e)
+			{
+				throw new InvalidDataException(string.Format("Unable to access the XML file specified ({0}).", filePath), e);
 			}
 
-			// Create a list of element names and sort it.
-			List<string> elementNames = new List<string>(xmlElements.Count);
-			elementNames.AddRange(xmlElements.Keys);
-			elementNames.Sort();
+			GetHeaderInformation(doc);
+			Dictionary<string, XmlNode[]> xmlNodesByName;
+			if (maintainHierarchy)
+				xmlNodesByName = BuildUniqueHierarchicalElementTable(doc, ignoreCase);
+			else
+				xmlNodesByName = BuildUniqueElementTable(doc, ignoreCase);
 
-			// Create the all elements array.
-			AllElements = new ElementInfo[elementNames.Count];
-			for (int i = 0; i < elementNames.Count; i++)
-				AllElements[i] = xmlElements[elementNames[i]];
+			// Generate the element objects.
+			Dictionary<string, ElementInfo> xmlElements = new Dictionary<string, ElementInfo>();
+			foreach(string key in xmlNodesByName.Keys)
+				xmlElements.Add(key, new ElementInfo(xmlNodesByName[key], ignoreCase));
+			AddChildElements(xmlNodesByName, xmlElements, ignoreCase, maintainHierarchy);
+			Elements = xmlElements;
+			MainClassName = StringUtility.GetUpperCamelCase(Path.GetFileNameWithoutExtension(filePath));
+			FilePath = filePath;
+			HierarchyMaintained = maintainHierarchy;
+			CaseSensitive = !ignoreCase;
+		}
 
-			// Create the root elements array.
-			string[] rootNames = ParseRootNodeNames(doc);
-			RootElements = new ElementInfo[rootNames.Length];
-			for (int i = 0; i < rootNames.Length; i++)
-				RootElements[i] = xmlElements[rootNames[i]];
+		private void GetHeaderInformation(XmlDocument doc)
+		{
+			XmlDeclaration dec = doc.FirstChild as XmlDeclaration;
+			if(dec != null)
+			{
+				Version = dec.Version;
+				Encoding = dec.Encoding;
+			}
 		}
 
 		/// <summary>
@@ -89,7 +136,7 @@ namespace XMLToDataClass.Data
 		/// </summary>
 		/// <param name="nodesByName">Lookup table of each <see cref="XmlNode"/> by it's name.</param>
 		/// <param name="elementsByName">Lookup table of each <see cref="ElementInfo"/> by it's <see cref="XmlNode"/> name.</param>
-		private static void AddChildElements(Dictionary<string, XmlNode[]> nodesByName, Dictionary<string, ElementInfo> elementsByName)
+		private void AddChildElements(Dictionary<string, XmlNode[]> nodesByName, Dictionary<string, ElementInfo> elementsByName, bool ignoreCase, bool maintainHierarchy)
 		{
 			foreach (string name in nodesByName.Keys)
 			{
@@ -99,143 +146,30 @@ namespace XMLToDataClass.Data
 				{
 					foreach (XmlNode child in node.ChildNodes)
 					{
-						if (child.NodeType == XmlNodeType.Element && !childNames.Contains(child.Name))
-							childNames.Add(child.Name);
+						string childName = child.Name;
+						if (ignoreCase)
+							childName = child.Name.ToLower();
+						if (child.NodeType == XmlNodeType.Element && !childNames.Contains(childName))
+							childNames.Add(childName);
 					}
 				}
 
-				// Sort the child by names.
+				// Sort the child names.
 				childNames.Sort();
 
 				// Build the child element array.
 				List<ElementInfo> childElements = new List<ElementInfo>(childNames.Count);
 				foreach (string childName in childNames)
-					childElements.Add(elementsByName[childName]);
+				{
+					string elementName = childName;
+					if (maintainHierarchy)
+						elementName = string.Format("{0}.{1}", name, childName);
+					childElements.Add(elementsByName[elementName]);
+				}
 
 				// Add the array to the element.
 				elementsByName[name].Children = childElements.ToArray();
 			}
-		}
-
-		/// <summary>
-		///   Generates <see cref="ElementInfo"/> data objects for each <see cref="XmlNode"/> name.
-		/// </summary>
-		/// <param name="nodesByName">Lookup table of each <see cref="XmlNode"/> by it's name.</param>
-		/// <returns>Lookup table of each <see cref="ElementInfo"/> by it's <see cref="XmlNode"/> name.</returns>
-		private static Dictionary<string, ElementInfo> ParseElements(Dictionary<string, XmlNode[]> nodesByName)
-		{
-			Dictionary<string, ElementInfo> lookup = new Dictionary<string, ElementInfo>(nodesByName.Count);
-			foreach (string name in nodesByName.Keys)
-			{
-				// Parse all the attribute names in the nodes.
-				string[] attribNames = GetAllAttributeNames(nodesByName[name]);
-
-				// Determine the attributes.
-				AttributeInfo[] attribs = new AttributeInfo[attribNames.Length];
-				for (int i = 0; i < attribNames.Length; i++)
-				{
-					AttributeInfo newAttrib = new AttributeInfo(attribNames[i]);
-					newAttrib.AttributeType = DetermineAttributeType(attribNames[i], nodesByName[name]);
-					newAttrib.IsOptional = IsAttributeOptional(attribNames[i], nodesByName[name]);
-					newAttrib.CanBeEmpty = CanAttributeBeEmpty(attribNames[i], nodesByName[name]);
-
-					if (newAttrib.AttributeType == DataType.String)
-					{
-						newAttrib.EnumValueList = FindAllValues(attribNames[i], nodesByName[name]);
-						newAttrib.EnumNameList = GetAllValueNames(newAttrib.EnumValueList);
-						newAttrib.EnumTypeName = GenerateEnumTypeName(name, attribNames[i]);
-					}
-
-					attribs[i] = newAttrib;
-				}
-
-				// Determine if it can have CDATA.
-				bool CDATAoptional;
-				bool CDATAfound = ParseCDATA(nodesByName[name], out CDATAoptional);
-
-				// Determine if it can have Text.
-				bool textOptional;
-				DataType type;
-				bool textFound = ParseNodeText(nodesByName[name], out textOptional, out type);
-
-				string[] textValues = FindAllValues(nodesByName[name]);
-
-				// Create an element object without the child Element objects.
-				if(CDATAfound)
-				{
-					if(textFound)
-						lookup.Add(name, new ElementInfo(name, attribs, new ElementInfo[0], CDATAoptional, textOptional, type, textValues));
-					else
-						lookup.Add(name, new ElementInfo(name, attribs, new ElementInfo[0], CDATAoptional));
-				}
-				else
-				{
-					if(textFound)
-						lookup.Add(name, new ElementInfo(name, attribs, new ElementInfo[0], textOptional, type, textValues));
-					else
-						lookup.Add(name, new ElementInfo(name, attribs, new ElementInfo[0]));
-				}
-			}
-
-			return lookup;
-		}
-
-		/// <summary>
-		///   Generates the enumerated type name from the element name and attribute name.
-		/// </summary>
-		/// <param name="elementName">Name of the parent element node.</param>
-		/// <param name="attributeName">Name of the attribute.</param>
-		/// <returns>String representing the name.</returns>
-		private static string GenerateEnumTypeName(string elementName, string attributeName)
-		{
-			return AttributeInfo.GeneratePropertyName(string.Format("{0}_{1}", elementName, attributeName));
-		}
-
-		/// <summary>
-		///   Generates the enumerated type name from the element name.
-		/// </summary>
-		/// <param name="elementName">Name of the element node.</param>
-		/// <returns>String representing the name.</returns>
-		private static string GenerateEnumTypeName(string elementName)
-		{
-			return string.Format("{0}Type", AttributeInfo.GeneratePropertyName(elementName));
-			;
-		}
-
-		/// <summary>
-		///   Generates names from the values.
-		/// </summary>
-		/// <param name="values">Array of values to generate names for.</param>
-		/// <returns>Array of names associated with the values.</returns>
-		private static string[] GetAllValueNames(string[] values)
-		{
-			string[] names = new string[values.Length];
-			for (int i = 0; i < values.Length; i++)
-				names[i] = AttributeInfo.GeneratePropertyName(values[i]);
-			return names;
-		}
-
-		/// <summary>
-		///   Parses the XML node attribute names from the list of <see cref="XmlNode"/>s.
-		/// </summary>
-		/// <param name="nodes">Array of <see cref="XmlNode"/>s to be parsed.</param>
-		/// <returns>Array of all possible attributes found in the nodes.  The array is sorted by alphabetical order.</returns>
-		private static string[] GetAllAttributeNames(XmlNode[] nodes)
-		{
-			List<string> names = new List<string>();
-			foreach (XmlNode node in nodes)
-			{
-				foreach (XmlAttribute attrib in node.Attributes)
-				{
-					if (!names.Contains(attrib.Name))
-						names.Add(attrib.Name);
-				}
-			}
-
-			// Sort the list.
-			names.Sort();
-
-			return names.ToArray();
 		}
 
 		/// <summary>
@@ -244,145 +178,51 @@ namespace XMLToDataClass.Data
 		/// <param name="node"><see cref="XmlNode"/> to pull the names from.</param>
 		/// <param name="lookup">Lookup table to add the information to.</param>
 		/// <remarks>This method is called recursively to cover all decendant nodes.</remarks>
-		private static void AddToNodeLookupByName(XmlNode node, Dictionary<string, List<XmlNode>> lookup)
+		private void AddToNodeLookupByName(XmlNode node, Dictionary<string, List<XmlNode>> lookup, bool ignoreCase)
 		{
 			foreach (XmlNode child in node.ChildNodes)
 			{
 				if (child.NodeType == XmlNodeType.Element)
 				{
+					string childName = child.Name;
+					if (ignoreCase)
+						childName = child.Name.ToLower();
+
 					// Add the child to the lookup table.
-					if (!lookup.ContainsKey(child.Name))
-						lookup.Add(child.Name, new List<XmlNode>());
-					lookup[child.Name].Add(child);
+					if (!lookup.ContainsKey(childName))
+						lookup.Add(childName, new List<XmlNode>());
+					lookup[childName].Add(child);
 
 					// Add any children of the child to the node as well.
-					AddToNodeLookupByName(child, lookup);
+					AddToNodeLookupByName(child, lookup, ignoreCase);
 				}
 			}
 		}
 
-		/// <summary>
-		///   Determines if the attribute string can be empty or not.
-		/// </summary>
-		/// <param name="attribName">Name of the attribute.</param>
-		/// <param name="nodes">Array of <see cref="XmlNode"/>s to check to determine if attribute is optional.</param>
-		/// <returns>True if the attribute can be empty, false otherwise.</returns>
-		/// <remarks>The attribute can be empty if one of the nodes contains an empty string. If all of the nodes contain a non-empty string then it can not be empty..</remarks>
-		private static bool CanAttributeBeEmpty(string attribName, XmlNode[] nodes)
+		private void AddtoNodeLookupByHeirarchicalName(string heirarchicalName, XmlNode node, Dictionary<string, List<XmlNode>> lookup, bool ignoreCase)
 		{
-			foreach (XmlNode node in nodes)
+			foreach(XmlNode child in node.ChildNodes)
 			{
-				XmlAttribute attrib = node.Attributes[attribName];
-				if (attrib != null)
+				if(child.NodeType == XmlNodeType.Element)
 				{
-					if (attrib.Value.Length == 0)
-						return true;
+					string childName = child.Name;
+					if (ignoreCase)
+						childName = child.Name.ToLower();
+
+					// Add the child to the lookup table.
+					string name;
+					if (heirarchicalName == null)
+						name = childName;
+					else
+						name = string.Format("{0}.{1}", heirarchicalName, childName);
+					if (!lookup.ContainsKey(name))
+						lookup.Add(name, new List<XmlNode>());
+					lookup[name].Add(child);
+
+					// Add any children of the child to the node as well.
+					AddtoNodeLookupByHeirarchicalName(name, child, lookup, ignoreCase);
 				}
 			}
-			return false;
-		}
-
-		/// <summary>
-		///   Determines the attribute type from the list of <see cref="XmlNode"/>s containing the attribute.
-		/// </summary>
-		/// <param name="attribName">Name of the attribute.</param>
-		/// <param name="nodes">Array of <see cref="XmlNode"/>s containing the specified attribute.</param>
-		/// <returns><see cref="DataType"/> object denoting the type of the attribute.</returns>
-		private static DataType DetermineAttributeType(string attribName, XmlNode[] nodes)
-		{
-			DataType? type = null;
-			foreach (XmlNode node in nodes)
-			{
-				XmlAttribute attrib = node.Attributes[attribName];
-				if (attrib != null)
-				{
-					if(attrib.Value != null && attrib.Value.Length > 0)
-						type = DataTypeUtility.DetermineAttributeType(attrib.Value, type);
-				}
-			}
-
-			if(type.HasValue)
-				return type.Value;
-
-			// If all the attributes are empty or null then assume it is a string.
-			return DataType.String;
-		}
-
-		/// <summary>
-		///   Finds all the values associated with a specific attribute.
-		/// </summary>
-		/// <param name="attribName">Name of the attribute.</param>
-		/// <param name="nodes">Array of <see cref="XmlNode"/>s to check for values.</param>
-		/// <returns>Array of all found values. Can be empty.</returns>
-		private static string[] FindAllValues(string attribName, XmlNode[] nodes)
-		{
-			List<string> valueList = new List<string>();
-			foreach (XmlNode node in nodes)
-			{
-				XmlAttribute attrib = node.Attributes[attribName];
-				if (attrib != null && attrib.Value.Length != 0 && !valueList.Contains(attrib.Value.ToLower()))
-					valueList.Add(attrib.Value.ToLower());
-			}
-
-			return valueList.ToArray();
-		}
-
-		private static string[] FindAllValues(XmlNode[] nodes)
-		{
-			List<string> valueList = new List<string>();
-			foreach (XmlNode node in nodes)
-			{
-				if (node.HasChildNodes)
-				{
-					foreach (XmlNode child in node.ChildNodes)
-					{
-						if (child.NodeType == XmlNodeType.Text && child.InnerText.Length != 0 && !valueList.Contains(child.InnerText))
-							valueList.Add(child.InnerText);
-					}
-				}
-			}
-			return valueList.ToArray();
-		}
-
-		/// <summary>
-		///   Gets all the <see cref="DataType"/>s used in the XML file.
-		/// </summary>
-		/// <returns>Array of <see cref="AttributeInfo"/>.<see cref="DataType"/>s contained in the XML file.</returns>
-		public DataType[] GetAllDataTypes()
-		{
-			List<DataType> typeList = new List<DataType>();
-			foreach (ElementInfo el in AllElements)
-			{
-				// Pull the type from the Text.
-				if (el.HasText && !typeList.Contains(el.TextDataType))
-					typeList.Add(el.TextDataType);
-
-				// Pull all the data types from the attributes.
-				foreach (AttributeInfo attrib in el.Attributes)
-				{
-					if (!typeList.Contains(attrib.AttributeType))
-						typeList.Add(attrib.AttributeType);
-				}
-			}
-			return typeList.ToArray();
-		}
-
-		/// <summary>
-		///   Determines if the attribute is optional or not.
-		/// </summary>
-		/// <param name="attribName">Name of the attribute.</param>
-		/// <param name="nodes">Array of <see cref="XmlNode"/>s to check to determine if attribute is optional.</param>
-		/// <returns>True if the attribute is optional, false otherwise.</returns>
-		/// <remarks>The attribute is not optional if all the nodes contain the attribute, if one node does not contain the attribute then it is considered optional.</remarks>
-		private static bool IsAttributeOptional(string attribName, XmlNode[] nodes)
-		{
-			foreach (XmlNode node in nodes)
-			{
-				XmlAttribute attrib = node.Attributes[attribName];
-				if (attrib == null)
-					return true;
-			}
-			return false;
 		}
 
 		/// <summary>
@@ -390,10 +230,10 @@ namespace XMLToDataClass.Data
 		/// </summary>
 		/// <param name="doc"><see cref="XmlDocument"/> to be parsed.</param>
 		/// <returns>Lookup table used to find all the <see cref="XmlNode"/>s with a specified name.</returns>
-		private static Dictionary<string, XmlNode[]> ParseAllXmlNodesFromXmlNodeName(XmlDocument doc)
+		private Dictionary<string, XmlNode[]> BuildUniqueElementTable(XmlDocument doc, bool ignoreCase)
 		{
 			Dictionary<string, List<XmlNode>> lookup = new Dictionary<string, List<XmlNode>>();
-			AddToNodeLookupByName(doc, lookup);
+			AddToNodeLookupByName(doc, lookup, ignoreCase);
 
 			// Sort the names.
 			List<string> sortList = new List<string>(lookup.Count);
@@ -406,115 +246,235 @@ namespace XMLToDataClass.Data
 			return returnLookup;
 		}
 
-		/// <summary>
-		///   Parses the <i>nodes</i> and determines if a CDATA child elements exist.
-		/// </summary>
-		/// <param name="nodes">Array of <see cref="XmlNode"/>s to be parsed.</param>
-		/// <param name="isOptional">True if the CDATA was in some, but not in others. Only valid if method returns true.</param>
-		/// <returns>True if the CDATA child element was found in at least one of the <i>nodes</i>, false otherwise.</returns>
-		private static bool ParseCDATA(XmlNode[] nodes, out bool isOptional)
+		private Dictionary<string, XmlNode[]> BuildUniqueHierarchicalElementTable(XmlDocument doc, bool ignoreCase)
 		{
-			isOptional = false;
-			bool foundAtLeastOne = false;
-			foreach (XmlNode node in nodes)
-			{
-				if (node.HasChildNodes)
-				{
-					bool thisChild = false;
-					foreach (XmlNode child in node.ChildNodes)
-					{
-						if (child.NodeType == XmlNodeType.CDATA)
-						{
-							// Mark that we found at least one containing the CDATA.
-							foundAtLeastOne = true;
-							thisChild = true;
-						}
-					}
-
-					if (!thisChild)
-					{
-						// Since we found one without the CDATA then mark it as optional.
-						isOptional = true;
-					}
-				}
-				else
-				{
-					// Since we found one without the CDATA then mark it as optional.
-					isOptional = true;
-				}
-			}
-			return foundAtLeastOne;
-		}
-
-		/// <summary>
-		///   Parses the <i>nodes</i> and determines if Text child elements exist.
-		/// </summary>
-		/// <param name="nodes">Array of <see cref="XmlNode"/>s to be parsed.</param>
-		/// <param name="isOptional">True if the Text was in some, but not in others. Only valid if method returns true.</param>
-		/// <param name="dataType"><see cref="DataType"/> of the text. Only valid if method returns true.</param>
-		/// <returns>True if the Text child element was found in at least one of the <i>nodes</i>, false otherwise.</returns>
-		private static bool ParseNodeText(XmlNode[] nodes, out bool isOptional, out DataType dataType)
-		{
-			isOptional = false;
-			dataType = DataType.String;
-			DataType? type = null;
-			foreach (XmlNode node in nodes)
-			{
-				if (node.HasChildNodes)
-				{
-					XmlNode text = null;
-					foreach (XmlNode child in node.ChildNodes)
-					{
-						if (child.NodeType == XmlNodeType.Text)
-							text = child;
-					}
-
-					if (text == null)
-					{
-						// Since we found one without the Text then mark it as optional.
-						isOptional = true;
-					}
-					else
-					{
-						// Parse the found text into a data type.
-						type = DataTypeUtility.DetermineAttributeType(text.InnerText, type);
-					}
-				}
-				else
-				{
-					// Since we found one without the Text then mark it as optional.
-					isOptional = true;
-				}
-			}
-
-			if (!type.HasValue)
-				return false;
-
-			dataType = type.Value;
-			return true;
-		}
-
-		/// <summary>
-		///   Parses the XML document to determine the root node names.
-		/// </summary>
-		/// <param name="doc"><see cref="XmlDocument"/> object to parse.</param>
-		/// <returns>String array of all the names of the <see cref="XmlNode"/>s in the document.</returns>
-		private string[] ParseRootNodeNames(XmlDocument doc)
-		{
-			List<string> topNames = new List<string>();
-			foreach (XmlNode child in doc.ChildNodes)
-			{
-				if (child.NodeType == XmlNodeType.Element)
-				{
-					if (!topNames.Contains(child.Name))
-						topNames.Add(child.Name);
-				}
-			}
+			Dictionary<string, List<XmlNode>> lookup = new Dictionary<string, List<XmlNode>>();
+			AddtoNodeLookupByHeirarchicalName(null, doc, lookup, ignoreCase);
 
 			// Sort the names.
-			topNames.Sort();
+			List<string> sortList = new List<string>(lookup.Count);
+			sortList.AddRange(lookup.Keys);
+			sortList.Sort();
 
-			return topNames.ToArray();
+			Dictionary<string, XmlNode[]> returnLookup = new Dictionary<string, XmlNode[]>(lookup.Count);
+			foreach (string name in sortList)
+				returnLookup.Add(name, lookup[name].ToArray());
+			return returnLookup;
+		}
+
+		public ElementInfo GetRootNode()
+		{
+			foreach(string key in Elements.Keys)
+			{
+				if (!key.Contains("."))
+					return Elements[key];
+			}
+			throw new InvalidOperationException("Could not locate a root node");
+		}
+
+		public ElementInfo[] GetAllNodes()
+		{
+			List<ElementInfo> nodeList = new List<ElementInfo>(Elements.Count);
+			nodeList.AddRange(Elements.Values);
+			return nodeList.ToArray();
+		}
+
+		public CSCodeGen.FileInfo[] GenerateClassFiles(string nameSpace)
+		{
+			List<string> usingList = new List<string>();
+			usingList.Add("System");
+			usingList.Add("System.Collections.Generic");
+			usingList.Add("System.Globalization");
+			usingList.Add("System.IO");
+			usingList.Add("System.Security");
+			usingList.Add("System.Xml");
+
+			// Add the main class.
+			List<CSCodeGen.FileInfo> fileList = new List<CSCodeGen.FileInfo>();
+			ClassInfo main = GenerateMainClass();
+			CSCodeGen.FileInfo file = new CSCodeGen.FileInfo(nameSpace, main);
+			file.Usings.AddRange(usingList);
+			fileList.Add(file);
+
+			if (HierarchyMaintained)
+			{
+				ElementInfo root = GetRootNode();
+				main.ChildClasses.Add(root.GenerateDataClass(HierarchyMaintained, !CaseSensitive));
+			}
+			else
+			{
+				ElementInfo[] nodes = GetAllNodes();
+				foreach (ElementInfo info in nodes)
+				{
+					file = new CSCodeGen.FileInfo(nameSpace, info.GenerateDataClass(HierarchyMaintained, !CaseSensitive));
+					file.Usings.AddRange(usingList);
+					fileList.Add(file);
+				}
+			}
+
+			return fileList.ToArray();
+		}
+
+		private ClassInfo GenerateMainClass()
+		{
+			string summary = string.Format("Provides the methods to import and export data to/from an XML file. The schema was taken from the {0} file.", Path.GetFileName(FilePath));
+			ClassInfo info = new ClassInfo("public partial", MainClassName, null, summary);
+
+			// Add properties for each root element.
+			ElementInfo root = GetRootNode();
+			summary = string.Format("Contains the root {0} element in the XML file.", root.Name);
+			info.Properties.Add(new PropertyInfo("public", string.Format("{0}", root.ClassName), "Root", summary, null, null, "private"));
+
+			info.Methods.Add(GenerateImporterMethod());
+			info.Methods.Add(GenerateExporterMethod());
+			return info;
+		}
+
+		private MethodInfo GenerateImporterMethod()
+		{
+			// Append the signature of the method.
+			string summary = "Imports data from an XML file.";
+			MethodInfo method = new MethodInfo("public", "void", "ImportFromXML", summary);
+
+			method.Parameters.Add(new ParameterInfo("string", "filePath", "Path to the XML file containing the data to be imported.", false, false));
+			method.Exceptions.Add(new ExceptionInfo("ArgumentException", "<i>filePath</i> is an invalid file path."));
+			method.Exceptions.Add(new ExceptionInfo("InvalidOperationException", "<i>filePath</i> could not be opened."));
+			method.Exceptions.Add(new ExceptionInfo("InvalidDataException", "An error occurred while parsing the XML data."));
+
+			method.CodeLines.Add("if(filePath == null)");
+			method.CodeLines.Add("   throw new ArgumentNullException(\"filePath\");");
+			method.CodeLines.Add(string.Empty);
+			method.CodeLines.Add("XmlDocument doc = new XmlDocument();");
+			method.CodeLines.Add("try");
+			method.CodeLines.Add("{");
+			method.CodeLines.Add("	doc.Load(filePath);");
+			method.CodeLines.Add("}");
+			method.CodeLines.Add("catch(ArgumentException e)");
+			method.CodeLines.Add("{");
+			method.CodeLines.Add("	throw new ArgumentException(\"filePath was not a valid XML file path.\", e);");
+			method.CodeLines.Add("}");
+			method.CodeLines.Add("catch(PathTooLongException e)");
+			method.CodeLines.Add("{");
+			method.CodeLines.Add("	throw new ArgumentException(\"filePath was not a valid XML file path.\", e);");
+			method.CodeLines.Add("}");
+			method.CodeLines.Add("catch(DirectoryNotFoundException e)");
+			method.CodeLines.Add("{");
+			method.CodeLines.Add("	throw new ArgumentException(\"filePath was not a valid XML file path.\", e);");
+			method.CodeLines.Add("}");
+			method.CodeLines.Add("catch(NotSupportedException e)");
+			method.CodeLines.Add("{");
+			method.CodeLines.Add("	throw new InvalidOperationException(\"filePath referenced a file that is in an invalid format.\", e);");
+			method.CodeLines.Add("}");
+			method.CodeLines.Add("catch(FileNotFoundException e)");
+			method.CodeLines.Add("{");
+			method.CodeLines.Add("	throw new InvalidOperationException(\"filePath referenced a file that could not be found.\", e);");
+			method.CodeLines.Add("}");
+			method.CodeLines.Add("catch(IOException e)");
+			method.CodeLines.Add("{");
+			method.CodeLines.Add("	throw new InvalidOperationException(\"filePath referenced a file that could not be opened.\", e);");
+			method.CodeLines.Add("}");
+			method.CodeLines.Add("catch(UnauthorizedAccessException e)");
+			method.CodeLines.Add("{");
+			method.CodeLines.Add("	throw new InvalidOperationException(\"filePath referenced a file that could not be opened.\", e);");
+			method.CodeLines.Add("}");
+			method.CodeLines.Add("catch(SecurityException e)");
+			method.CodeLines.Add("{");
+			method.CodeLines.Add("	throw new InvalidOperationException(\"filePath referenced a file that could not be opened.\", e);");
+			method.CodeLines.Add("}");
+			method.CodeLines.Add(string.Empty);
+
+			// Add the list objects.
+			ElementInfo root = GetRootNode();
+			method.CodeLines.Add("XmlElement root = doc.DocumentElement;");
+			method.CodeLines.Add("if(root.NodeType != XmlNodeType.Element)");
+			method.CodeLines.Add("	throw new InvalidDataException(\"The root node is not an element node.\");");
+			method.CodeLines.Add(string.Format("if(string.Compare(root.Name, \"{0}\", {1}) != 0)", root.Name, (!CaseSensitive).ToString().ToLower()));
+			method.CodeLines.Add(string.Format("	throw new InvalidDataException(\"The root node is not a '{0}' named node.\");", root.Name));
+			method.CodeLines.Add(string.Format("Root = new {0}(root);", root.ClassName));
+			return method;
+		}
+
+		private MethodInfo GenerateExporterMethod()
+		{
+			string summary = "Exports data to an XML file.";
+			MethodInfo method = new MethodInfo("public", "void", "ExportToXML", summary);
+
+			method.Parameters.Add(new ParameterInfo("string", "filePath", "Path to the XML file to be written to. If file exists all contents will be destroyed.", false, false));
+			method.Exceptions.Add(new ExceptionInfo("ArgumentException", "<i>filePath</i> is an invalid file path."));
+			method.Exceptions.Add(new ExceptionInfo("InvalidOperationException", "<i>filePath</i> could not be opened."));
+
+			method.CodeLines.Add("XmlDocument doc = new XmlDocument();");
+			if (Version != null || Encoding != null)
+			{
+				string versionString = Version;
+				if (versionString == null)
+					versionString = string.Empty;
+				string encodingString = Encoding;
+				if (encodingString == null)
+					encodingString = string.Empty;
+				method.CodeLines.Add(string.Format("XmlDeclaration dec = doc.CreateXmlDeclaration(\"{0}\", \"{1}\", null);", versionString, encodingString));
+				method.CodeLines.Add("doc.InsertBefore(dec, doc.DocumentElement);");
+			}
+
+			method.CodeLines.Add("XmlElement root = Root.CreateElement(doc);");
+			method.CodeLines.Add("doc.AppendChild(root);");
+			method.CodeLines.Add("doc.Save(filePath);");
+			return method;
+		}
+
+		public void GenerateCode(string codeOutputFolder, string nameSpace, string projectName, string solutionName)
+		{
+			if (codeOutputFolder == null)
+				throw new ArgumentNullException("codeOutputFolder");
+			if (nameSpace == null)
+				throw new ArgumentNullException("nameSpace");
+			if (nameSpace.Length == 0)
+				throw new ArgumentException("nameSpace cannot be an empty string");
+
+			try
+			{
+				codeOutputFolder = Path.GetFullPath(codeOutputFolder);
+			}
+			catch (Exception e)
+			{
+				throw new ArgumentException(string.Format("The directory specified in codeOutputFolder ({0}) is not valid. See inner exception.", codeOutputFolder), e);
+			}
+
+			if (!Directory.Exists(codeOutputFolder))
+				throw new ArgumentException(string.Format("The directory specified in codeOutputFolder ({0}) does not exist.", codeOutputFolder));
+
+			CSCodeGen.FileInfo[] files = GenerateClassFiles(nameSpace);
+
+			// Generate the code.
+			if (projectName == null)
+			{
+				foreach (CSCodeGen.FileInfo file in files)
+					file.WriteToFile(codeOutputFolder);
+			}
+			else
+			{
+				string relativePath = null;
+				if (solutionName != null)
+					relativePath = projectName;
+				CSCodeGen.ProjectInfo proj = new CSCodeGen.ProjectInfo(projectName, "bin\\Debug\\", "bin\\Release\\", CSCodeGen.ProjectType.Library, relativePath);
+				proj.References.Add(new CSCodeGen.ProjectReferenceAssembly("System"));
+				proj.References.Add(new CSCodeGen.ProjectReferenceAssembly("System.Core"));
+				proj.References.Add(new CSCodeGen.ProjectReferenceAssembly("System.Data"));
+				proj.References.Add(new CSCodeGen.ProjectReferenceAssembly("System.Xml"));
+				foreach (CSCodeGen.FileInfo file in files)
+					proj.AddFile(file.NameSpace, file.Type, file.Usings.ToArray(), null, file.Description, file.FileNameExtension);
+
+				if (solutionName == null)
+				{
+					proj.WriteToFiles(codeOutputFolder);
+				}
+				else
+				{
+					CSCodeGen.SolutionInfo sol = new CSCodeGen.SolutionInfo(solutionName);
+					sol.Projects.Add(proj);
+					sol.WriteToFiles(codeOutputFolder);
+				}
+			}
 		}
 
 		#endregion Methods

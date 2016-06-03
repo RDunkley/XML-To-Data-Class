@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<a>
+	<b floatAttrib="$123.45" doubleAttrib="$123.45" />
+	<b floatAttrib="-3.0E37" doubleAttrib="-5.0E300" />
+	<b floatAttrib="3.0E37" doubleAttrib="5.0E300" />
+	<b floatAttrib="(123.45)" doubleAttrib="(123.45)" />
+	<b floatAttrib="97.345%" doubleAttrib="97.345%" />
+	<b floatAttrib="123.45" doubleAttrib="123.45" />
+</a>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<a>
+	<b attribA="6/15/2009" />
+	<b attribA="Monday, June 15, 2009" />
+	<b attribA="Monday, June 15, 2009 1:45 PM" />
+	<b attribA="Monday, June 15, 2009 1:45:30 PM" />
+	<b attribA="6/15/2009 1:45 PM" />
+	<b attribA="6/15/2009 1:45:30 PM" />
+	<b attribA="June 15" />
+	<b attribA="2009-06-15T13:45:30.0000000-07:00" />
+	<b attribA="Mon, 15 Jun 2009 20:45:30 GMT" />
+	<b attribA="2009-06-15T13:45:30" />
+	<b attribA="1:45 PM" />
+	<b attribA="1:45:30 PM" />
+	<b attribA="2009-06-15 13:45:30Z" />
+	<b attribA="Monday, June 15, 2009 8:45:30 PM" />
+	<b attribA="June 2009" />
+	<!--<b attribA="13:35" />
+	<b attribA="06-15-2009" />-->
+</a>

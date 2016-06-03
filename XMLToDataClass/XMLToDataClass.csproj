@@ -1,31 +1,44 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{DFD30515-7A72-4750-A900-D9B87F0E0569}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>XMLToDataClass</RootNamespace>
     <AssemblyName>XMLToDataClass</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -46,16 +59,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CodeGen.cs" />
-    <Compile Include="CodeGenHelper.cs" />
-    <Compile Include="DataClassCodeGen.cs" />
-    <Compile Include="Data\DataTypeUtility.cs" />
-    <Compile Include="Data\ElementInfo.cs" />
     <Compile Include="Data\AttributeInfo.cs" />
+    <Compile Include="Data\CDATAInfo.cs" />
+    <Compile Include="Data\ElementInfo.cs" />
+    <Compile Include="Data\DataInfo.cs" />
     <Compile Include="Data\DataType.cs" />
+    <Compile Include="Data\TextInfo.cs" />
+    <Compile Include="Data\Types\BaseType.cs" />
+    <Compile Include="Data\Types\BooleanType.cs" />
+    <Compile Include="Data\Types\DateTimeType.cs" />
+    <Compile Include="Data\Types\EnumType.cs" />
+    <Compile Include="Data\Types\FloatingType.cs" />
+    <Compile Include="Data\Types\IDataType.cs" />
+    <Compile Include="Data\Types\IFloatingPointType.cs" />
+    <Compile Include="Data\Types\IIntegralType.cs" />
+    <Compile Include="Data\Types\IntegralType.cs" />
+    <Compile Include="Data\Types\StringType.cs" />
     <Compile Include="Data\XMLInfo.cs" />
-    <Compile Include="ExporterCodeGen.cs" />
-    <Compile Include="ImporterCodeGen.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -64,17 +84,65 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="View\AttributeInfoPanel.cs">
+    <Compile Include="View\DataInfoPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="View\AttributeInfoPanel.Designer.cs">
-      <DependentUpon>AttributeInfoPanel.cs</DependentUpon>
+    <Compile Include="View\DataInfoPanel.Designer.cs">
+      <DependentUpon>DataInfoPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\BooleanTypeSettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="View\BooleanTypeSettings.Designer.cs">
+      <DependentUpon>BooleanTypeSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\DateTimeSettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="View\DateTimeSettings.Designer.cs">
+      <DependentUpon>DateTimeSettings.cs</DependentUpon>
     </Compile>
     <Compile Include="View\ElementInfoPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="View\ElementInfoPanel.Designer.cs">
       <DependentUpon>ElementInfoPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\EnumTypeSettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="View\EnumTypeSettings.Designer.cs">
+      <DependentUpon>EnumTypeSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\FloatingPointSettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="View\FloatingPointSettings.Designer.cs">
+      <DependentUpon>FloatingPointSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\IntegralSettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="View\IntegralSettings.Designer.cs">
+      <DependentUpon>IntegralSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\LoadForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\LoadForm.Designer.cs">
+      <DependentUpon>LoadForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\StringTypeSettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="View\StringTypeSettings.Designer.cs">
+      <DependentUpon>StringTypeSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\TextInputForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\TextInputForm.Designer.cs">
+      <DependentUpon>TextInputForm.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -87,12 +155,37 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="View\AttributeInfoPanel.resx">
-      <DependentUpon>AttributeInfoPanel.cs</DependentUpon>
+    <EmbeddedResource Include="View\DataInfoPanel.resx">
+      <DependentUpon>DataInfoPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\BooleanTypeSettings.resx">
+      <DependentUpon>BooleanTypeSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\DateTimeSettings.resx">
+      <DependentUpon>DateTimeSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\ElementInfoPanel.resx">
       <DependentUpon>ElementInfoPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\EnumTypeSettings.resx">
+      <DependentUpon>EnumTypeSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\FloatingPointSettings.resx">
+      <DependentUpon>FloatingPointSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\IntegralSettings.resx">
+      <DependentUpon>IntegralSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\LoadForm.resx">
+      <DependentUpon>LoadForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\StringTypeSettings.resx">
+      <DependentUpon>StringTypeSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\TextInputForm.resx">
+      <DependentUpon>TextInputForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
@@ -104,6 +197,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\CSCodeGen\CSCodeGen\CSCodeGen.csproj">
+      <Project>{5a0655c3-b2bd-4b4b-bfe5-3ee9bd9a8a4b}</Project>
+      <Name>CSCodeGen</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

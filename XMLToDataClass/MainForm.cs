@@ -27,6 +27,8 @@ namespace XMLToDataClass
 	{
 		#region Fields
 
+		private LoadForm mLoadForm = new LoadForm();
+
 		private XMLInfo mInfo;
 
 		#endregion Fields
@@ -39,19 +41,52 @@ namespace XMLToDataClass
 
 			xmlFilePathLabel.Text = "";
 			namespaceTextBox.Text = Properties.Settings.Default.Namespace;
+			projectCheckBox.Checked = Properties.Settings.Default.Project;
+			projectTextBox.Text = Properties.Settings.Default.ProjectName;
+			solutionCheckBox.Checked = Properties.Settings.Default.Solution;
+			solutionTextBox.Text = Properties.Settings.Default.SolutionName;
 
 			if (Properties.Settings.Default.OutputFolder.Length != 0)
 				codeTextBox.Text = Properties.Settings.Default.OutputFolder;
 			else
 				codeTextBox.Text = Environment.CurrentDirectory;
 
+
 			mainTreeView.AfterSelect += mainTreeView_AfterSelect;
+			UpdateProjectSolutionInfo();
 			UpdateTreeView();
+		}
+
+		private void UpdateProjectSolutionInfo()
+		{
+			projectTextBox.Enabled = projectCheckBox.Checked;
+			solutionCheckBox.Enabled = projectCheckBox.Checked;
+			solutionTextBox.Enabled = projectCheckBox.Checked & solutionCheckBox.Checked;
+		}
+
+		private void UpdateTree(TreeNode node)
+		{
+			if (node.Tag is ElementInfo[] && mInfo.HierarchyMaintained)
+			{
+				// Elements are selected so load child elements.
+				foreach (TreeNode child in node.Nodes)
+				{
+					if (child.Nodes.Count == 0)
+						AddParentLevelTreeNode(child, child.Tag as ElementInfo);
+				}
+			}
+
+			UpdateDetailView();
 		}
 
 		void mainTreeView_AfterSelect(object sender, TreeViewEventArgs e)
 		{
-			UpdateDetailView();
+			UpdateTree(e.Node);
+		}
+
+		private void mainTreeView_AfterExpand(object sender, TreeViewEventArgs e)
+		{
+			UpdateTree(e.Node);
 		}
 
 		private void codeBrowseButton_Click(object sender, EventArgs e)
@@ -94,8 +129,20 @@ namespace XMLToDataClass
 				return;
 			}
 
-			CodeGen.GenerateCodeClasses(mInfo, codePath, nameSpace);
+			//CodeGen.GenerateCodeClasses(mInfo, codePath, nameSpace, projectCheckBox.Checked, projectTextBox.Text, solutionCheckBox.Checked, solutionTextBox.Text);
 
+			string projectName = null;
+			if (projectCheckBox.Checked)
+				projectName = projectTextBox.Text;
+			string solutionName = null;
+			if (solutionCheckBox.Checked)
+				solutionName = solutionTextBox.Text;
+			mInfo.GenerateCode(codePath, nameSpace, projectName, solutionName);
+
+			Properties.Settings.Default.Project = projectCheckBox.Checked;
+			Properties.Settings.Default.ProjectName = projectTextBox.Text;
+			Properties.Settings.Default.Solution = solutionCheckBox.Checked;
+			Properties.Settings.Default.SolutionName = solutionTextBox.Text;
 			Properties.Settings.Default.Namespace = namespaceTextBox.Text;
 			Properties.Settings.Default.OutputFolder = codeTextBox.Text;
 			Properties.Settings.Default.Save();
@@ -116,22 +163,61 @@ namespace XMLToDataClass
 
 			if (mInfo != null)
 			{
-				foreach (ElementInfo info in mInfo.AllElements)
+				ElementInfo[] roots;
+				if (mInfo.HierarchyMaintained)
+				{
+					roots = new ElementInfo[1] { mInfo.GetRootNode() };
+				}
+				else
+				{
+					roots = mInfo.GetAllNodes();
+				}
+
+				foreach (ElementInfo info in roots)
 				{
 					int index = mainTreeView.Nodes.Add(new TreeNode(info.Name));
 					mainTreeView.Nodes[index].Tag = info;
-
-					// Add the attributes.
-					foreach (AttributeInfo aInfo in info.Attributes)
-					{
-						int aIndex = mainTreeView.Nodes[index].Nodes.Add(new TreeNode(aInfo.Name));
-						mainTreeView.Nodes[index].Nodes[aIndex].Tag = aInfo;
-					}
+					AddParentLevelTreeNode(mainTreeView.Nodes[index], info);
 				}
 
 				UpdateDetailView();
 				UpdateGUIAccess(true);
 			}
+		}
+
+		private void AddParentLevelTreeNode(TreeNode node, ElementInfo info)
+		{
+			// Text
+			int index = node.Nodes.Add(new TreeNode("Text"));
+			node.Nodes[index].Tag = info.Text;
+
+			// CDATA
+			index = node.Nodes.Add(new TreeNode("CDATA"));
+			node.Nodes[index].Tag = info.CDATA;
+
+			// Attributes
+			index = node.Nodes.Add(new TreeNode("Attributes"));
+			node.Nodes[index].Tag = info.Attributes;
+			foreach (AttributeInfo attrib in info.Attributes)
+				AddLeafNode(node.Nodes[index], attrib);
+
+			// Child Elements
+			index = node.Nodes.Add(new TreeNode("Elements"));
+			node.Nodes[index].Tag = info.Children;
+			foreach (ElementInfo element in info.Children)
+				AddLeafNode(node.Nodes[index], element);
+		}
+
+		private void AddLeafNode(TreeNode node, AttributeInfo attrib)
+		{
+			int index = node.Nodes.Add(new TreeNode(attrib.Info.Name));
+			node.Nodes[index].Tag = attrib;
+		}
+
+		private void AddLeafNode(TreeNode node, ElementInfo element)
+		{
+			int index = node.Nodes.Add(new TreeNode(element.Name));
+			node.Nodes[index].Tag = element;
 		}
 
 		private void UpdateDetailView()
@@ -141,32 +227,47 @@ namespace XMLToDataClass
 			{
 				if(mainTreeView.SelectedNode.Tag is ElementInfo)
 				{
-					ElementInfoPanel panel = new ElementInfoPanel(mainTreeView.SelectedNode.Tag as ElementInfo, mInfo);
-					mainSplitContainer.Panel2.Controls.Add(panel);
-					panel.Dock = DockStyle.Fill;
+					if (mInfo.HierarchyMaintained || mainTreeView.SelectedNode.Parent == null)
+					{
+						ElementInfoPanel panel = new ElementInfoPanel(mainTreeView.SelectedNode.Tag as ElementInfo);
+						mainSplitContainer.Panel2.Controls.Add(panel);
+						panel.Dock = DockStyle.Fill;
+					}
 				}
 				else if(mainTreeView.SelectedNode.Tag is AttributeInfo)
 				{
-					AttributeInfoPanel panel = new AttributeInfoPanel(mainTreeView.SelectedNode.Tag as AttributeInfo);
+					DataInfoPanel panel = new DataInfoPanel(((AttributeInfo)mainTreeView.SelectedNode.Tag).Info);
+					mainSplitContainer.Panel2.Controls.Add(panel);
+					panel.Dock = DockStyle.Fill;
+				}
+				else if (mainTreeView.SelectedNode.Tag is CDataInfo)
+				{
+					CDataInfo info = mainTreeView.SelectedNode.Tag as CDataInfo;
+					DataInfoPanel panel = new DataInfoPanel(info.Info);
+					mainSplitContainer.Panel2.Controls.Add(panel);
+					panel.Dock = DockStyle.Fill;
+					panel.Enabled = info.Include;
+				}
+				else if (mainTreeView.SelectedNode.Tag is TextInfo)
+				{
+					TextInfo info = mainTreeView.SelectedNode.Tag as TextInfo;
+					DataInfoPanel panel = new DataInfoPanel(info.Info);
+					mainSplitContainer.Panel2.Controls.Add(panel);
+					panel.Dock = DockStyle.Fill;
+					panel.Enabled = info.Include;
+				}
+				else if(mainTreeView.SelectedNode.Tag is DataInfo)
+				{
+					DataInfoPanel panel = new DataInfoPanel(mainTreeView.SelectedNode.Tag as DataInfo);
 					mainSplitContainer.Panel2.Controls.Add(panel);
 					panel.Dock = DockStyle.Fill;
 				}
 			}
 		}
 
-		#endregion Methods
-
 		private void loadButton_Click(object sender, EventArgs e)
 		{
-			OpenFileDialog fileDialog = new OpenFileDialog();
-			fileDialog.CheckFileExists = true;
-			fileDialog.CheckPathExists = true;
-			fileDialog.Filter = "XML files (*.xml)|*.xml|All files (*.*)|*.*";
-			fileDialog.DefaultExt = "xml";
-			fileDialog.Multiselect = false;
-			fileDialog.Title = "Select the XML file to generate the data classes from";
-
-			if (fileDialog.ShowDialog() != DialogResult.OK)
+			if (mLoadForm.ShowDialog() != DialogResult.OK)
 				return;
 
 			UpdateGUIAccess(false);
@@ -174,7 +275,7 @@ namespace XMLToDataClass
 
 			try
 			{
-				mInfo = CodeGen.ParseXML(fileDialog.FileName);
+				mInfo = new XMLInfo(mLoadForm.FilePath, mLoadForm.PreserveHierarchy, mLoadForm.IgnoreCase);
 			}
 			catch (InvalidDataException error)
 			{
@@ -187,8 +288,20 @@ namespace XMLToDataClass
 				Application.Exit();
 			}
 
-			xmlFilePathLabel.Text = fileDialog.FileName;
+			xmlFilePathLabel.Text = mLoadForm.FilePath;
 			UpdateTreeView();
+		}
+
+		#endregion Methods
+
+		private void projectCheckBox_CheckedChanged(object sender, EventArgs e)
+		{
+			UpdateProjectSolutionInfo();
+		}
+
+		private void solutionCheckBox_CheckedChanged(object sender, EventArgs e)
+		{
+			UpdateProjectSolutionInfo();
 		}
 	}
 }

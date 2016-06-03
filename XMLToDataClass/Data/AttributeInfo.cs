@@ -1,156 +1,144 @@
-﻿/********************************************************************************************************************************
- * Copyright 2014 Richard Dunkley
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using System.Xml;
 
 namespace XMLToDataClass.Data
 {
-	/// <summary>
-	///   Contains all the information for <see cref="XmlNode"/> attributes.
-	/// </summary>
 	public class AttributeInfo
 	{
 		#region Properties
 
 		/// <summary>
-		///   DataType of the attribute.
+		///   Contains information on the data portion of the attribute.
 		/// </summary>
-		public DataType AttributeType { get; set; }
-
-		/// <summary>
-		///   True if the attribute can be an empty string, false otherwise.
-		/// </summary>
-		public bool CanBeEmpty { get; set; }
-
-		/// <summary>
-		///   Contains an array of the enumerated type names for each of the values in the <see cref="EnumValueList"/>. Only valid if <see cref="AttributeType"/> is <see cref="DataType.Enum"/>.
-		/// </summary>
-		public string[] EnumNameList { get; set; }
-
-		/// <summary>
-		///   Contains the name of the enumerated type.  Only valid if <see cref="AttributeType"/> is <see cref="DataType.Enum"/>.
-		/// </summary>
-		public string EnumTypeName { get; set; }
-
-		/// <summary>
-		///   Contains an array of the strings that represent the enumerated types in the XML file. Only valid if <see cref="AttributeType"/> is <see cref="DataType.Enum"/>.
-		/// </summary>
-		public string[] EnumValueList { get; set; }
-
-		/// <summary>
-		///   True if the attribute is optional, false otherwise.
-		/// </summary>
-		public bool IsOptional { get; set; }
-
-		/// <summary>
-		///   Name of the attribute.
-		/// </summary>
-		public string Name { get; private set; }
-
-		/// <summary>
-		///   Name of the attribute property.
-		/// </summary>
-		public string PropertyName { get; set; }
-
-		/// <summary>
-		///   Name of the property that defines whether the property is valid.
-		/// </summary>
-		public string PropertyValidName { get; private set; }
+		public DataInfo Info { get; private set; }
 
 		#endregion Properties
 
 		#region Methods
 
-		/// <summary>
-		///   Instantiates a new <see cref="AttributeInfo"/> object.
-		/// </summary>
-		/// <param name="name">Name of the attribute.</param>
-		public AttributeInfo(string name)
+		public AttributeInfo(string attributeName, XmlNode[] nodes, bool ignoreCase)
 		{
-			if (name == null)
-				throw new ArgumentNullException("name");
-			if (name.Length == 0)
-				throw new ArgumentException("name is an empty string");
+			if (attributeName == null)
+				throw new ArgumentNullException("attributeName");
+			if (attributeName.Length == 0)
+				throw new ArgumentException("attributeName is an empty string");
+			if (nodes == null)
+				throw new ArgumentNullException("nodes");
+			if (nodes.Length == 0)
+				throw new ArgumentException("nodes is an empty array");
 
-			Name = name;
-			PropertyName = GeneratePropertyName(name);
-			PropertyValidName = GetValidPropertyCapitalCase(PropertyName);
+			string[] possibleValues = FindAllPossibleValues(attributeName, nodes, ignoreCase);
+			bool isOptional = IsOptional(attributeName, nodes, ignoreCase);
+			bool canBeEmpty = CanBeEmpty(attributeName, nodes, ignoreCase);
+			Info = new DataInfo(attributeName, possibleValues, isOptional, canBeEmpty, ignoreCase);
 		}
 
 		/// <summary>
-		///   Changes the name of the property that will be generated to represent this attribute.
+		///   Finds all the possible values in the <i>nodes</i> that contain the specified attribute name.
 		/// </summary>
-		/// <param name="newName">The new property name.</param>
-		/// <exception cref="ArgumentNullException"><i>newName</i> is a null reference.</exception>
-		/// <exception cref="ArgumentException"><i>newName</i> is an empty string.</exception>
-		public void ChangePropertyName(string newName)
+		/// <param name="attribName"></param>
+		/// <param name="nodes"></param>
+		/// <param name="ignoreCase"></param>
+		/// <returns></returns>
+		private string[] FindAllPossibleValues(string attribName, XmlNode[] nodes, bool ignoreCase)
 		{
-			if (newName == null)
-				throw new ArgumentNullException("newName");
-			if (newName.Length == 0)
-				throw new ArgumentException("newName is an empty string");
-
-			PropertyName = newName;
-			PropertyValidName = GetValidPropertyCapitalCase(PropertyName);
-		}
-
-		/// <summary>
-		///   Generates the property name from the XML node name.
-		/// </summary>
-		/// <param name="name">Name of the XML node.</param>
-		/// <returns>Generated property name.</returns>
-		/// <exception cref="ArgumentNullException"><i>name</i> is a null reference.</exception>
-		/// <exception cref="ArgumentException"><i>name</i> is an empty string.</exception>
-		public static string GeneratePropertyName(string name)
-		{
-			if (name == null)
-				throw new ArgumentNullException("name is a null reference");
-			if (name.Length == 0)
-				throw new ArgumentException("name is an empty string");
-
-			StringBuilder builder = new StringBuilder();
-			bool capNext = true;
-			for (int i = 0; i < name.Length; i++)
+			List<string> valueList = new List<string>();
+			foreach (XmlNode node in nodes)
 			{
-				if (name[i] == '_')
+				foreach (XmlAttribute attrib in node.Attributes)
 				{
-					capNext = true;
-				}
-				else
-				{
-					if (capNext)
-					{
-						builder.Append(char.ToUpper(name[i]));
-						capNext = false;
-					}
-					else
-						builder.Append(name[i]);
+					if (string.Compare(attribName, attrib.Name, ignoreCase) == 0 && attrib.Value.Length > 0)
+						valueList.Add(attrib.Value);
 				}
 			}
-			return builder.ToString();
+			return valueList.ToArray();
 		}
 
 		/// <summary>
-		///   Gets the valid property name in capital case of the associated attribute name.
+		///   Determines if the attribute string can be empty or not.
 		/// </summary>
-		/// <param name="name">XML name of the attribute.</param>
-		/// <returns>Valid property name in capital case.</returns>
-		private static string GetValidPropertyCapitalCase(string name)
+		/// <param name="attribName">Name of the attribute.</param>
+		/// <param name="nodes">Array of <see cref="XmlNode"/>s to check to determine if attribute is optional.</param>
+		/// <returns>True if the attribute can be empty, false otherwise.</returns>
+		/// <remarks>The attribute can be empty if one of the nodes contains an empty string. If all of the nodes contain a non-empty string then it can not be empty..</remarks>
+		private bool CanBeEmpty(string attribName, XmlNode[] nodes, bool ignoreCase)
 		{
-			return string.Format("Is{0}Valid", name);
+			foreach (XmlNode node in nodes)
+			{
+				foreach (XmlAttribute attrib in node.Attributes)
+				{
+					if (string.Compare(attribName, attrib.Name, ignoreCase) == 0)
+					{
+						if (attrib.Value.Length == 0)
+							return true;
+					}
+				}
+			}
+			return false;
+		}
+
+		/// <summary>
+		///   Determines if the attribute is optional or not.
+		/// </summary>
+		/// <param name="attribName">Name of the attribute.</param>
+		/// <param name="nodes">Array of <see cref="XmlNode"/>s to check to determine if attribute is optional.</param>
+		/// <returns>True if the attribute is optional, false otherwise.</returns>
+		/// <remarks>The attribute is not optional if all the nodes contain the attribute, if one node does not contain the attribute then it is considered optional.</remarks>
+		private bool IsOptional(string attribName, XmlNode[] nodes, bool ignoreCase)
+		{
+			foreach (XmlNode node in nodes)
+			{
+				bool found = false;
+				foreach (XmlAttribute attrib in node.Attributes)
+				{
+					if (string.Compare(attribName, attrib.Name, ignoreCase) == 0)
+						found = true;
+				}
+
+				if (!found)
+					return true;
+			}
+			return false;
+		}
+
+		/// <summary>
+		///   Parses the XML node attribute names from the list of <see cref="XmlNode"/>s.
+		/// </summary>
+		/// <param name="nodes">Array of <see cref="XmlNode"/>s to be parsed.</param>
+		/// <returns>Array of all possible attributes found in the nodes.  The array is sorted by alphabetical order.</returns>
+		public static string[] GetAllAttributeNames(XmlNode[] nodes, bool ignoreCase)
+		{
+			List<string> names = new List<string>();
+			foreach (XmlNode node in nodes)
+			{
+				foreach (XmlAttribute attrib in node.Attributes)
+				{
+					if (!names.Contains(attrib.Name))
+						names.Add(attrib.Name);
+				}
+			}
+
+			if (!ignoreCase)
+			{
+				names.Sort();
+				return names.ToArray();
+			}
+
+			// Remove any duplicates and return lower case values(duplicates because of case insensitivity).
+			List<string> lowerCaseList = new List<string>();
+			foreach (string name in names)
+			{
+				string lowerName = name.ToLower();
+				if (!lowerCaseList.Contains(lowerName))
+					lowerCaseList.Add(lowerName);
+			}
+
+			lowerCaseList.Sort();
+			return lowerCaseList.ToArray();
 		}
 
 		#endregion Methods

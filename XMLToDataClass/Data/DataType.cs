@@ -17,73 +17,78 @@
 namespace XMLToDataClass.Data
 {
 	/// <summary>
-	///   Defines the type of attributes that are supported.
+	///   Defines the type of attributes that are supported. Numbered from most restrictive to least restrictive.
 	/// </summary>
 	public enum DataType
 	{
 		/// <summary>
-		///   Represents a string type.
+		///   Represents a boolean value type.
 		/// </summary>
-		String = 0,
-
-		/// <summary>
-		///   Represents a 64-bit integer.
-		/// </summary>
-		Long = 1,
-
-		/// <summary>
-		///   Represents a 64-bit unsigned integer.
-		/// </summary>
-		ULong = 2,
-
-		/// <summary>
-		///   Represents a 64-bit unsigned integer.
-		/// </summary>
-		Int = 3,
-
-		/// <summary>
-		///   Represents a 32-bit unsigned integer.
-		/// </summary>
-		UInt = 4,
-
-		/// <summary>
-		///   Represents a 16-bit integer.
-		/// </summary>
-		Short = 5,
-
-		/// <summary>
-		///   Represents a 16-bit unsigned integer.
-		/// </summary>
-		UShort = 6,
-
-		/// <summary>
-		///   Represents a 8-bit integer.
-		/// </summary>
-		SByte = 7,
+		Boolean = 3,
 
 		/// <summary>
 		///   Represents a 8-bit unsigned integer.
 		/// </summary>
-		Byte = 8,
+		Byte = 6,
+
+		/// <summary>
+		///   Represents a 64-bit unsigned integer.
+		/// </summary>
+		Int = 4,
+
+		/// <summary>
+		///   Represents a 64-bit integer.
+		/// </summary>
+		Long = 10,
+
+		/// <summary>
+		///   Represents a 8-bit integer.
+		/// </summary>
+		SByte = 5,
+
+		/// <summary>
+		///   Represents a 16-bit integer.
+		/// </summary>
+		Short = 7,
+
+		/// <summary>
+		///   Represents a string type.
+		/// </summary>
+		String = 12,
+
+		/// <summary>
+		///   Represents a 32-bit unsigned integer.
+		/// </summary>
+		UInt = 9,
+
+		/// <summary>
+		///   Represents a 64-bit unsigned integer.
+		/// </summary>
+		ULong = 11,
+
+		/// <summary>
+		///   Represents a 16-bit unsigned integer.
+		/// </summary>
+		UShort = 8,
 
 		/// <summary>
 		///   Represents a 32-bit floating point value.
 		/// </summary>
-		Float = 9,
+		Float = 2,
 
 		/// <summary>
 		///   Represents a 64-bit floating point value.
 		/// </summary>
-		Double = 10,
+		Double = 1,
 
 		/// <summary>
 		///   Represents a date time value.
 		/// </summary>
-		DateTime = 11,
+		DateTime = 0,
 
 		/// <summary>
-		///   Represents a boolean value type.
+		///  Represents an enumerated type.
 		/// </summary>
-		Boolean = 12,
+		Enum = 13,
 	}
 }
