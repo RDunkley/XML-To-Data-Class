@@ -62,6 +62,7 @@ namespace XMLToDataClass
 			this.solutionCheckBox = new System.Windows.Forms.CheckBox();
 			this.label5 = new System.Windows.Forms.Label();
 			this.solutionTextBox = new System.Windows.Forms.TextBox();
+			this.settingsButton = new System.Windows.Forms.Button();
 			this.mainTableLayoutPanel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.mainSplitContainer)).BeginInit();
 			this.mainSplitContainer.Panel1.SuspendLayout();
@@ -132,6 +133,7 @@ namespace XMLToDataClass
 			this.mainTableLayoutPanel.Controls.Add(this.solutionCheckBox, 1, 5);
 			this.mainTableLayoutPanel.Controls.Add(this.label5, 0, 6);
 			this.mainTableLayoutPanel.Controls.Add(this.solutionTextBox, 1, 6);
+			this.mainTableLayoutPanel.Controls.Add(this.settingsButton, 1, 8);
 			this.mainTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.mainTableLayoutPanel.Location = new System.Drawing.Point(0, 0);
 			this.mainTableLayoutPanel.Name = "mainTableLayoutPanel";
@@ -302,6 +304,16 @@ namespace XMLToDataClass
 			this.solutionTextBox.Size = new System.Drawing.Size(411, 20);
 			this.solutionTextBox.TabIndex = 19;
 			// 
+			// settingsButton
+			// 
+			this.settingsButton.Location = new System.Drawing.Point(88, 441);
+			this.settingsButton.Name = "settingsButton";
+			this.settingsButton.Size = new System.Drawing.Size(75, 23);
+			this.settingsButton.TabIndex = 20;
+			this.settingsButton.Text = "Settings";
+			this.settingsButton.UseVisualStyleBackColor = true;
+			this.settingsButton.Click += new System.EventHandler(this.settingsButton_Click);
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -341,6 +353,7 @@ namespace XMLToDataClass
 		private System.Windows.Forms.CheckBox solutionCheckBox;
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.TextBox solutionTextBox;
+		private System.Windows.Forms.Button settingsButton;
 	}
 }
 

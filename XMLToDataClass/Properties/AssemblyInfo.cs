@@ -1,18 +1,16 @@
-﻿/********************************************************************************************************************************
- * Copyright 2014 Richard Dunkley
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+﻿//********************************************************************************************************************************
+// Filename:    AssemblyInfo.cs
+// Owner:       Richard Dunkley
+// Description: Contains the assemlby information.
+//********************************************************************************************************************************
+// Copyright © Richard Dunkley 2016
+//
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the
+// License. You may obtain a copy of the License at: http://www.apache.org/licenses/LICENSE-2.0  Unless required by applicable
+// law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+// CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+//********************************************************************************************************************************
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -22,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("XMLToDataClass")]
 [assembly: AssemblyDescription("XML to Custom C# Data Class Generator")]
 [assembly: AssemblyProduct("XMLToDataClass")]
-[assembly: AssemblyCopyright("Copyright © Richard Dunkley 2014")]
+[assembly: AssemblyCopyright("Copyright © Richard Dunkley 2016")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
@@ -42,5 +40,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.1.0.1")]
-[assembly: AssemblyFileVersion("1.1.0.1")]
+[assembly: AssemblyVersion("1.1.0.2")]
+[assembly: AssemblyFileVersion("1.1.0.2")]

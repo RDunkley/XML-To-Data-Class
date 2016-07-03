@@ -1,40 +1,49 @@
-﻿/********************************************************************************************************************************
- * Copyright 2014 Richard Dunkley
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+﻿//********************************************************************************************************************************
+// Filename:    MainForm.cs
+// Owner:       Richard Dunkley
+// Description: Partial class of the main form of the application.
+//********************************************************************************************************************************
+// Copyright © Richard Dunkley 2016
+//
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the
+// License. You may obtain a copy of the License at: http://www.apache.org/licenses/LICENSE-2.0  Unless required by applicable
+// law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+// CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+//********************************************************************************************************************************
 using System;
-using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 using XMLToDataClass.Data;
 using XMLToDataClass.View;
 
 namespace XMLToDataClass
 {
+	/// <summary>
+	///   Main form of the application.
+	/// </summary>
 	public partial class MainForm : Form
 	{
 		#region Fields
 
+		/// <summary>
+		///   Form to load the XML file.
+		/// </summary>
 		private LoadForm mLoadForm = new LoadForm();
 
+		/// <summary>
+		///   Information loaded from the XML file.
+		/// </summary>
 		private XMLInfo mInfo;
 
 		#endregion Fields
 
 		#region Methods
 
+		/// <summary>
+		///   Instantiates a new MainForm object.
+		/// </summary>
 		public MainForm()
 		{
 			InitializeComponent();
@@ -57,6 +66,9 @@ namespace XMLToDataClass
 			UpdateTreeView();
 		}
 
+		/// <summary>
+		///   Updates the Project/Solution information based on the current check boxes.
+		/// </summary>
 		private void UpdateProjectSolutionInfo()
 		{
 			projectTextBox.Enabled = projectCheckBox.Checked;
@@ -64,6 +76,10 @@ namespace XMLToDataClass
 			solutionTextBox.Enabled = projectCheckBox.Checked & solutionCheckBox.Checked;
 		}
 
+		/// <summary>
+		///   Updates the element tree.
+		/// </summary>
+		/// <param name="node"></param>
 		private void UpdateTree(TreeNode node)
 		{
 			if (node.Tag is ElementInfo[] && mInfo.HierarchyMaintained)
@@ -79,16 +95,31 @@ namespace XMLToDataClass
 			UpdateDetailView();
 		}
 
-		void mainTreeView_AfterSelect(object sender, TreeViewEventArgs e)
+		/// <summary>
+		///   Handles the mainTreeView.AfterSelect event.
+		/// </summary>
+		/// <param name="sender">Sender of the event.</param>
+		/// <param name="e"><see cref="TreeViewEventArgs"/> containing the arguments for the event.</param>
+		private void mainTreeView_AfterSelect(object sender, TreeViewEventArgs e)
 		{
 			UpdateTree(e.Node);
 		}
 
+		/// <summary>
+		///   Handles the mainTreeView.AfterExpand event.
+		/// </summary>
+		/// <param name="sender">Sender of the event.</param>
+		/// <param name="e"><see cref="TreeViewEventArgs"/> containing the arguments for the event.</param>
 		private void mainTreeView_AfterExpand(object sender, TreeViewEventArgs e)
 		{
 			UpdateTree(e.Node);
 		}
 
+		/// <summary>
+		///   Handles the codeBrowseButton.Click event.
+		/// </summary>
+		/// <param name="sender">Sender of the event.</param>
+		/// <param name="e"><see cref="EventArgs"/> containing the arguments for the event.</param>
 		private void codeBrowseButton_Click(object sender, EventArgs e)
 		{
 			FolderBrowserDialog dialog = new FolderBrowserDialog();
@@ -101,8 +132,23 @@ namespace XMLToDataClass
 			codeTextBox.Text = dialog.SelectedPath;
 		}
 
+		/// <summary>
+		///   Handles the process.Click event.
+		/// </summary>
+		/// <param name="sender">Sender of the event.</param>
+		/// <param name="e"><see cref="EventArgs"/> containing the arguments for the event.</param>
 		private void processButton_Click(object sender, EventArgs e)
 		{
+			CSCodeGen.DefaultValues.CompanyName = Properties.Settings.Default.CSCodeGenCompanyName;
+			CSCodeGen.DefaultValues.Developer = Properties.Settings.Default.CSCodeGenDeveloper;
+			CSCodeGen.DefaultValues.UseTabs = Properties.Settings.Default.CSCodeGenUseTabs;
+			CSCodeGen.DefaultValues.FlowerBoxCharacter = Properties.Settings.Default.CSCodeGenFlowerBoxCharacter;
+			CSCodeGen.DefaultValues.NumCharactersPerLine = Properties.Settings.Default.CSCodeGenNumCharsPerLine;
+			CSCodeGen.DefaultValues.TabSize = Properties.Settings.Default.CSCodeGenIndentSize;
+			CSCodeGen.DefaultValues.FileInfoTemplate = ParseTemplate(Properties.Settings.Default.CSCodeGenFileHeaderTemplate);
+			CSCodeGen.DefaultValues.CopyrightTemplate = ParseTemplate(Properties.Settings.Default.CSCodeGenCopyrightTemplate);
+			CSCodeGen.DefaultValues.LicenseTemplate = ParseTemplate(Properties.Settings.Default.CSCodeGenLicenseTemplate);
+
 			string codePath = codeTextBox.Text;
 			string nameSpace = namespaceTextBox.Text;
 
@@ -150,12 +196,19 @@ namespace XMLToDataClass
 			MessageBox.Show("Code files were generated successfully", "Processing Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
 
+		/// <summary>
+		///   Updates access to the GUI (GUI is restricted until XML information is loaded).
+		/// </summary>
+		/// <param name="enable">True if it should be enabled, false otherwise.</param>
 		private void UpdateGUIAccess(bool enable)
 		{
 			mainSplitContainer.Enabled = enable;
 			processButton.Enabled = enable;
 		}
 
+		/// <summary>
+		///   Updates the tree view.
+		/// </summary>
 		private void UpdateTreeView()
 		{
 			mainTreeView.Nodes.Clear();
@@ -185,6 +238,11 @@ namespace XMLToDataClass
 			}
 		}
 
+		/// <summary>
+		///   Adds the parent level tree node.
+		/// </summary>
+		/// <param name="node">Node to be added.</param>
+		/// <param name="info"><see cref="ElementInfo"/> object corresponding to the node.</param>
 		private void AddParentLevelTreeNode(TreeNode node, ElementInfo info)
 		{
 			// Text
@@ -208,18 +266,31 @@ namespace XMLToDataClass
 				AddLeafNode(node.Nodes[index], element);
 		}
 
+		/// <summary>
+		///   Adds a leaf node.
+		/// </summary>
+		/// <param name="node">Node to be added.</param>
+		/// <param name="attrib"><see cref="AttributeInfo"/> corresponding to the node.</param>
 		private void AddLeafNode(TreeNode node, AttributeInfo attrib)
 		{
 			int index = node.Nodes.Add(new TreeNode(attrib.Info.Name));
 			node.Nodes[index].Tag = attrib;
 		}
 
+		/// <summary>
+		///   Adds a leaf node.
+		/// </summary>
+		/// <param name="node">Node to be added.</param>
+		/// <param name="element"><see cref="ElementInfo"/> corresponding to the node.</param>
 		private void AddLeafNode(TreeNode node, ElementInfo element)
 		{
 			int index = node.Nodes.Add(new TreeNode(element.Name));
 			node.Nodes[index].Tag = element;
 		}
 
+		/// <summary>
+		///   Updates the details view pane.
+		/// </summary>
 		private void UpdateDetailView()
 		{
 			mainSplitContainer.Panel2.Controls.Clear();
@@ -265,6 +336,11 @@ namespace XMLToDataClass
 			}
 		}
 
+		/// <summary>
+		///   Handles the loadButton.Click event.
+		/// </summary>
+		/// <param name="sender">Sender of the event.</param>
+		/// <param name="e"><see cref="EventArgs"/> containing the arguments for the event.</param>
 		private void loadButton_Click(object sender, EventArgs e)
 		{
 			if (mLoadForm.ShowDialog() != DialogResult.OK)
@@ -292,16 +368,97 @@ namespace XMLToDataClass
 			UpdateTreeView();
 		}
 
-		#endregion Methods
-
+		/// <summary>
+		///   Handles the projectCheckBox.CheckedChanged event.
+		/// </summary>
+		/// <param name="sender">Sender of the event.</param>
+		/// <param name="e"><see cref="EventArgs"/> containing the arguments for the event.</param>
 		private void projectCheckBox_CheckedChanged(object sender, EventArgs e)
 		{
 			UpdateProjectSolutionInfo();
 		}
 
+		/// <summary>
+		///   Handles the solutionCheckBox.CheckedChanged event.
+		/// </summary>
+		/// <param name="sender">Sender of the event.</param>
+		/// <param name="e"><see cref="EventArgs"/> containing the arguments for the event.</param>
 		private void solutionCheckBox_CheckedChanged(object sender, EventArgs e)
 		{
 			UpdateProjectSolutionInfo();
 		}
+
+		/// <summary>
+		///   Parses the template.
+		/// </summary>
+		/// <param name="template">Template string to be parsed.</param>
+		/// <returns>Array of the parsed template lines.</returns>
+		private string[] ParseTemplate(string template)
+		{
+			if (template == null)
+				return new string[0];
+			if (template.Length == 0)
+				return new string[0];
+
+			return template.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+		}
+
+		/// <summary>
+		///   Merges the template lines into one string.
+		/// </summary>
+		/// <param name="template">Lines of the template to be merged.</param>
+		/// <returns>Merged template string.</returns>
+		private string MergeTemplate(string[] template)
+		{
+			if (template == null)
+				return string.Empty;
+			if (template.Length == 0)
+				return string.Empty;
+
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < template.Length; i++)
+			{
+				if (i == template.Length - 1)
+					sb.Append(template[i]);
+				else
+					sb.AppendLine(template[i]);
+			}
+			return sb.ToString();
+		}
+
+		/// <summary>
+		///   Handles the settingsButton.Click event.
+		/// </summary>
+		/// <param name="sender">Sender of the event.</param>
+		/// <param name="e"><see cref="EventArgs"/> containing the arguments for the event.</param>
+		private void settingsButton_Click(object sender, EventArgs e)
+		{
+			SettingsForm form = new SettingsForm();
+			form.CompanyName = Properties.Settings.Default.CSCodeGenCompanyName;
+			form.Developer = Properties.Settings.Default.CSCodeGenDeveloper;
+			form.UseTabs = Properties.Settings.Default.CSCodeGenUseTabs;
+			form.FlowerBoxCharacter = Properties.Settings.Default.CSCodeGenFlowerBoxCharacter;
+			form.NumberOfCharsPerLine = Properties.Settings.Default.CSCodeGenNumCharsPerLine;
+			form.IndentSize = Properties.Settings.Default.CSCodeGenIndentSize;
+			form.FileHeaderTemplate = ParseTemplate(Properties.Settings.Default.CSCodeGenFileHeaderTemplate);
+			form.CopyrightTemplate = ParseTemplate(Properties.Settings.Default.CSCodeGenCopyrightTemplate);
+			form.LicenseTemplate = ParseTemplate(Properties.Settings.Default.CSCodeGenLicenseTemplate);
+
+			if (form.ShowDialog() != DialogResult.OK)
+				return;
+
+			Properties.Settings.Default.CSCodeGenCompanyName = form.CompanyName;
+			Properties.Settings.Default.CSCodeGenDeveloper = form.Developer;
+			Properties.Settings.Default.CSCodeGenUseTabs = form.UseTabs;
+			Properties.Settings.Default.CSCodeGenFlowerBoxCharacter = form.FlowerBoxCharacter;
+			Properties.Settings.Default.CSCodeGenNumCharsPerLine = form.NumberOfCharsPerLine;
+			Properties.Settings.Default.CSCodeGenIndentSize = form.IndentSize;
+			Properties.Settings.Default.CSCodeGenFileHeaderTemplate = MergeTemplate(form.FileHeaderTemplate);
+			Properties.Settings.Default.CSCodeGenCopyrightTemplate = MergeTemplate(form.CopyrightTemplate);
+			Properties.Settings.Default.CSCodeGenLicenseTemplate = MergeTemplate(form.LicenseTemplate);
+			Properties.Settings.Default.Save();
+		}
+
+		#endregion Methods
 	}
 }

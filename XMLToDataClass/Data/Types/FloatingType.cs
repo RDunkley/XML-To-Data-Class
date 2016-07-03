@@ -1,10 +1,22 @@
-﻿using CSCodeGen;
+﻿//********************************************************************************************************************************
+// Filename:    FloatingType.cs
+// Owner:       Richard Dunkley
+// Description: Class which represents a floating point value in an XML file.
+//********************************************************************************************************************************
+// Copyright © Richard Dunkley 2016
+//
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the
+// License. You may obtain a copy of the License at: http://www.apache.org/licenses/LICENSE-2.0  Unless required by applicable
+// law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+// CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+//********************************************************************************************************************************
+using CSCodeGen;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace XMLToDataClass.Data.Types
 {
@@ -269,19 +281,19 @@ namespace XMLToDataClass.Data.Types
 			{
 				// Only one type is allowed so output in that type.
 				if (AllowCurrency)
-					codeLines.Add(string.Format("return {0}.ToString(\"C\");", mInfo.PropertyName));
+					codeLines.Add(string.Format("return {0}.ToString(\"C\");", name));
 				else if (AllowExponent)
-					codeLines.Add(string.Format("return {0}.ToString(\"E\");", mInfo.PropertyName));
+					codeLines.Add(string.Format("return {0}.ToString(\"E\");", name));
 				else if (AllowParentheses)
 				{
-					codeLines.Add(string.Format("if({0} < 0)", mInfo.PropertyName));
-					codeLines.Add(string.Format("	return string.Format(\"({{0}})\", (Math.Abs({0})).ToString(\"N\"));", mInfo.PropertyName));
-					codeLines.Add(string.Format("return {0}.ToString(\"N\");", mInfo.PropertyName));
+					codeLines.Add(string.Format("if({0} < 0)", name));
+					codeLines.Add(string.Format("	return string.Format(\"({{0}})\", (Math.Abs({0})).ToString(\"N\"));", name));
+					codeLines.Add(string.Format("return {0}.ToString(\"N\");", name));
 				}
 				else if(AllowPercent)
-					codeLines.Add(string.Format("return {0}.ToString(\"P\");", mInfo.PropertyName));
+					codeLines.Add(string.Format("return {0}.ToString(\"P\");", name));
 				else
-					codeLines.Add(string.Format("return {0}.ToString(\"N\");", mInfo.PropertyName));
+					codeLines.Add(string.Format("return {0}.ToString(\"N\");", name));
 			}
 			else
 			{
@@ -293,7 +305,7 @@ namespace XMLToDataClass.Data.Types
 					temp.Append("Currency)");
 					codeLines.Add(temp.ToString());
 					temp.Clear();
-					codeLines.Add(string.Format("	return {0}.ToString(\"C\");", mInfo.PropertyName));
+					codeLines.Add(string.Format("	return {0}.ToString(\"C\");", name));
 					index++;
 					if (index + 1 == count)
 						codeLines.Add("	else");
@@ -308,7 +320,7 @@ namespace XMLToDataClass.Data.Types
 						codeLines.Add(temp.ToString());
 						temp.Clear();
 					}
-					codeLines.Add(string.Format("	return {0}.ToString(\"E\");", mInfo.PropertyName));
+					codeLines.Add(string.Format("	return {0}.ToString(\"E\");", name));
 					index++;
 					if (index + 1 == count)
 						codeLines.Add("	else");
@@ -324,9 +336,9 @@ namespace XMLToDataClass.Data.Types
 						temp.Clear();
 					}
 					codeLines.Add("{");
-					codeLines.Add(string.Format("	if({0} < 0)", mInfo.PropertyName));
-					codeLines.Add(string.Format("		return string.Format(\"({{0}})\", (Math.Abs({0})).ToString(\"N\"));", mInfo.PropertyName));
-					codeLines.Add(string.Format("	return {0}.ToString(\"N\");", mInfo.PropertyName));
+					codeLines.Add(string.Format("	if({0} < 0)", name));
+					codeLines.Add(string.Format("		return string.Format(\"({{0}})\", (Math.Abs({0})).ToString(\"N\"));", name));
+					codeLines.Add(string.Format("	return {0}.ToString(\"N\");", name));
 					codeLines.Add("}");
 					index++;
 					if (index + 1 == count)
@@ -342,14 +354,14 @@ namespace XMLToDataClass.Data.Types
 						codeLines.Add(temp.ToString());
 						temp.Clear();
 					}
-					codeLines.Add(string.Format("	return {0}.ToString(\"P\");", mInfo.PropertyName));
+					codeLines.Add(string.Format("	return {0}.ToString(\"P\");", name));
 					index++;
 					if (index + 1 == count)
 						codeLines.Add("	else");
 					else
 						temp.Append(string.Format("else if({0} == {1}.", enumPropertyName, enumTypeName));
 				}
-				codeLines.Add(string.Format("	return {0}.ToString(\"N\");", mInfo.PropertyName));
+				codeLines.Add(string.Format("	return {0}.ToString(\"N\");", name));
 			}
 			return codeLines.ToArray();
 		}

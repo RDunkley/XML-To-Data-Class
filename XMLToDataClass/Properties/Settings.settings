@@ -23,5 +23,32 @@
     <Setting Name="SolutionName" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="CSCodeGenCompanyName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">&lt;company_name&gt;</Value>
+    </Setting>
+    <Setting Name="CSCodeGenDeveloper" Type="System.String" Scope="User">
+      <Value Profile="(Default)">&lt;developer&gt;</Value>
+    </Setting>
+    <Setting Name="CSCodeGenFlowerBoxCharacter" Type="System.Char" Scope="User">
+      <Value Profile="(Default)">*</Value>
+    </Setting>
+    <Setting Name="CSCodeGenUseTabs" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="CSCodeGenNumCharsPerLine" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">130</Value>
+    </Setting>
+    <Setting Name="CSCodeGenIndentSize" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">4</Value>
+    </Setting>
+    <Setting Name="CSCodeGenFileHeaderTemplate" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="CSCodeGenCopyrightTemplate" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="CSCodeGenLicenseTemplate" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

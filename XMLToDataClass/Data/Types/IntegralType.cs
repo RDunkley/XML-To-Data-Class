@@ -1,11 +1,21 @@
-﻿using CSCodeGen;
+﻿//********************************************************************************************************************************
+// Filename:    IntegralType.cs
+// Owner:       Richard Dunkley
+// Description: Class which represents an integral value in an XML file.
+//********************************************************************************************************************************
+// Copyright © Richard Dunkley 2016
+//
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the
+// License. You may obtain a copy of the License at: http://www.apache.org/licenses/LICENSE-2.0  Unless required by applicable
+// law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+// CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+//********************************************************************************************************************************
+using CSCodeGen;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using XMLToDataClass.View;
 
 namespace XMLToDataClass.Data.Types
 {
@@ -395,13 +405,13 @@ namespace XMLToDataClass.Data.Types
 			{
 				// Only one type is allowed so output in that type.
 				if (AllowHexType1Values)
-					codeLines.Add(string.Format("return string.Format(\"{{0}}h\", {0}.ToString(\"X\"));", mInfo.PropertyName));
+					codeLines.Add(string.Format("return string.Format(\"{{0}}h\", {0}.ToString(\"X\"));", name));
 				else if (AllowHexType2Values)
-					codeLines.Add(string.Format("return string.Format(\"0x{{0}}\", {0}.ToString(\"X\"));", mInfo.PropertyName));
+					codeLines.Add(string.Format("return string.Format(\"0x{{0}}\", {0}.ToString(\"X\"));", name));
 				else if (AllowBinaryValues)
-					codeLines.Add(string.Format("return string.Format(\"{{0}}b\", Convert.ToString(({1}){0}, 2));", mInfo.PropertyName, GetToStringType()));
+					codeLines.Add(string.Format("return string.Format(\"{{0}}b\", Convert.ToString(({1}){0}, 2));", name, GetToStringType()));
 				else
-					codeLines.Add(string.Format("return {0}.ToString();", mInfo.PropertyName));
+					codeLines.Add(string.Format("return {0}.ToString();", name));
 			}
 			else
 			{
@@ -413,7 +423,7 @@ namespace XMLToDataClass.Data.Types
 					temp.Append("HexType1)");
 					codeLines.Add(temp.ToString());
 					temp.Clear();
-					codeLines.Add(string.Format("	return string.Format(\"{{0}}h\", {0}.ToString(\"X\"));", mInfo.PropertyName));
+					codeLines.Add(string.Format("	return string.Format(\"{{0}}h\", {0}.ToString(\"X\"));", name));
 					index++;
 					if (index + 1 == count)
 						codeLines.Add("	else");
@@ -428,7 +438,7 @@ namespace XMLToDataClass.Data.Types
 						codeLines.Add(temp.ToString());
 						temp.Clear();
 					}
-					codeLines.Add(string.Format("	return string.Format(\"0x{{0}}\", {0}.ToString(\"X\"));", mInfo.PropertyName));
+					codeLines.Add(string.Format("	return string.Format(\"0x{{0}}\", {0}.ToString(\"X\"));", name));
 					index++;
 					if (index + 1 == count)
 						codeLines.Add("	else");
@@ -443,14 +453,14 @@ namespace XMLToDataClass.Data.Types
 						codeLines.Add(temp.ToString());
 						temp.Clear();
 					}
-					codeLines.Add(string.Format("	return string.Format(\"{{0}}b\", Convert.ToString(({1}){0}, 2));", mInfo.PropertyName, GetToStringType()));
+					codeLines.Add(string.Format("	return string.Format(\"{{0}}b\", Convert.ToString(({1}){0}, 2));", name, GetToStringType()));
 					index++;
 					if (index != count)
 						codeLines.Add("else");
 				}
 				if (AllowIntegerValues)
 				{
-					codeLines.Add(string.Format("	return {0}.ToString();", mInfo.PropertyName));
+					codeLines.Add(string.Format("	return {0}.ToString();", name));
 				}
 			}
 			return codeLines.ToArray();
