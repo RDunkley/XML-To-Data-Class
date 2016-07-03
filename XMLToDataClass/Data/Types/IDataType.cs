@@ -12,6 +12,7 @@
 // limitations under the License.
 //********************************************************************************************************************************
 using CSCodeGen;
+using System.Collections.Generic;
 
 namespace XMLToDataClass.Data.Types
 {
@@ -38,6 +39,11 @@ namespace XMLToDataClass.Data.Types
 		///   <see cref="DataType"/> of this data type.
 		/// </summary>
 		DataType Type { get; }
+
+		/// <summary>
+		///   List of the usings required by this type.
+		/// </summary>
+		List<string> Usings { get; }
 
 		#endregion properties
 

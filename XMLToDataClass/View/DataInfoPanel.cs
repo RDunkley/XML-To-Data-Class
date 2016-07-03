@@ -17,6 +17,7 @@ using System.Windows.Forms;
 using XMLToDataClass.Data;
 using CSCodeGen;
 using XMLToDataClass.Data.Types;
+using System.IO.Ports;
 
 namespace XMLToDataClass.View
 {
@@ -147,6 +148,14 @@ namespace XMLToDataClass.View
 				case DataType.Enum:
 					control = new EnumTypeSettings(Info.SelectedDataTypeObject as EnumType);
 					((EnumTypeSettings)control).SettingsChanged += DataInfoPanel_SettingsChanged;
+					break;
+				case DataType.SerialPortParity:
+					control = new FixedEnumSettings<Parity>(Info.SelectedDataTypeObject as SerialPortParityEnumType);
+					((FixedEnumSettings<Parity>)control).SettingsChanged += DataInfoPanel_SettingsChanged;
+					break;
+				case DataType.SerialPortStopBits:
+					control = new FixedEnumSettings<StopBits>(Info.SelectedDataTypeObject as SerialPortStopBitsEnumType);
+					((FixedEnumSettings<StopBits>)control).SettingsChanged += DataInfoPanel_SettingsChanged;
 					break;
 				default:
 					throw new NotImplementedException("The data type specified is not recognized as a valid type");

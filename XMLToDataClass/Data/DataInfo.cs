@@ -106,6 +106,8 @@ namespace XMLToDataClass.Data
 			mTypeLookup.Add(DataType.UShort, new IntegralType<ushort>(this, possibleValues, ignoreCase));
 			mTypeLookup.Add(DataType.DateTime, new DateTimeType(this, possibleValues, ignoreCase));
 			mTypeLookup.Add(DataType.Enum, new EnumType(this, possibleValues, ignoreCase));
+			mTypeLookup.Add(DataType.SerialPortParity, new SerialPortParityEnumType(this, possibleValues, ignoreCase));
+			mTypeLookup.Add(DataType.SerialPortStopBits, new SerialPortStopBitsEnumType(this, possibleValues, ignoreCase));
 			DetermineDefaultSelectedType();
 		}
 
@@ -136,6 +138,15 @@ namespace XMLToDataClass.Data
 			if (SelectedDataTypeObject.IsNullable && (IsOptional || CanBeEmpty))
 				return string.Format("{0}?", SelectedDataTypeObject.DataTypeString);
 			return SelectedDataTypeObject.DataTypeString;
+		}
+
+		/// <summary>
+		///   Returns all the custom usings for the selected data type.
+		/// </summary>
+		/// <returns></returns>
+		public string[] GetSelectedUsings()
+		{
+			return SelectedDataTypeObject.Usings.ToArray();
 		}
 
 		/// <summary>

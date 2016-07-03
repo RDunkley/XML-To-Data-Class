@@ -69,11 +69,14 @@
     <Compile Include="Data\Types\BooleanType.cs" />
     <Compile Include="Data\Types\DateTimeType.cs" />
     <Compile Include="Data\Types\EnumType.cs" />
+    <Compile Include="Data\Types\FixedEnumType.cs" />
     <Compile Include="Data\Types\FloatingType.cs" />
     <Compile Include="Data\Types\IDataType.cs" />
     <Compile Include="Data\Types\IFloatingPointType.cs" />
     <Compile Include="Data\Types\IIntegralType.cs" />
     <Compile Include="Data\Types\IntegralType.cs" />
+    <Compile Include="Data\Types\SerialPortParityEnumType.cs" />
+    <Compile Include="Data\Types\SerialPortStopBitsEnumType.cs" />
     <Compile Include="Data\Types\StringType.cs" />
     <Compile Include="Data\XMLInfo.cs" />
     <Compile Include="MainForm.cs">
@@ -119,6 +122,12 @@
     </Compile>
     <Compile Include="View\EnumTypeSettings.Designer.cs">
       <DependentUpon>EnumTypeSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\FixedEnumSettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="View\FixedEnumSettings.Designer.cs">
+      <DependentUpon>FixedEnumSettings.cs</DependentUpon>
     </Compile>
     <Compile Include="View\FloatingPointSettings.cs">
       <SubType>UserControl</SubType>
@@ -180,6 +189,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="View\EnumTypeSettings.resx">
       <DependentUpon>EnumTypeSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\FixedEnumSettings.resx">
+      <DependentUpon>FixedEnumSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\FloatingPointSettings.resx">
       <DependentUpon>FloatingPointSettings.cs</DependentUpon>

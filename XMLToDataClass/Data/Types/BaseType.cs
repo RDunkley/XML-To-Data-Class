@@ -64,6 +64,11 @@ namespace XMLToDataClass.Data.Types
 		/// </summary>
 		public DataType Type { get; protected set;}
 
+		/// <summary>
+		///   List of the usings required by this type.
+		/// </summary>
+		public List<string> Usings { get; protected set; }
+
 		#endregion Properties
 
 		#region Methods
@@ -85,6 +90,7 @@ namespace XMLToDataClass.Data.Types
 			mInfo = info;
 			mPossibleValues = possibleValues;
 			mIgnoreCase = ignoreCase;
+			Usings = new List<string>();
 		}
 
 		/// <summary>

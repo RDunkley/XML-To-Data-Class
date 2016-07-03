@@ -194,6 +194,8 @@ namespace XMLToDataClass.Data
 		public ClassInfo GenerateDataClass(bool preserveHierarchy, bool ignoreCase)
 		{
 			ClassInfo info = new ClassInfo("public partial", ClassName, null, string.Format("In memory representation of the XML element \"{0}\".", Name));
+			info.AddUsing("System.Xml");
+			info.AddUsing("System.IO");
 
 			List<DataInfo> dataList = new List<DataInfo>();
 
@@ -233,6 +235,9 @@ namespace XMLToDataClass.Data
 
 				// Add any additional enums.
 				info.Enums.AddRange(data.SelectedDataTypeObject.GenerateAdditionalEnums());
+
+				// Add any custom usings.
+				info.AddUsings(data.GetSelectedUsings());
 			}
 
 			// Add properties to represent the child nodes.
@@ -253,8 +258,11 @@ namespace XMLToDataClass.Data
 			if(preserveHierarchy)
 			{
 				// Add additional sub-classes.
-				foreach(ElementInfo child in Children)
-					info.ChildClasses.Add(child.GenerateDataClass(preserveHierarchy, ignoreCase));
+				foreach (ElementInfo child in Children)
+				{
+					ClassInfo childClass = child.GenerateDataClass(preserveHierarchy, ignoreCase);
+					info.AddChildClass(childClass);
+				}
 			}
 
 			return info;

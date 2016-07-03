@@ -87,7 +87,7 @@ namespace XMLToDataClass.Data.Types
 		/// <param name="possibleValues">Possible values the data type will have to parse. Can be empty.</param>
 		/// <param name="ignoreCase">True if the case of values should be ignored, false if they shouldn't.</param>
 		/// <exception cref="ArgumentNullException"><i>possibleValues</i> or <i>info</i> is a null reference.</exception>
-		/// <exception cref="ArgumentException">The type <i>T</i> specifies is not a valid integral type.</exception>
+		/// <exception cref="ArgumentException">The type <i>T</i> specified is not a valid integral type.</exception>
 		public IntegralType(DataInfo info, string[] possibleValues, bool ignoreCase) : base(info, possibleValues, ignoreCase)
 		{
 			AllowHexType1Values = DefaultAllowHexType1Values;
@@ -132,6 +132,7 @@ namespace XMLToDataClass.Data.Types
 			if (IsUnsigned())
 				signedString = "unsigned";
 			DisplayName = string.Format("{0}-bit {1} integer", GettMaxBitLength().ToString(), signedString);
+			Usings.Add("System.Globalization");
 		}
 
 		/// <summary>
@@ -240,6 +241,11 @@ namespace XMLToDataClass.Data.Types
 			}
 		}
 
+		/// <summary>
+		///   Generates additional enumerations used by the import or export methods.
+		/// </summary>
+		/// <returns><see cref="EnumInfo"/> array represnenting additional fields needed by the import/export methods. Can be empty.</returns>
+		/// <exception cref="InvalidOperationException">An attempt was made to generate the enums, but either none of the parsing mechanisms are selected or the maximum allowed value is less than the minimum allowed.</exception>
 		public override EnumInfo[] GenerateAdditionalEnums()
 		{
 			if (MaximumValue.CompareTo(MinimumValue) <= 0)
@@ -278,6 +284,12 @@ namespace XMLToDataClass.Data.Types
 			return new EnumInfo[] { enumInfo };
 		}
 
+		/// <summary>
+		///   Generates additional properties used by the import or export methods.
+		/// </summary>
+		/// <returns><see cref="PropertyInfo"/> array representing additional properties needed by the import/export methods. Can be empty.</returns>
+		/// <remarks>These properties are typically used to persist state from import to export.</remarks>
+		/// <exception cref="InvalidOperationException">An attempt was made to generate the properties, but either none of the parsing mechanisms are selected or the maximum allowed value is less than the minimum allowed.</exception>
 		public override PropertyInfo[] GenerateAdditionalProperties()
 		{
 			if (MaximumValue.CompareTo(MinimumValue) <= 0)
@@ -294,7 +306,7 @@ namespace XMLToDataClass.Data.Types
 					"public",
 					"bool",
 					string.Format("{0}NullIsEmpty", mInfo.PropertyName),
-					string.Format("True if the null {0} boolean should be represented as an empty string in XML, false if it shouldn't be included.", mInfo.PropertyName)
+					string.Format("True if the null {0} value should be represented as an empty string in XML, false if it shouldn't be included.", mInfo.PropertyName)
 				));
 			}
 
@@ -345,6 +357,11 @@ namespace XMLToDataClass.Data.Types
 			}
 		}
 
+		/// <summary>
+		///   Generates the export method code for the enumerated type.
+		/// </summary>
+		/// <returns>String array representing the export method code.</returns>
+		/// <exception cref="InvalidOperationException">An attempt was made to generate the method, but either none of the parsing mechanisms are selected or the maximum allowed value is less than the minimum allowed.</exception>
 		public override string[] GenerateExportMethodCode()
 		{
 			if (MaximumValue.CompareTo(MinimumValue) <= 0)
@@ -466,6 +483,11 @@ namespace XMLToDataClass.Data.Types
 			return codeLines.ToArray();
 		}
 
+		/// <summary>
+		///   Generates the import method code for the enumerated type.
+		/// </summary>
+		/// <returns>String array representing the import method code.</returns>
+		/// <exception cref="InvalidOperationException">An attempt was made to generate the method, but either none of the parsing mechanisms are selected or the maximum allowed value is less than the minimum allowed.</exception>
 		public override string[] GenerateImportMethodCode()
 		{
 			if (MaximumValue.CompareTo(MinimumValue) <= 0)

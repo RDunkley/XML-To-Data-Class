@@ -106,6 +106,7 @@ namespace XMLToDataClass.Data.Types
 			}
 			IsNullable = true;
 			DataTypeString = Enum.GetName(typeof(DataType), Type).ToLower();
+			Usings.Add("System.Globalization");
 		}
 
 		/// <summary>

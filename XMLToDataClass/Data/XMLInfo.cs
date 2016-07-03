@@ -279,35 +279,24 @@ namespace XMLToDataClass.Data
 
 		public CSCodeGen.FileInfo[] GenerateClassFiles(string nameSpace)
 		{
-			List<string> usingList = new List<string>();
-			usingList.Add("System");
-			usingList.Add("System.Collections.Generic");
-			usingList.Add("System.Globalization");
-			usingList.Add("System.IO");
-			usingList.Add("System.Security");
-			usingList.Add("System.Xml");
-
 			// Add the main class.
 			List<CSCodeGen.FileInfo> fileList = new List<CSCodeGen.FileInfo>();
 			ClassInfo main = GenerateMainClass();
-			CSCodeGen.FileInfo file = new CSCodeGen.FileInfo(nameSpace, main);
-			file.Usings.AddRange(usingList);
-			fileList.Add(file);
+			main.AddUsing("System.Xml");
+			main.AddUsing("System.IO");
+			main.AddUsing("System.Security");
+			fileList.Add(new CSCodeGen.FileInfo(nameSpace, main));
 
 			if (HierarchyMaintained)
 			{
 				ElementInfo root = GetRootNode();
-				main.ChildClasses.Add(root.GenerateDataClass(HierarchyMaintained, !CaseSensitive));
+				main.AddChildClass(root.GenerateDataClass(HierarchyMaintained, !CaseSensitive));
 			}
 			else
 			{
 				ElementInfo[] nodes = GetAllNodes();
 				foreach (ElementInfo info in nodes)
-				{
-					file = new CSCodeGen.FileInfo(nameSpace, info.GenerateDataClass(HierarchyMaintained, !CaseSensitive));
-					file.Usings.AddRange(usingList);
-					fileList.Add(file);
-				}
+					fileList.Add(new CSCodeGen.FileInfo(nameSpace, info.GenerateDataClass(HierarchyMaintained, !CaseSensitive)));
 			}
 
 			return fileList.ToArray();
@@ -460,7 +449,7 @@ namespace XMLToDataClass.Data
 				proj.References.Add(new CSCodeGen.ProjectReferenceAssembly("System.Data"));
 				proj.References.Add(new CSCodeGen.ProjectReferenceAssembly("System.Xml"));
 				foreach (CSCodeGen.FileInfo file in files)
-					proj.AddFile(file.NameSpace, file.Type, file.Usings.ToArray(), null, file.Description, file.FileNameExtension);
+					proj.AddFile(file);
 
 				if (solutionName == null)
 				{
