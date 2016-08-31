@@ -35,26 +35,26 @@
 			this.developerTextBox = new System.Windows.Forms.TextBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.flowerTextBox = new System.Windows.Forms.TextBox();
-			this.label4 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
-			this.tabCheckBox = new System.Windows.Forms.CheckBox();
-			this.indentTextBox = new System.Windows.Forms.TextBox();
 			this.numPerLineTextBox = new System.Windows.Forms.TextBox();
+			this.tabCheckBox = new System.Windows.Forms.CheckBox();
+			this.label4 = new System.Windows.Forms.Label();
+			this.indentTextBox = new System.Windows.Forms.TextBox();
+			this.templateGroupBox = new System.Windows.Forms.GroupBox();
 			this.mainTabControl = new System.Windows.Forms.TabControl();
 			this.fileHeaderTabPage = new System.Windows.Forms.TabPage();
-			this.copyrightTabPage = new System.Windows.Forms.TabPage();
-			this.templateGroupBox = new System.Windows.Forms.GroupBox();
-			this.licenseTabPage = new System.Windows.Forms.TabPage();
 			this.fileRichTextBox = new System.Windows.Forms.RichTextBox();
+			this.copyrightTabPage = new System.Windows.Forms.TabPage();
 			this.copyrightRichTextBox = new System.Windows.Forms.RichTextBox();
+			this.licenseTabPage = new System.Windows.Forms.TabPage();
 			this.licenseRichTextBox = new System.Windows.Forms.RichTextBox();
 			this.okButton = new System.Windows.Forms.Button();
 			this.cancelButton = new System.Windows.Forms.Button();
 			this.mainTableLayoutPanel.SuspendLayout();
+			this.templateGroupBox.SuspendLayout();
 			this.mainTabControl.SuspendLayout();
 			this.fileHeaderTabPage.SuspendLayout();
 			this.copyrightTabPage.SuspendLayout();
-			this.templateGroupBox.SuspendLayout();
 			this.licenseTabPage.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -149,17 +149,6 @@
 			this.flowerTextBox.Size = new System.Drawing.Size(44, 20);
 			this.flowerTextBox.TabIndex = 5;
 			// 
-			// label4
-			// 
-			this.label4.AutoSize = true;
-			this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label4.Location = new System.Drawing.Point(233, 52);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(155, 26);
-			this.label4.TabIndex = 6;
-			this.label4.Text = "Indent Size:";
-			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
 			// label5
 			// 
 			this.label5.AutoSize = true;
@@ -170,6 +159,14 @@
 			this.label5.TabIndex = 7;
 			this.label5.Text = "Number of Characters Per Line:";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// numPerLineTextBox
+			// 
+			this.numPerLineTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.numPerLineTextBox.Location = new System.Drawing.Point(394, 29);
+			this.numPerLineTextBox.Name = "numPerLineTextBox";
+			this.numPerLineTextBox.Size = new System.Drawing.Size(44, 20);
+			this.numPerLineTextBox.TabIndex = 10;
 			// 
 			// tabCheckBox
 			// 
@@ -182,6 +179,17 @@
 			this.tabCheckBox.Text = "Use Tabs";
 			this.tabCheckBox.UseVisualStyleBackColor = true;
 			// 
+			// label4
+			// 
+			this.label4.AutoSize = true;
+			this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.label4.Location = new System.Drawing.Point(233, 52);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(155, 26);
+			this.label4.TabIndex = 6;
+			this.label4.Text = "Indent Size:";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// indentTextBox
 			// 
 			this.indentTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -190,13 +198,17 @@
 			this.indentTextBox.Size = new System.Drawing.Size(44, 20);
 			this.indentTextBox.TabIndex = 9;
 			// 
-			// numPerLineTextBox
+			// templateGroupBox
 			// 
-			this.numPerLineTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.numPerLineTextBox.Location = new System.Drawing.Point(394, 29);
-			this.numPerLineTextBox.Name = "numPerLineTextBox";
-			this.numPerLineTextBox.Size = new System.Drawing.Size(44, 20);
-			this.numPerLineTextBox.TabIndex = 10;
+			this.mainTableLayoutPanel.SetColumnSpan(this.templateGroupBox, 4);
+			this.templateGroupBox.Controls.Add(this.mainTabControl);
+			this.templateGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.templateGroupBox.Location = new System.Drawing.Point(3, 81);
+			this.templateGroupBox.Name = "templateGroupBox";
+			this.templateGroupBox.Size = new System.Drawing.Size(435, 144);
+			this.templateGroupBox.TabIndex = 12;
+			this.templateGroupBox.TabStop = false;
+			this.templateGroupBox.Text = "Templates";
 			// 
 			// mainTabControl
 			// 
@@ -221,44 +233,11 @@
 			this.fileHeaderTabPage.Text = "File Header";
 			this.fileHeaderTabPage.UseVisualStyleBackColor = true;
 			// 
-			// copyrightTabPage
-			// 
-			this.copyrightTabPage.Controls.Add(this.copyrightRichTextBox);
-			this.copyrightTabPage.Location = new System.Drawing.Point(4, 22);
-			this.copyrightTabPage.Name = "copyrightTabPage";
-			this.copyrightTabPage.Padding = new System.Windows.Forms.Padding(3);
-			this.copyrightTabPage.Size = new System.Drawing.Size(421, 128);
-			this.copyrightTabPage.TabIndex = 1;
-			this.copyrightTabPage.Text = "Copyright";
-			this.copyrightTabPage.UseVisualStyleBackColor = true;
-			// 
-			// templateGroupBox
-			// 
-			this.mainTableLayoutPanel.SetColumnSpan(this.templateGroupBox, 4);
-			this.templateGroupBox.Controls.Add(this.mainTabControl);
-			this.templateGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.templateGroupBox.Location = new System.Drawing.Point(3, 81);
-			this.templateGroupBox.Name = "templateGroupBox";
-			this.templateGroupBox.Size = new System.Drawing.Size(435, 144);
-			this.templateGroupBox.TabIndex = 12;
-			this.templateGroupBox.TabStop = false;
-			this.templateGroupBox.Text = "Templates";
-			// 
-			// licenseTabPage
-			// 
-			this.licenseTabPage.Controls.Add(this.licenseRichTextBox);
-			this.licenseTabPage.Location = new System.Drawing.Point(4, 22);
-			this.licenseTabPage.Name = "licenseTabPage";
-			this.licenseTabPage.Padding = new System.Windows.Forms.Padding(3);
-			this.licenseTabPage.Size = new System.Drawing.Size(421, 128);
-			this.licenseTabPage.TabIndex = 2;
-			this.licenseTabPage.Text = "License";
-			this.licenseTabPage.UseVisualStyleBackColor = true;
-			// 
 			// fileRichTextBox
 			// 
 			this.fileRichTextBox.AcceptsTab = true;
 			this.fileRichTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.fileRichTextBox.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.fileRichTextBox.Location = new System.Drawing.Point(3, 3);
 			this.fileRichTextBox.Name = "fileRichTextBox";
 			this.fileRichTextBox.Size = new System.Drawing.Size(415, 93);
@@ -266,24 +245,48 @@
 			this.fileRichTextBox.Text = "";
 			this.fileRichTextBox.WordWrap = false;
 			// 
+			// copyrightTabPage
+			// 
+			this.copyrightTabPage.Controls.Add(this.copyrightRichTextBox);
+			this.copyrightTabPage.Location = new System.Drawing.Point(4, 22);
+			this.copyrightTabPage.Name = "copyrightTabPage";
+			this.copyrightTabPage.Padding = new System.Windows.Forms.Padding(3);
+			this.copyrightTabPage.Size = new System.Drawing.Size(421, 99);
+			this.copyrightTabPage.TabIndex = 1;
+			this.copyrightTabPage.Text = "Copyright";
+			this.copyrightTabPage.UseVisualStyleBackColor = true;
+			// 
 			// copyrightRichTextBox
 			// 
 			this.copyrightRichTextBox.AcceptsTab = true;
 			this.copyrightRichTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.copyrightRichTextBox.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.copyrightRichTextBox.Location = new System.Drawing.Point(3, 3);
 			this.copyrightRichTextBox.Name = "copyrightRichTextBox";
-			this.copyrightRichTextBox.Size = new System.Drawing.Size(415, 122);
+			this.copyrightRichTextBox.Size = new System.Drawing.Size(415, 93);
 			this.copyrightRichTextBox.TabIndex = 1;
 			this.copyrightRichTextBox.Text = "";
 			this.copyrightRichTextBox.WordWrap = false;
+			// 
+			// licenseTabPage
+			// 
+			this.licenseTabPage.Controls.Add(this.licenseRichTextBox);
+			this.licenseTabPage.Location = new System.Drawing.Point(4, 22);
+			this.licenseTabPage.Name = "licenseTabPage";
+			this.licenseTabPage.Padding = new System.Windows.Forms.Padding(3);
+			this.licenseTabPage.Size = new System.Drawing.Size(421, 99);
+			this.licenseTabPage.TabIndex = 2;
+			this.licenseTabPage.Text = "License";
+			this.licenseTabPage.UseVisualStyleBackColor = true;
 			// 
 			// licenseRichTextBox
 			// 
 			this.licenseRichTextBox.AcceptsTab = true;
 			this.licenseRichTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.licenseRichTextBox.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.licenseRichTextBox.Location = new System.Drawing.Point(3, 3);
 			this.licenseRichTextBox.Name = "licenseRichTextBox";
-			this.licenseRichTextBox.Size = new System.Drawing.Size(415, 122);
+			this.licenseRichTextBox.Size = new System.Drawing.Size(415, 93);
 			this.licenseRichTextBox.TabIndex = 1;
 			this.licenseRichTextBox.Text = "";
 			this.licenseRichTextBox.WordWrap = false;
@@ -324,10 +327,10 @@
 			this.Text = "Code Generation Settings";
 			this.mainTableLayoutPanel.ResumeLayout(false);
 			this.mainTableLayoutPanel.PerformLayout();
+			this.templateGroupBox.ResumeLayout(false);
 			this.mainTabControl.ResumeLayout(false);
 			this.fileHeaderTabPage.ResumeLayout(false);
 			this.copyrightTabPage.ResumeLayout(false);
-			this.templateGroupBox.ResumeLayout(false);
 			this.licenseTabPage.ResumeLayout(false);
 			this.ResumeLayout(false);
 
