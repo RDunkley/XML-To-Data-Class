@@ -549,7 +549,7 @@ namespace XMLToDataClass.Data.Types
 				codeLines.Add(string.Empty);
 				codeLines.Add("	if (value.Length > 1 && char.ToLower(value[value.Length - 1]) == 'h')");
 				codeLines.Add("	{");
-				codeLines.Add("		// Number is a hexedecimal type 1 number (FFh).");
+				codeLines.Add("		// Number is a hexadecimal type 1 number (FFh).");
 				codeLines.Add(string.Format("		returnValue = {0}.Parse(value.Substring(0, value.Length - 1), NumberStyles.AllowHexSpecifier);", DataTypeString));
 				if(count > 1)
 					codeLines.Add(string.Format("		{0} = {1}.HexType1;", enumPropertyName, enumTypeName));
@@ -566,7 +566,7 @@ namespace XMLToDataClass.Data.Types
 				else
 					codeLines.Add("	else if (value.Length > 2 && value[0] == '0' && char.ToLower(value[1]) == 'x')");
 				codeLines.Add("	{");
-				codeLines.Add("		// Number is specified as a hexedecimal type 2 number (0xFF).");
+				codeLines.Add("		// Number is specified as a hexadecimal type 2 number (0xFF).");
 				codeLines.Add(string.Format("		returnValue = {0}.Parse(value.Substring(2), NumberStyles.AllowHexSpecifier);", DataTypeString));
 				if (count > 1)
 					codeLines.Add(string.Format("		{0} = {1}.HexType2;", enumPropertyName, enumTypeName));
@@ -770,14 +770,14 @@ namespace XMLToDataClass.Data.Types
 			bool parsed = false;
 			if (allowHexType2 && value.Length > 2 && value[0] == '0' && char.ToLower(value[1]) == 'x')
 			{
-				// Number is specified as a hexedecimal number.
+				// Number is specified as a hexadecimal number.
 				if (!TryParse(value.Substring(2), NumberStyles.AllowHexSpecifier, out returnValue))
 					return false;
 				parsed = true;
 			}
 			else if (allowHexType1 && value.Length > 1 && char.ToLower(value[value.Length - 1]) == 'h')
 			{
-				// Number is specified as a hexedecimal number.
+				// Number is specified as a hexadecimal number.
 				if (!TryParse(value.Substring(0, value.Length - 1), NumberStyles.AllowHexSpecifier, out returnValue))
 					return false;
 				parsed = true;
@@ -935,13 +935,13 @@ namespace XMLToDataClass.Data.Types
 			{
 				if (allowHexType2 && value.Length > 2 && value[0] == '0' && char.ToLower(value[1]) == 'x')
 				{
-					// Number is specified as a hexedecimal number.
+					// Number is specified as a hexadecimal number.
 					returnValue = Parse(value.Substring(2), NumberStyles.AllowHexSpecifier);
 					parsed = true;
 				}
 				else if (allowHexType1 && value.Length > 1 && char.ToLower(value[value.Length - 1]) == 'h')
 				{
-					// Number is specified as a hexedecimal number.
+					// Number is specified as a hexadecimal number.
 					returnValue = Parse(value.Substring(0, value.Length - 1), NumberStyles.AllowHexSpecifier);
 					parsed = true;
 				}
