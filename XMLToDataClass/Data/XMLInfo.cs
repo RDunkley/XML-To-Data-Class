@@ -27,6 +27,8 @@ namespace XMLToDataClass.Data
 	{
 		#region Properties
 
+		public ElementInfo RootNode { get; private set; }
+
 		public Dictionary<string, ElementInfo> Elements { get; private set; }
 
 		public bool HierarchyMaintained { get; private set; }
@@ -112,11 +114,29 @@ namespace XMLToDataClass.Data
 			foreach(string key in xmlNodesByName.Keys)
 				xmlElements.Add(key, new ElementInfo(xmlNodesByName[key], ignoreCase));
 			AddChildElements(xmlNodesByName, xmlElements, ignoreCase, maintainHierarchy);
+			RootNode = GetRootNode(doc, xmlElements, ignoreCase);
 			Elements = xmlElements;
 			MainClassName = StringUtility.GetUpperCamelCase(Path.GetFileNameWithoutExtension(filePath));
 			FilePath = filePath;
 			HierarchyMaintained = maintainHierarchy;
 			CaseSensitive = !ignoreCase;
+		}
+
+		private ElementInfo GetRootNode(XmlDocument doc, Dictionary<string, ElementInfo> xmlElements, bool ignoreCase)
+		{
+			foreach(XmlNode child in doc.ChildNodes)
+			{
+				if(child.NodeType == XmlNodeType.Element)
+				{
+					foreach(ElementInfo element in xmlElements.Values)
+					{
+						if (string.Compare(child.Name, element.Name, ignoreCase) == 0)
+							return element;
+					}
+				}
+			}
+
+			throw new InvalidOperationException("Unable to locate a root node in the XML file");
 		}
 
 		private void GetHeaderInformation(XmlDocument doc)
@@ -260,16 +280,6 @@ namespace XMLToDataClass.Data
 			return returnLookup;
 		}
 
-		public ElementInfo GetRootNode()
-		{
-			foreach(string key in Elements.Keys)
-			{
-				if (!key.Contains("."))
-					return Elements[key];
-			}
-			throw new InvalidOperationException("Could not locate a root node");
-		}
-
 		public ElementInfo[] GetAllNodes()
 		{
 			List<ElementInfo> nodeList = new List<ElementInfo>(Elements.Count);
@@ -289,8 +299,7 @@ namespace XMLToDataClass.Data
 
 			if (HierarchyMaintained)
 			{
-				ElementInfo root = GetRootNode();
-				main.AddChildClass(root.GenerateDataClass(HierarchyMaintained, !CaseSensitive));
+				main.AddChildClass(RootNode.GenerateDataClass(HierarchyMaintained, !CaseSensitive));
 			}
 			else
 			{
@@ -308,9 +317,8 @@ namespace XMLToDataClass.Data
 			ClassInfo info = new ClassInfo("public partial", MainClassName, null, summary);
 
 			// Add properties for each root element.
-			ElementInfo root = GetRootNode();
-			summary = string.Format("Contains the root {0} element in the XML file.", root.Name);
-			info.Properties.Add(new PropertyInfo("public", string.Format("{0}", root.ClassName), "Root", summary, null, null, "private"));
+			summary = string.Format("Contains the root {0} element in the XML file.", RootNode.Name);
+			info.Properties.Add(new PropertyInfo("public", string.Format("{0}", RootNode.ClassName), "Root", summary, null, null, "private"));
 
 			info.Methods.Add(GenerateImporterMethod());
 			info.Methods.Add(GenerateExporterMethod());
@@ -371,13 +379,12 @@ namespace XMLToDataClass.Data
 			method.CodeLines.Add(string.Empty);
 
 			// Add the list objects.
-			ElementInfo root = GetRootNode();
 			method.CodeLines.Add("XmlElement root = doc.DocumentElement;");
 			method.CodeLines.Add("if(root.NodeType != XmlNodeType.Element)");
 			method.CodeLines.Add("	throw new InvalidDataException(\"The root node is not an element node.\");");
-			method.CodeLines.Add(string.Format("if(string.Compare(root.Name, \"{0}\", {1}) != 0)", root.Name, (!CaseSensitive).ToString().ToLower()));
-			method.CodeLines.Add(string.Format("	throw new InvalidDataException(\"The root node is not a '{0}' named node.\");", root.Name));
-			method.CodeLines.Add(string.Format("Root = new {0}(root);", root.ClassName));
+			method.CodeLines.Add(string.Format("if(string.Compare(root.Name, \"{0}\", {1}) != 0)", RootNode.Name, (!CaseSensitive).ToString().ToLower()));
+			method.CodeLines.Add(string.Format("	throw new InvalidDataException(\"The root node is not a '{0}' named node.\");", RootNode.Name));
+			method.CodeLines.Add(string.Format("Root = new {0}(root);", RootNode.ClassName));
 			return method;
 		}
 

@@ -260,7 +260,7 @@ namespace XMLToDataClass
 				ElementInfo[] roots;
 				if (mInfo.HierarchyMaintained)
 				{
-					roots = new ElementInfo[1] { mInfo.GetRootNode() };
+					roots = new ElementInfo[1] { mInfo.RootNode };
 				}
 				else
 				{
