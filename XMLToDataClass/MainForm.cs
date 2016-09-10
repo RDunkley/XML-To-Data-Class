@@ -242,6 +242,8 @@ namespace XMLToDataClass
 		private void UpdateGUIAccess(bool enable)
 		{
 			mainSplitContainer.Enabled = enable;
+			mainClassLabel.Enabled = enable;
+			mainClassTextBox.Enabled = enable;
 			generateButton.Enabled = enable;
 			saveConfigButton.Enabled = enable;
 			loadConfigButton.Enabled = enable;
@@ -273,6 +275,8 @@ namespace XMLToDataClass
 					mainTreeView.Nodes[index].Tag = info;
 					AddParentLevelTreeNode(mainTreeView.Nodes[index], info);
 				}
+
+				mainClassTextBox.Text = mInfo.MainClassName;
 
 				UpdateDetailView();
 				UpdateGUIAccess(true);
@@ -503,5 +507,11 @@ namespace XMLToDataClass
 		}
 
 		#endregion Methods
+
+		private void mainClassTextBox_TextChanged(object sender, EventArgs e)
+		{
+			if (mInfo != null)
+				mInfo.MainClassName = mainClassTextBox.Text;
+		}
 	}
 }
