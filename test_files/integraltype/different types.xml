@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<a>
-	<b byteAttrib="0xFF" sbyteAttrib="0xFF" ushortAttrib="0xFFFF" shortAttrib="0xFFFF" uintAttrib="0xFFFFFFFF" intAttrib="0xFFFFFFFF" ulongAttrib="0xFFFFFFFFFFFFFFFF" longAttrib="0xFFFFFFFFFFFFFFFF" />
-	<b byteAttrib="FFh" sbyteAttrib="FFh" ushortAttrib="FFFFh" shortAttrib="FFFFh" uintAttrib="FFFFFFFFh" intAttrib="FFFFFFFFh" ulongAttrib="FFFFFFFFFFFFFFFFh" longAttrib="FFFFFFFFFFFFFFFFh" />
-	<b byteAttrib="11111111b" sbyteAttrib="11111111b" ushortAttrib="1111111111111111b" shortAttrib="1111111111111111b" uintAttrib="11111111111111111111111111111111b" intAttrib="11111111111111111111111111111111b" ulongAttrib="1111111111111111111111111111111111111111111111111111111111111111b" longAttrib="1111111111111111111111111111111111111111111111111111111111111111b" />
-	<b byteAttrib="255" sbyteAttrib="-100" ushortAttrib="65,535" shortAttrib="-2,000" uintAttrib="4294967295" intAttrib="-200000000" ulongAttrib="18,446,744,073,709,551,615" longAttrib="-10,000,000,000" />
-</a>

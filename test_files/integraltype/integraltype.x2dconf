@@ -1,0 +1,1294 @@
+<save_data MainClassName="DifferentTypes">
+  <a ClassName="A">
+    <CDATA SelectedDataType="SerialPortStopBits" CanBeEmpty="False" IsOptional="True" PropertyName="CDATA" Include="False">
+      <Boolean>
+        <setting name="AllowTrueFalseStrings" value="True" />
+        <setting name="AllowYesNoStrings" value="True" />
+        <setting name="AllowZeroOneStrings" value="True" />
+      </Boolean>
+      <Byte>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="255" />
+        <setting name="MinimumValue" value="0" />
+      </Byte>
+      <Double>
+        <setting name="AllowCurrency" value="True" />
+        <setting name="AllowParentheses" value="True" />
+        <setting name="AllowExponent" value="True" />
+        <setting name="AllowPercent" value="True" />
+        <setting name="MaximumValue" value="1.79769313486232E+308" />
+        <setting name="MinimumValue" value="-1.79769313486232E+308" />
+      </Double>
+      <Float>
+        <setting name="AllowCurrency" value="True" />
+        <setting name="AllowParentheses" value="True" />
+        <setting name="AllowExponent" value="True" />
+        <setting name="AllowPercent" value="True" />
+        <setting name="MaximumValue" value="3.402823E+38" />
+        <setting name="MinimumValue" value="-3.402823E+38" />
+      </Float>
+      <Int>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="2147483647" />
+        <setting name="MinimumValue" value="-2147483648" />
+      </Int>
+      <Long>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="9223372036854775807" />
+        <setting name="MinimumValue" value="-9223372036854775808" />
+      </Long>
+      <SByte>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="127" />
+        <setting name="MinimumValue" value="-128" />
+      </SByte>
+      <Short>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="32767" />
+        <setting name="MinimumValue" value="-32768" />
+      </Short>
+      <String>
+        <setting name="MinimumLength" value="0" />
+        <setting name="MaximumLength" value="0" />
+      </String>
+      <UInt>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="4294967295" />
+        <setting name="MinimumValue" value="0" />
+      </UInt>
+      <ULong>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="18446744073709551615" />
+        <setting name="MinimumValue" value="0" />
+      </ULong>
+      <UShort>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="65535" />
+        <setting name="MinimumValue" value="0" />
+      </UShort>
+      <DateTime>
+        <setting name="DateTimeSelect" value="DateTime" />
+        <setting name="Culture" value="en-US" />
+      </DateTime>
+      <Enum />
+      <SerialPortParity>
+        <setting name="AllowValues" value="False" />
+        <setting name="IgnoreCase" value="True" />
+      </SerialPortParity>
+      <SerialPortStopBits>
+        <setting name="AllowValues" value="False" />
+        <setting name="IgnoreCase" value="True" />
+      </SerialPortStopBits>
+    </CDATA>
+    <Text SelectedDataType="SerialPortStopBits" CanBeEmpty="False" IsOptional="True" PropertyName="Text" Include="False">
+      <Boolean>
+        <setting name="AllowTrueFalseStrings" value="True" />
+        <setting name="AllowYesNoStrings" value="True" />
+        <setting name="AllowZeroOneStrings" value="True" />
+      </Boolean>
+      <Byte>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="255" />
+        <setting name="MinimumValue" value="0" />
+      </Byte>
+      <Double>
+        <setting name="AllowCurrency" value="True" />
+        <setting name="AllowParentheses" value="True" />
+        <setting name="AllowExponent" value="True" />
+        <setting name="AllowPercent" value="True" />
+        <setting name="MaximumValue" value="1.79769313486232E+308" />
+        <setting name="MinimumValue" value="-1.79769313486232E+308" />
+      </Double>
+      <Float>
+        <setting name="AllowCurrency" value="True" />
+        <setting name="AllowParentheses" value="True" />
+        <setting name="AllowExponent" value="True" />
+        <setting name="AllowPercent" value="True" />
+        <setting name="MaximumValue" value="3.402823E+38" />
+        <setting name="MinimumValue" value="-3.402823E+38" />
+      </Float>
+      <Int>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="2147483647" />
+        <setting name="MinimumValue" value="-2147483648" />
+      </Int>
+      <Long>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="9223372036854775807" />
+        <setting name="MinimumValue" value="-9223372036854775808" />
+      </Long>
+      <SByte>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="127" />
+        <setting name="MinimumValue" value="-128" />
+      </SByte>
+      <Short>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="32767" />
+        <setting name="MinimumValue" value="-32768" />
+      </Short>
+      <String>
+        <setting name="MinimumLength" value="0" />
+        <setting name="MaximumLength" value="0" />
+      </String>
+      <UInt>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="4294967295" />
+        <setting name="MinimumValue" value="0" />
+      </UInt>
+      <ULong>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="18446744073709551615" />
+        <setting name="MinimumValue" value="0" />
+      </ULong>
+      <UShort>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="65535" />
+        <setting name="MinimumValue" value="0" />
+      </UShort>
+      <DateTime>
+        <setting name="DateTimeSelect" value="DateTime" />
+        <setting name="Culture" value="en-US" />
+      </DateTime>
+      <Enum />
+      <SerialPortParity>
+        <setting name="AllowValues" value="False" />
+        <setting name="IgnoreCase" value="True" />
+      </SerialPortParity>
+      <SerialPortStopBits>
+        <setting name="AllowValues" value="False" />
+        <setting name="IgnoreCase" value="True" />
+      </SerialPortStopBits>
+    </Text>
+  </a>
+  <b ClassName="B">
+    <byteattrib SelectedDataType="Byte" CanBeEmpty="False" IsOptional="False" PropertyName="Byteattrib">
+      <Boolean>
+        <setting name="AllowTrueFalseStrings" value="True" />
+        <setting name="AllowYesNoStrings" value="True" />
+        <setting name="AllowZeroOneStrings" value="True" />
+      </Boolean>
+      <Byte>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="False" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="23" />
+        <setting name="MinimumValue" value="0" />
+      </Byte>
+      <Double>
+        <setting name="AllowCurrency" value="True" />
+        <setting name="AllowParentheses" value="True" />
+        <setting name="AllowExponent" value="True" />
+        <setting name="AllowPercent" value="True" />
+        <setting name="MaximumValue" value="1.79769313486232E+308" />
+        <setting name="MinimumValue" value="-1.79769313486232E+308" />
+      </Double>
+      <Float>
+        <setting name="AllowCurrency" value="True" />
+        <setting name="AllowParentheses" value="True" />
+        <setting name="AllowExponent" value="True" />
+        <setting name="AllowPercent" value="True" />
+        <setting name="MaximumValue" value="3.402823E+38" />
+        <setting name="MinimumValue" value="-3.402823E+38" />
+      </Float>
+      <Int>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="2147483647" />
+        <setting name="MinimumValue" value="-2147483648" />
+      </Int>
+      <Long>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="9223372036854775807" />
+        <setting name="MinimumValue" value="-9223372036854775808" />
+      </Long>
+      <SByte>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="127" />
+        <setting name="MinimumValue" value="-128" />
+      </SByte>
+      <Short>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="32767" />
+        <setting name="MinimumValue" value="-32768" />
+      </Short>
+      <String>
+        <setting name="MinimumLength" value="0" />
+        <setting name="MaximumLength" value="0" />
+      </String>
+      <UInt>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="4294967295" />
+        <setting name="MinimumValue" value="0" />
+      </UInt>
+      <ULong>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="18446744073709551615" />
+        <setting name="MinimumValue" value="0" />
+      </ULong>
+      <UShort>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="65535" />
+        <setting name="MinimumValue" value="0" />
+      </UShort>
+      <DateTime>
+        <setting name="DateTimeSelect" value="DateTime" />
+        <setting name="Culture" value="en-US" />
+      </DateTime>
+      <Enum>
+        <setting name="0xff" value="Xff" />
+        <setting name="ffh" value="Ffh" />
+        <setting name="11111111b" value="B" />
+        <setting name="255" value="" />
+      </Enum>
+      <SerialPortParity>
+        <setting name="AllowValues" value="False" />
+        <setting name="IgnoreCase" value="True" />
+      </SerialPortParity>
+      <SerialPortStopBits>
+        <setting name="AllowValues" value="False" />
+        <setting name="IgnoreCase" value="True" />
+      </SerialPortStopBits>
+    </byteattrib>
+    <intattrib SelectedDataType="Int" CanBeEmpty="False" IsOptional="False" PropertyName="Intattrib">
+      <Boolean>
+        <setting name="AllowTrueFalseStrings" value="True" />
+        <setting name="AllowYesNoStrings" value="True" />
+        <setting name="AllowZeroOneStrings" value="True" />
+      </Boolean>
+      <Byte>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="255" />
+        <setting name="MinimumValue" value="0" />
+      </Byte>
+      <Double>
+        <setting name="AllowCurrency" value="True" />
+        <setting name="AllowParentheses" value="True" />
+        <setting name="AllowExponent" value="True" />
+        <setting name="AllowPercent" value="True" />
+        <setting name="MaximumValue" value="1.79769313486232E+308" />
+        <setting name="MinimumValue" value="-1.79769313486232E+308" />
+      </Double>
+      <Float>
+        <setting name="AllowCurrency" value="True" />
+        <setting name="AllowParentheses" value="True" />
+        <setting name="AllowExponent" value="True" />
+        <setting name="AllowPercent" value="True" />
+        <setting name="MaximumValue" value="3.402823E+38" />
+        <setting name="MinimumValue" value="-3.402823E+38" />
+      </Float>
+      <Int>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="False" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="214748364" />
+        <setting name="MinimumValue" value="-214748364" />
+      </Int>
+      <Long>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="9223372036854775807" />
+        <setting name="MinimumValue" value="-9223372036854775808" />
+      </Long>
+      <SByte>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="127" />
+        <setting name="MinimumValue" value="-128" />
+      </SByte>
+      <Short>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="32767" />
+        <setting name="MinimumValue" value="-32768" />
+      </Short>
+      <String>
+        <setting name="MinimumLength" value="0" />
+        <setting name="MaximumLength" value="0" />
+      </String>
+      <UInt>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="4294967295" />
+        <setting name="MinimumValue" value="0" />
+      </UInt>
+      <ULong>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="18446744073709551615" />
+        <setting name="MinimumValue" value="0" />
+      </ULong>
+      <UShort>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="65535" />
+        <setting name="MinimumValue" value="0" />
+      </UShort>
+      <DateTime>
+        <setting name="DateTimeSelect" value="DateTime" />
+        <setting name="Culture" value="en-US" />
+      </DateTime>
+      <Enum>
+        <setting name="0xffffffff" value="Xffffffff" />
+        <setting name="ffffffffh" value="Ffffffffh" />
+        <setting name="11111111111111111111111111111111b" value="B" />
+        <setting name="-200000000" value="" />
+      </Enum>
+      <SerialPortParity>
+        <setting name="AllowValues" value="False" />
+        <setting name="IgnoreCase" value="True" />
+      </SerialPortParity>
+      <SerialPortStopBits>
+        <setting name="AllowValues" value="False" />
+        <setting name="IgnoreCase" value="True" />
+      </SerialPortStopBits>
+    </intattrib>
+    <longattrib SelectedDataType="Long" CanBeEmpty="False" IsOptional="False" PropertyName="Longattrib">
+      <Boolean>
+        <setting name="AllowTrueFalseStrings" value="True" />
+        <setting name="AllowYesNoStrings" value="True" />
+        <setting name="AllowZeroOneStrings" value="True" />
+      </Boolean>
+      <Byte>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="255" />
+        <setting name="MinimumValue" value="0" />
+      </Byte>
+      <Double>
+        <setting name="AllowCurrency" value="True" />
+        <setting name="AllowParentheses" value="True" />
+        <setting name="AllowExponent" value="True" />
+        <setting name="AllowPercent" value="True" />
+        <setting name="MaximumValue" value="1.79769313486232E+308" />
+        <setting name="MinimumValue" value="-1.79769313486232E+308" />
+      </Double>
+      <Float>
+        <setting name="AllowCurrency" value="True" />
+        <setting name="AllowParentheses" value="True" />
+        <setting name="AllowExponent" value="True" />
+        <setting name="AllowPercent" value="True" />
+        <setting name="MaximumValue" value="3.402823E+38" />
+        <setting name="MinimumValue" value="-3.402823E+38" />
+      </Float>
+      <Int>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="2147483647" />
+        <setting name="MinimumValue" value="-2147483648" />
+      </Int>
+      <Long>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="False" />
+        <setting name="MaximumValue" value="9223372036854775" />
+        <setting name="MinimumValue" value="-9223372036854775" />
+      </Long>
+      <SByte>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="127" />
+        <setting name="MinimumValue" value="-128" />
+      </SByte>
+      <Short>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="32767" />
+        <setting name="MinimumValue" value="-32768" />
+      </Short>
+      <String>
+        <setting name="MinimumLength" value="0" />
+        <setting name="MaximumLength" value="0" />
+      </String>
+      <UInt>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="4294967295" />
+        <setting name="MinimumValue" value="0" />
+      </UInt>
+      <ULong>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="18446744073709551615" />
+        <setting name="MinimumValue" value="0" />
+      </ULong>
+      <UShort>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="65535" />
+        <setting name="MinimumValue" value="0" />
+      </UShort>
+      <DateTime>
+        <setting name="DateTimeSelect" value="DateTime" />
+        <setting name="Culture" value="en-US" />
+      </DateTime>
+      <Enum>
+        <setting name="0xffffffffffffffff" value="Xffffffffffffffff" />
+        <setting name="ffffffffffffffffh" value="Ffffffffffffffffh" />
+        <setting name="1111111111111111111111111111111111111111111111111111111111111111b" value="B" />
+        <setting name="-10,000,000,000" value="" />
+      </Enum>
+      <SerialPortParity>
+        <setting name="AllowValues" value="False" />
+        <setting name="IgnoreCase" value="True" />
+      </SerialPortParity>
+      <SerialPortStopBits>
+        <setting name="AllowValues" value="False" />
+        <setting name="IgnoreCase" value="True" />
+      </SerialPortStopBits>
+    </longattrib>
+    <sbyteattrib SelectedDataType="SByte" CanBeEmpty="False" IsOptional="False" PropertyName="Sbyteattrib">
+      <Boolean>
+        <setting name="AllowTrueFalseStrings" value="True" />
+        <setting name="AllowYesNoStrings" value="True" />
+        <setting name="AllowZeroOneStrings" value="True" />
+      </Boolean>
+      <Byte>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="255" />
+        <setting name="MinimumValue" value="0" />
+      </Byte>
+      <Double>
+        <setting name="AllowCurrency" value="True" />
+        <setting name="AllowParentheses" value="True" />
+        <setting name="AllowExponent" value="True" />
+        <setting name="AllowPercent" value="True" />
+        <setting name="MaximumValue" value="1.79769313486232E+308" />
+        <setting name="MinimumValue" value="-1.79769313486232E+308" />
+      </Double>
+      <Float>
+        <setting name="AllowCurrency" value="True" />
+        <setting name="AllowParentheses" value="True" />
+        <setting name="AllowExponent" value="True" />
+        <setting name="AllowPercent" value="True" />
+        <setting name="MaximumValue" value="3.402823E+38" />
+        <setting name="MinimumValue" value="-3.402823E+38" />
+      </Float>
+      <Int>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="2147483" />
+        <setting name="MinimumValue" value="-2147483" />
+      </Int>
+      <Long>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="9223372036854775807" />
+        <setting name="MinimumValue" value="-9223372036854775808" />
+      </Long>
+      <SByte>
+        <setting name="AllowHexType1Values" value="False" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="12" />
+        <setting name="MinimumValue" value="-12" />
+      </SByte>
+      <Short>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="32767" />
+        <setting name="MinimumValue" value="-32768" />
+      </Short>
+      <String>
+        <setting name="MinimumLength" value="0" />
+        <setting name="MaximumLength" value="0" />
+      </String>
+      <UInt>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="4294967295" />
+        <setting name="MinimumValue" value="0" />
+      </UInt>
+      <ULong>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="18446744073709551615" />
+        <setting name="MinimumValue" value="0" />
+      </ULong>
+      <UShort>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="65535" />
+        <setting name="MinimumValue" value="0" />
+      </UShort>
+      <DateTime>
+        <setting name="DateTimeSelect" value="DateTime" />
+        <setting name="Culture" value="en-US" />
+      </DateTime>
+      <Enum>
+        <setting name="0xff" value="Xff" />
+        <setting name="ffh" value="Ffh" />
+        <setting name="11111111b" value="B" />
+        <setting name="-100" value="" />
+      </Enum>
+      <SerialPortParity>
+        <setting name="AllowValues" value="False" />
+        <setting name="IgnoreCase" value="True" />
+      </SerialPortParity>
+      <SerialPortStopBits>
+        <setting name="AllowValues" value="False" />
+        <setting name="IgnoreCase" value="True" />
+      </SerialPortStopBits>
+    </sbyteattrib>
+    <shortattrib SelectedDataType="Short" CanBeEmpty="False" IsOptional="False" PropertyName="Shortattrib">
+      <Boolean>
+        <setting name="AllowTrueFalseStrings" value="True" />
+        <setting name="AllowYesNoStrings" value="True" />
+        <setting name="AllowZeroOneStrings" value="True" />
+      </Boolean>
+      <Byte>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="255" />
+        <setting name="MinimumValue" value="0" />
+      </Byte>
+      <Double>
+        <setting name="AllowCurrency" value="True" />
+        <setting name="AllowParentheses" value="True" />
+        <setting name="AllowExponent" value="True" />
+        <setting name="AllowPercent" value="True" />
+        <setting name="MaximumValue" value="1.79769313486232E+308" />
+        <setting name="MinimumValue" value="-1.79769313486232E+308" />
+      </Double>
+      <Float>
+        <setting name="AllowCurrency" value="True" />
+        <setting name="AllowParentheses" value="True" />
+        <setting name="AllowExponent" value="True" />
+        <setting name="AllowPercent" value="True" />
+        <setting name="MaximumValue" value="3.402823E+38" />
+        <setting name="MinimumValue" value="-3.402823E+38" />
+      </Float>
+      <Int>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="2147483647" />
+        <setting name="MinimumValue" value="-2147483648" />
+      </Int>
+      <Long>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="9223372036854775807" />
+        <setting name="MinimumValue" value="-9223372036854775808" />
+      </Long>
+      <SByte>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="127" />
+        <setting name="MinimumValue" value="-128" />
+      </SByte>
+      <Short>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="32767" />
+        <setting name="MinimumValue" value="0" />
+      </Short>
+      <String>
+        <setting name="MinimumLength" value="0" />
+        <setting name="MaximumLength" value="0" />
+      </String>
+      <UInt>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="4294967295" />
+        <setting name="MinimumValue" value="0" />
+      </UInt>
+      <ULong>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="18446744073709551615" />
+        <setting name="MinimumValue" value="0" />
+      </ULong>
+      <UShort>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="65535" />
+        <setting name="MinimumValue" value="0" />
+      </UShort>
+      <DateTime>
+        <setting name="DateTimeSelect" value="DateTime" />
+        <setting name="Culture" value="en-US" />
+      </DateTime>
+      <Enum>
+        <setting name="0xffff" value="Xffff" />
+        <setting name="ffffh" value="Ffffh" />
+        <setting name="1111111111111111b" value="B" />
+        <setting name="-2,000" value="" />
+      </Enum>
+      <SerialPortParity>
+        <setting name="AllowValues" value="False" />
+        <setting name="IgnoreCase" value="True" />
+      </SerialPortParity>
+      <SerialPortStopBits>
+        <setting name="AllowValues" value="False" />
+        <setting name="IgnoreCase" value="True" />
+      </SerialPortStopBits>
+    </shortattrib>
+    <uintattrib SelectedDataType="UInt" CanBeEmpty="False" IsOptional="False" PropertyName="Uintattrib">
+      <Boolean>
+        <setting name="AllowTrueFalseStrings" value="True" />
+        <setting name="AllowYesNoStrings" value="True" />
+        <setting name="AllowZeroOneStrings" value="True" />
+      </Boolean>
+      <Byte>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="255" />
+        <setting name="MinimumValue" value="0" />
+      </Byte>
+      <Double>
+        <setting name="AllowCurrency" value="True" />
+        <setting name="AllowParentheses" value="True" />
+        <setting name="AllowExponent" value="True" />
+        <setting name="AllowPercent" value="True" />
+        <setting name="MaximumValue" value="1.79769313486232E+308" />
+        <setting name="MinimumValue" value="-1.79769313486232E+308" />
+      </Double>
+      <Float>
+        <setting name="AllowCurrency" value="True" />
+        <setting name="AllowParentheses" value="True" />
+        <setting name="AllowExponent" value="True" />
+        <setting name="AllowPercent" value="True" />
+        <setting name="MaximumValue" value="3.402823E+38" />
+        <setting name="MinimumValue" value="-3.402823E+38" />
+      </Float>
+      <Int>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="2147483647" />
+        <setting name="MinimumValue" value="-2147483648" />
+      </Int>
+      <Long>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="9223372036854775807" />
+        <setting name="MinimumValue" value="-9223372036854775808" />
+      </Long>
+      <SByte>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="127" />
+        <setting name="MinimumValue" value="-128" />
+      </SByte>
+      <Short>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="32767" />
+        <setting name="MinimumValue" value="-32768" />
+      </Short>
+      <String>
+        <setting name="MinimumLength" value="0" />
+        <setting name="MaximumLength" value="0" />
+      </String>
+      <UInt>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="295" />
+        <setting name="MinimumValue" value="0" />
+      </UInt>
+      <ULong>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="18446744073709551615" />
+        <setting name="MinimumValue" value="0" />
+      </ULong>
+      <UShort>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="65535" />
+        <setting name="MinimumValue" value="0" />
+      </UShort>
+      <DateTime>
+        <setting name="DateTimeSelect" value="DateTime" />
+        <setting name="Culture" value="en-US" />
+      </DateTime>
+      <Enum>
+        <setting name="0xffffffff" value="Xffffffff" />
+        <setting name="ffffffffh" value="Ffffffffh" />
+        <setting name="11111111111111111111111111111111b" value="B" />
+        <setting name="4294967295" value="" />
+      </Enum>
+      <SerialPortParity>
+        <setting name="AllowValues" value="False" />
+        <setting name="IgnoreCase" value="True" />
+      </SerialPortParity>
+      <SerialPortStopBits>
+        <setting name="AllowValues" value="False" />
+        <setting name="IgnoreCase" value="True" />
+      </SerialPortStopBits>
+    </uintattrib>
+    <ulongattrib SelectedDataType="ULong" CanBeEmpty="False" IsOptional="False" PropertyName="Ulongattrib">
+      <Boolean>
+        <setting name="AllowTrueFalseStrings" value="True" />
+        <setting name="AllowYesNoStrings" value="True" />
+        <setting name="AllowZeroOneStrings" value="True" />
+      </Boolean>
+      <Byte>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="255" />
+        <setting name="MinimumValue" value="0" />
+      </Byte>
+      <Double>
+        <setting name="AllowCurrency" value="True" />
+        <setting name="AllowParentheses" value="True" />
+        <setting name="AllowExponent" value="True" />
+        <setting name="AllowPercent" value="True" />
+        <setting name="MaximumValue" value="1.79769313486232E+308" />
+        <setting name="MinimumValue" value="-1.79769313486232E+308" />
+      </Double>
+      <Float>
+        <setting name="AllowCurrency" value="True" />
+        <setting name="AllowParentheses" value="True" />
+        <setting name="AllowExponent" value="True" />
+        <setting name="AllowPercent" value="True" />
+        <setting name="MaximumValue" value="3.402823E+38" />
+        <setting name="MinimumValue" value="-3.402823E+38" />
+      </Float>
+      <Int>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="2147483647" />
+        <setting name="MinimumValue" value="-2147483648" />
+      </Int>
+      <Long>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="9223372036854775807" />
+        <setting name="MinimumValue" value="-9223372036854775808" />
+      </Long>
+      <SByte>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="127" />
+        <setting name="MinimumValue" value="-128" />
+      </SByte>
+      <Short>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="32767" />
+        <setting name="MinimumValue" value="-32768" />
+      </Short>
+      <String>
+        <setting name="MinimumLength" value="0" />
+        <setting name="MaximumLength" value="0" />
+      </String>
+      <UInt>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="4294967295" />
+        <setting name="MinimumValue" value="0" />
+      </UInt>
+      <ULong>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="1812" />
+        <setting name="MinimumValue" value="0" />
+      </ULong>
+      <UShort>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="65535" />
+        <setting name="MinimumValue" value="0" />
+      </UShort>
+      <DateTime>
+        <setting name="DateTimeSelect" value="DateTime" />
+        <setting name="Culture" value="en-US" />
+      </DateTime>
+      <Enum>
+        <setting name="0xffffffffffffffff" value="Xffffffffffffffff" />
+        <setting name="ffffffffffffffffh" value="Ffffffffffffffffh" />
+        <setting name="1111111111111111111111111111111111111111111111111111111111111111b" value="B" />
+        <setting name="18,446,744,073,709,551,615" value="" />
+      </Enum>
+      <SerialPortParity>
+        <setting name="AllowValues" value="False" />
+        <setting name="IgnoreCase" value="True" />
+      </SerialPortParity>
+      <SerialPortStopBits>
+        <setting name="AllowValues" value="False" />
+        <setting name="IgnoreCase" value="True" />
+      </SerialPortStopBits>
+    </ulongattrib>
+    <ushortattrib SelectedDataType="UShort" CanBeEmpty="False" IsOptional="False" PropertyName="Ushortattrib">
+      <Boolean>
+        <setting name="AllowTrueFalseStrings" value="True" />
+        <setting name="AllowYesNoStrings" value="True" />
+        <setting name="AllowZeroOneStrings" value="True" />
+      </Boolean>
+      <Byte>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="255" />
+        <setting name="MinimumValue" value="0" />
+      </Byte>
+      <Double>
+        <setting name="AllowCurrency" value="True" />
+        <setting name="AllowParentheses" value="True" />
+        <setting name="AllowExponent" value="True" />
+        <setting name="AllowPercent" value="True" />
+        <setting name="MaximumValue" value="1.79769313486232E+308" />
+        <setting name="MinimumValue" value="-1.79769313486232E+308" />
+      </Double>
+      <Float>
+        <setting name="AllowCurrency" value="True" />
+        <setting name="AllowParentheses" value="True" />
+        <setting name="AllowExponent" value="True" />
+        <setting name="AllowPercent" value="True" />
+        <setting name="MaximumValue" value="3.402823E+38" />
+        <setting name="MinimumValue" value="-3.402823E+38" />
+      </Float>
+      <Int>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="2147483647" />
+        <setting name="MinimumValue" value="-2147483648" />
+      </Int>
+      <Long>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="9223372036854775807" />
+        <setting name="MinimumValue" value="-9223372036854775808" />
+      </Long>
+      <SByte>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="127" />
+        <setting name="MinimumValue" value="-128" />
+      </SByte>
+      <Short>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="32767" />
+        <setting name="MinimumValue" value="-32768" />
+      </Short>
+      <String>
+        <setting name="MinimumLength" value="0" />
+        <setting name="MaximumLength" value="0" />
+      </String>
+      <UInt>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="4294967295" />
+        <setting name="MinimumValue" value="0" />
+      </UInt>
+      <ULong>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="18446744073709551615" />
+        <setting name="MinimumValue" value="0" />
+      </ULong>
+      <UShort>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="6553" />
+        <setting name="MinimumValue" value="0" />
+      </UShort>
+      <DateTime>
+        <setting name="DateTimeSelect" value="DateTime" />
+        <setting name="Culture" value="en-US" />
+      </DateTime>
+      <Enum>
+        <setting name="0xffff" value="Xffff" />
+        <setting name="ffffh" value="Ffffh" />
+        <setting name="1111111111111111b" value="B" />
+        <setting name="65,535" value="" />
+      </Enum>
+      <SerialPortParity>
+        <setting name="AllowValues" value="False" />
+        <setting name="IgnoreCase" value="True" />
+      </SerialPortParity>
+      <SerialPortStopBits>
+        <setting name="AllowValues" value="False" />
+        <setting name="IgnoreCase" value="True" />
+      </SerialPortStopBits>
+    </ushortattrib>
+    <CDATA SelectedDataType="SerialPortStopBits" CanBeEmpty="False" IsOptional="True" PropertyName="CDATA" Include="False">
+      <Boolean>
+        <setting name="AllowTrueFalseStrings" value="True" />
+        <setting name="AllowYesNoStrings" value="True" />
+        <setting name="AllowZeroOneStrings" value="True" />
+      </Boolean>
+      <Byte>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="255" />
+        <setting name="MinimumValue" value="0" />
+      </Byte>
+      <Double>
+        <setting name="AllowCurrency" value="True" />
+        <setting name="AllowParentheses" value="True" />
+        <setting name="AllowExponent" value="True" />
+        <setting name="AllowPercent" value="True" />
+        <setting name="MaximumValue" value="1.79769313486232E+308" />
+        <setting name="MinimumValue" value="-1.79769313486232E+308" />
+      </Double>
+      <Float>
+        <setting name="AllowCurrency" value="True" />
+        <setting name="AllowParentheses" value="True" />
+        <setting name="AllowExponent" value="True" />
+        <setting name="AllowPercent" value="True" />
+        <setting name="MaximumValue" value="3.402823E+38" />
+        <setting name="MinimumValue" value="-3.402823E+38" />
+      </Float>
+      <Int>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="2147483647" />
+        <setting name="MinimumValue" value="-2147483648" />
+      </Int>
+      <Long>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="9223372036854775807" />
+        <setting name="MinimumValue" value="-9223372036854775808" />
+      </Long>
+      <SByte>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="127" />
+        <setting name="MinimumValue" value="-128" />
+      </SByte>
+      <Short>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="32767" />
+        <setting name="MinimumValue" value="-32768" />
+      </Short>
+      <String>
+        <setting name="MinimumLength" value="0" />
+        <setting name="MaximumLength" value="0" />
+      </String>
+      <UInt>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="4294967295" />
+        <setting name="MinimumValue" value="0" />
+      </UInt>
+      <ULong>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="18446744073709551615" />
+        <setting name="MinimumValue" value="0" />
+      </ULong>
+      <UShort>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="65535" />
+        <setting name="MinimumValue" value="0" />
+      </UShort>
+      <DateTime>
+        <setting name="DateTimeSelect" value="DateTime" />
+        <setting name="Culture" value="en-US" />
+      </DateTime>
+      <Enum />
+      <SerialPortParity>
+        <setting name="AllowValues" value="False" />
+        <setting name="IgnoreCase" value="True" />
+      </SerialPortParity>
+      <SerialPortStopBits>
+        <setting name="AllowValues" value="False" />
+        <setting name="IgnoreCase" value="True" />
+      </SerialPortStopBits>
+    </CDATA>
+    <Text SelectedDataType="SerialPortStopBits" CanBeEmpty="False" IsOptional="True" PropertyName="Text" Include="False">
+      <Boolean>
+        <setting name="AllowTrueFalseStrings" value="True" />
+        <setting name="AllowYesNoStrings" value="True" />
+        <setting name="AllowZeroOneStrings" value="True" />
+      </Boolean>
+      <Byte>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="255" />
+        <setting name="MinimumValue" value="0" />
+      </Byte>
+      <Double>
+        <setting name="AllowCurrency" value="True" />
+        <setting name="AllowParentheses" value="True" />
+        <setting name="AllowExponent" value="True" />
+        <setting name="AllowPercent" value="True" />
+        <setting name="MaximumValue" value="1.79769313486232E+308" />
+        <setting name="MinimumValue" value="-1.79769313486232E+308" />
+      </Double>
+      <Float>
+        <setting name="AllowCurrency" value="True" />
+        <setting name="AllowParentheses" value="True" />
+        <setting name="AllowExponent" value="True" />
+        <setting name="AllowPercent" value="True" />
+        <setting name="MaximumValue" value="3.402823E+38" />
+        <setting name="MinimumValue" value="-3.402823E+38" />
+      </Float>
+      <Int>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="2147483647" />
+        <setting name="MinimumValue" value="-2147483648" />
+      </Int>
+      <Long>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="9223372036854775807" />
+        <setting name="MinimumValue" value="-9223372036854775808" />
+      </Long>
+      <SByte>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="127" />
+        <setting name="MinimumValue" value="-128" />
+      </SByte>
+      <Short>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="32767" />
+        <setting name="MinimumValue" value="-32768" />
+      </Short>
+      <String>
+        <setting name="MinimumLength" value="0" />
+        <setting name="MaximumLength" value="0" />
+      </String>
+      <UInt>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="4294967295" />
+        <setting name="MinimumValue" value="0" />
+      </UInt>
+      <ULong>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="18446744073709551615" />
+        <setting name="MinimumValue" value="0" />
+      </ULong>
+      <UShort>
+        <setting name="AllowHexType1Values" value="True" />
+        <setting name="AllowHexType2Values" value="True" />
+        <setting name="AllowBinaryValues" value="True" />
+        <setting name="AllowIntegerValues" value="True" />
+        <setting name="MaximumValue" value="65535" />
+        <setting name="MinimumValue" value="0" />
+      </UShort>
+      <DateTime>
+        <setting name="DateTimeSelect" value="DateTime" />
+        <setting name="Culture" value="en-US" />
+      </DateTime>
+      <Enum />
+      <SerialPortParity>
+        <setting name="AllowValues" value="False" />
+        <setting name="IgnoreCase" value="True" />
+      </SerialPortParity>
+      <SerialPortStopBits>
+        <setting name="AllowValues" value="False" />
+        <setting name="IgnoreCase" value="True" />
+      </SerialPortStopBits>
+    </Text>
+  </b>
+</save_data>

@@ -14,6 +14,7 @@
 using CSCodeGen;
 using System;
 using System.Collections.Generic;
+using System.Xml;
 
 namespace XMLToDataClass.Data.Types
 {
@@ -205,6 +206,64 @@ namespace XMLToDataClass.Data.Types
 		public static bool TryParseWithDefaults(string value)
 		{
 			return TryParse(value, DefaultMinimumLength, DefaultMaximumLength);
+		}
+
+		/// <summary>
+		///   Saves the types configuration properties to XML child elements.
+		/// </summary>
+		/// <param name="doc"><see cref="XmlDocument"/> object representing the XML document to be written.</param>
+		/// <param name="parent">Parent <see cref="XmlNode"/> to append the child settings to.</param>
+		public override void Save(XmlDocument doc, XmlNode parent)
+		{
+			// Add MinimumLength setting.
+			XmlElement element = doc.CreateElement("setting");
+			XmlAttribute attrib = element.Attributes.Append(doc.CreateAttribute("name"));
+			attrib.Value = "MinimumLength";
+			attrib = element.Attributes.Append(doc.CreateAttribute("value"));
+			attrib.Value = MinimumLength.ToString();
+			parent.AppendChild(element);
+
+			// Add MaximumLength setting.
+			element = doc.CreateElement("setting");
+			attrib = element.Attributes.Append(doc.CreateAttribute("name"));
+			attrib.Value = "MaximumLength";
+			attrib = element.Attributes.Append(doc.CreateAttribute("value"));
+			attrib.Value = MaximumLength.ToString();
+			parent.AppendChild(element);
+		}
+
+		/// <summary>
+		///   Loads the configuration properties from XML node.
+		/// </summary>
+		/// <param name="parent">Parent XML node containing the child settings elements.</param>
+		public override void Load(XmlNode parent)
+		{
+			foreach (XmlNode node in parent.ChildNodes)
+			{
+				if (node.NodeType == XmlNodeType.Element && string.Compare(node.Name, "setting", true) == 0)
+				{
+					XmlAttribute nameAttrib = node.Attributes["name"];
+					XmlAttribute valueAttrib = node.Attributes["value"];
+					if (nameAttrib != null && valueAttrib != null)
+					{
+						// Set MinimumLength if found.
+						if (nameAttrib.Value == "MinimumLength")
+						{
+							int value;
+							if (int.TryParse(valueAttrib.Value, out value))
+								MinimumLength = value;
+						}
+
+						// Set MaximumLength if found.
+						if (nameAttrib.Value == "MaximumLength")
+						{
+							int value;
+							if (int.TryParse(valueAttrib.Value, out value))
+								MaximumLength = value;
+						}
+					}
+				}
+			}
 		}
 
 		#endregion Methods

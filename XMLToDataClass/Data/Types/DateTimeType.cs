@@ -15,6 +15,7 @@ using CSCodeGen;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Xml;
 
 namespace XMLToDataClass.Data.Types
 {
@@ -264,6 +265,67 @@ namespace XMLToDataClass.Data.Types
 		private string GetFormatPropertyName(string propertyName)
 		{
 			return string.Format("{0}ParsedFormat", propertyName);
+		}
+
+		/// <summary>
+		///   Saves the types configuration properties to XML child elements.
+		/// </summary>
+		/// <param name="doc"><see cref="XmlDocument"/> object representing the XML document to be written.</param>
+		/// <param name="parent">Parent <see cref="XmlNode"/> to append the child settings to.</param>
+		public override void Save(XmlDocument doc, XmlNode parent)
+		{
+			// Add the DateTimeSelect option.
+			XmlElement element = doc.CreateElement("setting");
+			XmlAttribute attrib = element.Attributes.Append(doc.CreateAttribute("name"));
+			attrib.Value = "DateTimeSelect";
+			attrib = element.Attributes.Append(doc.CreateAttribute("value"));
+			attrib.Value = Enum.GetName(typeof(DateTimeOption), DateTimeSelect);
+			parent.AppendChild(element);
+
+			// Add the Culture option.
+			element = doc.CreateElement("setting");
+			attrib = element.Attributes.Append(doc.CreateAttribute("name"));
+			attrib.Value = "Culture";
+			attrib = element.Attributes.Append(doc.CreateAttribute("value"));
+			attrib.Value = Culture.ToString();
+			parent.AppendChild(element);
+		}
+
+		/// <summary>
+		///   Loads the configuration properties from XML node.
+		/// </summary>
+		/// <param name="parent">Parent XML node containing the child settings elements.</param>
+		public override void Load(XmlNode parent)
+		{
+			foreach (XmlNode node in parent.ChildNodes)
+			{
+				if (node.NodeType == XmlNodeType.Element && string.Compare(node.Name, "setting", true) == 0)
+				{
+					XmlAttribute nameAttrib = node.Attributes["name"];
+					XmlAttribute valueAttrib = node.Attributes["value"];
+					if (nameAttrib != null && valueAttrib != null)
+					{
+						// Set DateTimeSelect if found.
+						if (nameAttrib.Value == "DateTimeSelect")
+						{
+							DateTimeOption value;
+							if (Enum.TryParse<DateTimeOption>(valueAttrib.Value, out value))
+								DateTimeSelect = value;
+						}
+
+						// Set Culture if found.
+						if (nameAttrib.Value == "Culture")
+						{
+							try
+							{
+								Culture = CultureInfo.GetCultureInfo(valueAttrib.Value);
+							}
+							catch (Exception)
+							{ }
+						}
+					}
+				}
+			}
 		}
 
 		/// <summary>

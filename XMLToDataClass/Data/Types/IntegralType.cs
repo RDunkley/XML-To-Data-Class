@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
+using System.Xml;
 
 namespace XMLToDataClass.Data.Types
 {
@@ -691,6 +692,185 @@ namespace XMLToDataClass.Data.Types
 		public override bool TryParse(string value)
 		{
 			return TryParse(value, MinimumValue, MaximumValue, AllowHexType1Values, AllowHexType2Values, AllowBinaryValues, AllowIntegerValues);
+		}
+
+		/// <summary>
+		///   Saves the types configuration properties to XML child elements.
+		/// </summary>
+		/// <param name="doc"><see cref="XmlDocument"/> object representing the XML document to be written.</param>
+		/// <param name="parent">Parent <see cref="XmlNode"/> to append the child settings to.</param>
+		public override void Save(XmlDocument doc, XmlNode parent)
+		{
+			// Add AllowHexType1Values setting.
+			XmlElement element = doc.CreateElement("setting");
+			XmlAttribute attrib = element.Attributes.Append(doc.CreateAttribute("name"));
+			attrib.Value = "AllowHexType1Values";
+			attrib = element.Attributes.Append(doc.CreateAttribute("value"));
+			attrib.Value = AllowHexType1Values.ToString();
+			parent.AppendChild(element);
+
+			// Add AllowHexType2Values setting.
+			element = doc.CreateElement("setting");
+			attrib = element.Attributes.Append(doc.CreateAttribute("name"));
+			attrib.Value = "AllowHexType2Values";
+			attrib = element.Attributes.Append(doc.CreateAttribute("value"));
+			attrib.Value = AllowHexType2Values.ToString();
+			parent.AppendChild(element);
+
+			// Add AllowBinaryValues setting.
+			element = doc.CreateElement("setting");
+			attrib = element.Attributes.Append(doc.CreateAttribute("name"));
+			attrib.Value = "AllowBinaryValues";
+			attrib = element.Attributes.Append(doc.CreateAttribute("value"));
+			attrib.Value = AllowBinaryValues.ToString();
+			parent.AppendChild(element);
+
+			// Add AllowIntegerValues setting.
+			element = doc.CreateElement("setting");
+			attrib = element.Attributes.Append(doc.CreateAttribute("name"));
+			attrib.Value = "AllowIntegerValues";
+			attrib = element.Attributes.Append(doc.CreateAttribute("value"));
+			attrib.Value = AllowIntegerValues.ToString();
+			parent.AppendChild(element);
+
+			// Add MaximumValue setting.
+			element = doc.CreateElement("setting");
+			attrib = element.Attributes.Append(doc.CreateAttribute("name"));
+			attrib.Value = "MaximumValue";
+			attrib = element.Attributes.Append(doc.CreateAttribute("value"));
+			attrib.Value = MaximumValue.ToString();
+			parent.AppendChild(element);
+
+			// Add MinimumValue setting.
+			element = doc.CreateElement("setting");
+			attrib = element.Attributes.Append(doc.CreateAttribute("name"));
+			attrib.Value = "MinimumValue";
+			attrib = element.Attributes.Append(doc.CreateAttribute("value"));
+			attrib.Value = MinimumValue.ToString();
+			parent.AppendChild(element);
+		}
+
+		/// <summary>
+		///   Loads the configuration properties from XML node.
+		/// </summary>
+		/// <param name="parent">Parent XML node containing the child settings elements.</param>
+		public override void Load(XmlNode parent)
+		{
+			foreach (XmlNode node in parent.ChildNodes)
+			{
+				if (node.NodeType == XmlNodeType.Element && string.Compare(node.Name, "setting", true) == 0)
+				{
+					XmlAttribute nameAttrib = node.Attributes["name"];
+					XmlAttribute valueAttrib = node.Attributes["value"];
+					if (nameAttrib != null && valueAttrib != null)
+					{
+						// Set AllowHexType1Values if found.
+						if (nameAttrib.Value == "AllowHexType1Values")
+						{
+							bool value;
+							if (bool.TryParse(valueAttrib.Value, out value))
+								AllowHexType1Values = value;
+						}
+
+						// Set AllowHexType2Values if found.
+						if (nameAttrib.Value == "AllowHexType2Values")
+						{
+							bool value;
+							if (bool.TryParse(valueAttrib.Value, out value))
+								AllowHexType2Values = value;
+						}
+
+						// Set AllowBinaryValues if found.
+						if (nameAttrib.Value == "AllowBinaryValues")
+						{
+							bool value;
+							if (bool.TryParse(valueAttrib.Value, out value))
+								AllowBinaryValues = value;
+						}
+
+						// Set AllowIntegerValues if found.
+						if (nameAttrib.Value == "AllowIntegerValues")
+						{
+							bool value;
+							if (bool.TryParse(valueAttrib.Value, out value))
+								AllowIntegerValues = value;
+						}
+
+						// Set MaximumValue if found.
+						if (nameAttrib.Value == "MaximumValue")
+						{
+							T value = DefaultMaximumValue;
+							if (TryParse(valueAttrib.Value, ref value))
+								MaximumValue = value;
+						}
+
+						// Set MinimumValue if found.
+						if (nameAttrib.Value == "MinimumValue")
+						{
+							T value = DefaultMinimumValue;
+							if (TryParse(valueAttrib.Value, ref value))
+								MinimumValue = value;
+						}
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		///   Attempts to parse the text using the built in integral type 'TryParse' methods.
+		/// </summary>
+		/// <param name="text">Text to be parsed.</param>
+		/// <param name="value">Return value of the parsing, if successful.</param>
+		/// <returns>True if it was able to parse the text, false otherwise.</returns>
+		private bool TryParse(string text, ref T value)
+		{
+			bool returnValue = false;
+			switch (typeof(T).Name.ToLower())
+			{
+				case "byte":
+					byte byteValue;
+					returnValue = byte.TryParse(text, out byteValue);
+					value = (T)(object)byteValue;
+					break;
+				case "sbyte":
+					sbyte sbyteValue;
+					returnValue = sbyte.TryParse(text, out sbyteValue);
+					value = (T)(object)sbyteValue;
+					break;
+				case "uint16":
+					ushort ushortValue;
+					returnValue = ushort.TryParse(text, out ushortValue);
+					value = (T)(object)ushortValue;
+					break;
+				case "int16":
+					short shortValue;
+					returnValue = short.TryParse(text, out shortValue);
+					value = (T)(object)shortValue;
+					break;
+				case "uint32":
+					uint uintValue;
+					returnValue = uint.TryParse(text, out uintValue);
+					value = (T)(object)uintValue;
+					break;
+				case "int32":
+					int intValue;
+					returnValue = int.TryParse(text, out intValue);
+					value = (T)(object)intValue;
+					break;
+				case "uint64":
+					ulong ulongValue;
+					returnValue = ulong.TryParse(text, out ulongValue);
+					value = (T)(object)ulongValue;
+					break;
+				case "int64":
+					long longValue;
+					returnValue = long.TryParse(text, out longValue);
+					value = (T)(object)longValue;
+					break;
+				default:
+					throw new NotImplementedException("The type of this class is not recognized as a supported type");
+			}
+			return returnValue;
 		}
 
 		/// <summary>

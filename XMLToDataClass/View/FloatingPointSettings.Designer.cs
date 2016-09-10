@@ -39,6 +39,7 @@ namespace XMLToDataClass.View
 			this.exponentCheckBox = new System.Windows.Forms.CheckBox();
 			this.parenthesesCheckBox = new System.Windows.Forms.CheckBox();
 			this.percentCheckBox = new System.Windows.Forms.CheckBox();
+			this.inputErrorLabel = new System.Windows.Forms.Label();
 			this.mainTableLayoutPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -47,18 +48,20 @@ namespace XMLToDataClass.View
 			this.mainTableLayoutPanel.ColumnCount = 2;
 			this.mainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.mainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.mainTableLayoutPanel.Controls.Add(this.label1, 0, 0);
-			this.mainTableLayoutPanel.Controls.Add(this.label2, 0, 1);
-			this.mainTableLayoutPanel.Controls.Add(this.minimumTextBox, 1, 0);
-			this.mainTableLayoutPanel.Controls.Add(this.maximumTextBox, 1, 1);
-			this.mainTableLayoutPanel.Controls.Add(this.currencyCheckBox, 0, 2);
-			this.mainTableLayoutPanel.Controls.Add(this.exponentCheckBox, 0, 3);
-			this.mainTableLayoutPanel.Controls.Add(this.parenthesesCheckBox, 0, 4);
-			this.mainTableLayoutPanel.Controls.Add(this.percentCheckBox, 0, 5);
+			this.mainTableLayoutPanel.Controls.Add(this.label1, 0, 1);
+			this.mainTableLayoutPanel.Controls.Add(this.label2, 0, 2);
+			this.mainTableLayoutPanel.Controls.Add(this.minimumTextBox, 1, 1);
+			this.mainTableLayoutPanel.Controls.Add(this.maximumTextBox, 1, 2);
+			this.mainTableLayoutPanel.Controls.Add(this.currencyCheckBox, 0, 3);
+			this.mainTableLayoutPanel.Controls.Add(this.exponentCheckBox, 0, 4);
+			this.mainTableLayoutPanel.Controls.Add(this.parenthesesCheckBox, 0, 5);
+			this.mainTableLayoutPanel.Controls.Add(this.percentCheckBox, 0, 6);
+			this.mainTableLayoutPanel.Controls.Add(this.inputErrorLabel, 0, 0);
 			this.mainTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.mainTableLayoutPanel.Location = new System.Drawing.Point(0, 0);
 			this.mainTableLayoutPanel.Name = "mainTableLayoutPanel";
-			this.mainTableLayoutPanel.RowCount = 7;
+			this.mainTableLayoutPanel.RowCount = 8;
+			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -73,7 +76,7 @@ namespace XMLToDataClass.View
 			// 
 			this.label1.AutoSize = true;
 			this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label1.Location = new System.Drawing.Point(3, 0);
+			this.label1.Location = new System.Drawing.Point(3, 13);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(84, 26);
 			this.label1.TabIndex = 0;
@@ -84,7 +87,7 @@ namespace XMLToDataClass.View
 			// 
 			this.label2.AutoSize = true;
 			this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label2.Location = new System.Drawing.Point(3, 26);
+			this.label2.Location = new System.Drawing.Point(3, 39);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(84, 26);
 			this.label2.TabIndex = 1;
@@ -94,7 +97,7 @@ namespace XMLToDataClass.View
 			// minimumTextBox
 			// 
 			this.minimumTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.minimumTextBox.Location = new System.Drawing.Point(93, 3);
+			this.minimumTextBox.Location = new System.Drawing.Point(93, 16);
 			this.minimumTextBox.Name = "minimumTextBox";
 			this.minimumTextBox.Size = new System.Drawing.Size(250, 20);
 			this.minimumTextBox.TabIndex = 2;
@@ -103,7 +106,7 @@ namespace XMLToDataClass.View
 			// maximumTextBox
 			// 
 			this.maximumTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.maximumTextBox.Location = new System.Drawing.Point(93, 29);
+			this.maximumTextBox.Location = new System.Drawing.Point(93, 42);
 			this.maximumTextBox.Name = "maximumTextBox";
 			this.maximumTextBox.Size = new System.Drawing.Size(250, 20);
 			this.maximumTextBox.TabIndex = 3;
@@ -114,7 +117,7 @@ namespace XMLToDataClass.View
 			this.currencyCheckBox.AutoSize = true;
 			this.mainTableLayoutPanel.SetColumnSpan(this.currencyCheckBox, 2);
 			this.currencyCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.currencyCheckBox.Location = new System.Drawing.Point(3, 55);
+			this.currencyCheckBox.Location = new System.Drawing.Point(3, 68);
 			this.currencyCheckBox.Name = "currencyCheckBox";
 			this.currencyCheckBox.Size = new System.Drawing.Size(340, 17);
 			this.currencyCheckBox.TabIndex = 4;
@@ -127,7 +130,7 @@ namespace XMLToDataClass.View
 			this.exponentCheckBox.AutoSize = true;
 			this.mainTableLayoutPanel.SetColumnSpan(this.exponentCheckBox, 2);
 			this.exponentCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.exponentCheckBox.Location = new System.Drawing.Point(3, 78);
+			this.exponentCheckBox.Location = new System.Drawing.Point(3, 91);
 			this.exponentCheckBox.Name = "exponentCheckBox";
 			this.exponentCheckBox.Size = new System.Drawing.Size(340, 17);
 			this.exponentCheckBox.TabIndex = 5;
@@ -140,7 +143,7 @@ namespace XMLToDataClass.View
 			this.parenthesesCheckBox.AutoSize = true;
 			this.mainTableLayoutPanel.SetColumnSpan(this.parenthesesCheckBox, 2);
 			this.parenthesesCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.parenthesesCheckBox.Location = new System.Drawing.Point(3, 101);
+			this.parenthesesCheckBox.Location = new System.Drawing.Point(3, 114);
 			this.parenthesesCheckBox.Name = "parenthesesCheckBox";
 			this.parenthesesCheckBox.Size = new System.Drawing.Size(340, 17);
 			this.parenthesesCheckBox.TabIndex = 6;
@@ -153,13 +156,27 @@ namespace XMLToDataClass.View
 			this.percentCheckBox.AutoSize = true;
 			this.mainTableLayoutPanel.SetColumnSpan(this.percentCheckBox, 2);
 			this.percentCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.percentCheckBox.Location = new System.Drawing.Point(3, 124);
+			this.percentCheckBox.Location = new System.Drawing.Point(3, 137);
 			this.percentCheckBox.Name = "percentCheckBox";
 			this.percentCheckBox.Size = new System.Drawing.Size(340, 17);
 			this.percentCheckBox.TabIndex = 7;
 			this.percentCheckBox.Text = "Allow Percentages (Ex: \'97.3%\', \'100%\', or \'0.3%\')";
 			this.percentCheckBox.UseVisualStyleBackColor = true;
 			this.percentCheckBox.CheckedChanged += new System.EventHandler(this.percentCheckBox_CheckedChanged);
+			// 
+			// inputErrorLabel
+			// 
+			this.inputErrorLabel.AutoSize = true;
+			this.mainTableLayoutPanel.SetColumnSpan(this.inputErrorLabel, 2);
+			this.inputErrorLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.inputErrorLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.inputErrorLabel.ForeColor = System.Drawing.Color.Crimson;
+			this.inputErrorLabel.Location = new System.Drawing.Point(3, 0);
+			this.inputErrorLabel.Name = "inputErrorLabel";
+			this.inputErrorLabel.Size = new System.Drawing.Size(340, 13);
+			this.inputErrorLabel.TabIndex = 8;
+			this.inputErrorLabel.Text = "label3";
+			this.inputErrorLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// FloatingPointSettings
 			// 
@@ -185,5 +202,6 @@ namespace XMLToDataClass.View
 		private System.Windows.Forms.CheckBox exponentCheckBox;
 		private System.Windows.Forms.CheckBox parenthesesCheckBox;
 		private System.Windows.Forms.CheckBox percentCheckBox;
+		private System.Windows.Forms.Label inputErrorLabel;
 	}
 }

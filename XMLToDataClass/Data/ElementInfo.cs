@@ -682,6 +682,53 @@ namespace XMLToDataClass.Data
 			return cInfo;
 		}
 
+		public void Save(XmlDocument doc, XmlNode parent)
+		{
+			XmlElement element = doc.CreateElement(Name);
+			XmlAttribute attrib = element.Attributes.Append(doc.CreateAttribute("ClassName"));
+			attrib.Value = ClassName;
+
+			// Save the attributes.
+			if (Attributes != null && Attributes.Length > 0)
+			{
+				foreach (AttributeInfo info in Attributes)
+					info.Save(doc, element);
+			}
+
+			if(CDATA != null)
+				CDATA.Save(doc, element);
+
+			if (Text != null)
+				Text.Save(doc, element);
+
+			parent.AppendChild(element);
+		}
+
+		public void Load(XmlNode parent, bool ignoreCase)
+		{
+			foreach(XmlNode node in parent.ChildNodes)
+			{
+				if(node.NodeType == XmlNodeType.Element && string.Compare(node.Name, Name, ignoreCase) == 0)
+				{
+					XmlAttribute attrib = node.Attributes["ClassName"];
+					if(attrib != null)
+						ClassName = attrib.Value;
+
+					if (Attributes != null && Attributes.Length > 0)
+					{
+						foreach (AttributeInfo info in Attributes)
+							info.Load(node, ignoreCase);
+					}
+
+					if (CDATA != null)
+						CDATA.Load(node, ignoreCase);
+
+					if (Text != null)
+						Text.Load(node, ignoreCase);
+				}
+			}
+		}
+
 		#endregion Methods
 	}
 }

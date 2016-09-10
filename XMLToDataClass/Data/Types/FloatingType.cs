@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Xml;
 
 namespace XMLToDataClass.Data.Types
 {
@@ -543,6 +544,153 @@ namespace XMLToDataClass.Data.Types
 		}
 
 		/// <summary>
+		///   Saves the types configuration properties to XML child elements.
+		/// </summary>
+		/// <param name="doc"><see cref="XmlDocument"/> object representing the XML document to be written.</param>
+		/// <param name="parent">Parent <see cref="XmlNode"/> to append the child settings to.</param>
+		public override void Save(XmlDocument doc, XmlNode parent)
+		{
+			// Add AllowCurrency setting.
+			XmlElement element = doc.CreateElement("setting");
+			XmlAttribute attrib = element.Attributes.Append(doc.CreateAttribute("name"));
+			attrib.Value = "AllowCurrency";
+			attrib = element.Attributes.Append(doc.CreateAttribute("value"));
+			attrib.Value = AllowCurrency.ToString();
+			parent.AppendChild(element);
+
+			// Add AllowParentheses setting.
+			element = doc.CreateElement("setting");
+			attrib = element.Attributes.Append(doc.CreateAttribute("name"));
+			attrib.Value = "AllowParentheses";
+			attrib = element.Attributes.Append(doc.CreateAttribute("value"));
+			attrib.Value = AllowParentheses.ToString();
+			parent.AppendChild(element);
+
+			// Add AllowExponent setting.
+			element = doc.CreateElement("setting");
+			attrib = element.Attributes.Append(doc.CreateAttribute("name"));
+			attrib.Value = "AllowExponent";
+			attrib = element.Attributes.Append(doc.CreateAttribute("value"));
+			attrib.Value = AllowExponent.ToString();
+			parent.AppendChild(element);
+
+			// Add AllowPercent setting.
+			element = doc.CreateElement("setting");
+			attrib = element.Attributes.Append(doc.CreateAttribute("name"));
+			attrib.Value = "AllowPercent";
+			attrib = element.Attributes.Append(doc.CreateAttribute("value"));
+			attrib.Value = AllowPercent.ToString();
+			parent.AppendChild(element);
+
+			// Add MaximumValue setting.
+			element = doc.CreateElement("setting");
+			attrib = element.Attributes.Append(doc.CreateAttribute("name"));
+			attrib.Value = "MaximumValue";
+			attrib = element.Attributes.Append(doc.CreateAttribute("value"));
+			attrib.Value = MaximumValue.ToString();
+			parent.AppendChild(element);
+
+			// Add MinimumValue setting.
+			element = doc.CreateElement("setting");
+			attrib = element.Attributes.Append(doc.CreateAttribute("name"));
+			attrib.Value = "MinimumValue";
+			attrib = element.Attributes.Append(doc.CreateAttribute("value"));
+			attrib.Value = MinimumValue.ToString();
+			parent.AppendChild(element);
+		}
+
+		/// <summary>
+		///   Loads the configuration properties from XML node.
+		/// </summary>
+		/// <param name="parent">Parent XML node containing the child settings elements.</param>
+		public override void Load(XmlNode parent)
+		{
+			foreach (XmlNode node in parent.ChildNodes)
+			{
+				if (node.NodeType == XmlNodeType.Element && string.Compare(node.Name, "setting", true) == 0)
+				{
+					XmlAttribute nameAttrib = node.Attributes["name"];
+					XmlAttribute valueAttrib = node.Attributes["value"];
+					if (nameAttrib != null && valueAttrib != null)
+					{
+						// Set AllowCurrency if found.
+						if (nameAttrib.Value == "AllowCurrency")
+						{
+							bool value;
+							if (bool.TryParse(valueAttrib.Value, out value))
+								AllowCurrency = value;
+						}
+
+						// Set AllowParentheses if found.
+						if (nameAttrib.Value == "AllowParentheses")
+						{
+							bool value;
+							if (bool.TryParse(valueAttrib.Value, out value))
+								AllowParentheses = value;
+						}
+
+						// Set AllowExponent if found.
+						if (nameAttrib.Value == "AllowExponent")
+						{
+							bool value;
+							if (bool.TryParse(valueAttrib.Value, out value))
+								AllowExponent = value;
+						}
+
+						// Set AllowPercent if found.
+						if (nameAttrib.Value == "AllowPercent")
+						{
+							bool value;
+							if (bool.TryParse(valueAttrib.Value, out value))
+								AllowPercent = value;
+						}
+
+						// Set MaximumValue if found.
+						if (nameAttrib.Value == "MaximumValue")
+						{
+							T value = DefaultMaximumValue;
+							if (TryParse(valueAttrib.Value, ref value))
+								MaximumValue = value;
+						}
+
+						// Set MinimumValue if found.
+						if (nameAttrib.Value == "MinimumValue")
+						{
+							T value = DefaultMinimumValue;
+							if (TryParse(valueAttrib.Value, ref value))
+								MinimumValue = value;
+						}
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		///   Attempts to parse the text using the built in floating type 'TryParse' methods.
+		/// </summary>
+		/// <param name="text">Text to be parsed.</param>
+		/// <param name="value">Return value of the parsing, if successful.</param>
+		/// <returns>True if it was able to parse the text, false otherwise.</returns>
+		private bool TryParse(string text, ref T value)
+		{
+			bool returnValue = false;
+			switch (typeof(T).Name.ToLower())
+			{
+				case "single":
+					float floatValue;
+					returnValue = float.TryParse(text, out floatValue);
+					value = (T)(object)floatValue;
+					break;
+				case "double":
+					double doubleValue;
+					returnValue = double.TryParse(text, out doubleValue);
+					value = (T)(object)doubleValue;
+					break;
+			}
+			return returnValue;
+		}
+
+		/// <summary>
 		///   Attempts to parse a value to the integral type, using it's current settings.
 		/// </summary>
 		/// <param name="value">String value to be parsed.</param>
@@ -571,8 +719,22 @@ namespace XMLToDataClass.Data.Types
 					break;
 				case "double":
 					double doubleValue;
-					returnValue = double.TryParse(text, style, CultureInfo.CurrentCulture.NumberFormat, out doubleValue);
-					value = (T)(object)doubleValue;
+					// Special case the minimum and maximum values since rounding causes them not to parse.
+					if (string.Compare(text, DefaultMaximumValue.ToString(), true) == 0)
+					{
+						value = DefaultMaximumValue;
+						returnValue = true;
+					}
+					else if (string.Compare(text, DefaultMinimumValue.ToString(), true) == 0)
+					{
+						value = DefaultMinimumValue;
+						returnValue = true;
+					}
+					else
+					{
+						returnValue = double.TryParse(text, style, CultureInfo.CurrentCulture.NumberFormat, out doubleValue);
+						value = (T)(object)doubleValue;
+					}
 					break;
 				default:
 					throw new NotImplementedException("The type of this class is not recognized as a supported type");
@@ -692,7 +854,13 @@ namespace XMLToDataClass.Data.Types
 				case "single":
 					return (T)(object)float.Parse(text, style);
 				case "double":
-					return (T)(object)double.Parse(text, style);
+					// Special case the minimum and maximum values since rounding causes them not to parse.
+					if (string.Compare(text, DefaultMaximumValue.ToString(), true) == 0)
+						return DefaultMaximumValue;
+					else if (string.Compare(text, DefaultMinimumValue.ToString(), true) == 0)
+						return DefaultMinimumValue;
+					else
+						return (T)(object)double.Parse(text, style);
 				default:
 					throw new NotImplementedException("The type of this class is not recognized as a supported type");
 			}
@@ -749,7 +917,7 @@ namespace XMLToDataClass.Data.Types
 			}
 			catch (OverflowException e)
 			{
-				throw new ArgumentException(string.Format("The floating point value specified ({0}) is larger or smaller than the integral type allows (Min: {1}, Max: {2}).", value, GetMinValue().ToString(), GetMaxValue().ToString()), e);
+				throw new ArgumentException(string.Format("The floating point value specified ({0}) is larger or smaller than the type allows (Min: {1}, Max: {2}).", value, GetMinValue().ToString(), GetMaxValue().ToString()), e);
 			}
 
 			if (maxValue.CompareTo(GetMaxValue()) < 0)

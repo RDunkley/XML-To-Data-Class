@@ -15,6 +15,7 @@ using CSCodeGen;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Xml;
 
 namespace XMLToDataClass.Data.Types
 {
@@ -461,6 +462,80 @@ namespace XMLToDataClass.Data.Types
 		private string GetEnumPropertyName(string propertyName)
 		{
 			return string.Format("{0}ParsedType", propertyName);
+		}
+
+		/// <summary>
+		///   Saves the types configuration properties to XML child elements.
+		/// </summary>
+		/// <param name="doc"><see cref="XmlDocument"/> object representing the XML document to be written.</param>
+		/// <param name="parent">Parent <see cref="XmlNode"/> to append the child settings to.</param>
+		public override void Save(XmlDocument doc, XmlNode parent)
+		{
+			// Add AllowTrueFalseStrings setting.
+			XmlElement element = doc.CreateElement("setting");
+			XmlAttribute attrib = element.Attributes.Append(doc.CreateAttribute("name"));
+			attrib.Value = "AllowTrueFalseStrings";
+			attrib = element.Attributes.Append(doc.CreateAttribute("value"));
+			attrib.Value = AllowTrueFalseStrings.ToString();
+			parent.AppendChild(element);
+
+			// Add AllowYesNoStrings setting.
+			element = doc.CreateElement("setting");
+			attrib = element.Attributes.Append(doc.CreateAttribute("name"));
+			attrib.Value = "AllowYesNoStrings";
+			attrib = element.Attributes.Append(doc.CreateAttribute("value"));
+			attrib.Value = AllowYesNoStrings.ToString();
+			parent.AppendChild(element);
+
+			// Add AllowZeroOneStrings setting.
+			element = doc.CreateElement("setting");
+			attrib = element.Attributes.Append(doc.CreateAttribute("name"));
+			attrib.Value = "AllowZeroOneStrings";
+			attrib = element.Attributes.Append(doc.CreateAttribute("value"));
+			attrib.Value = AllowZeroOneStrings.ToString();
+			parent.AppendChild(element);
+		}
+
+		/// <summary>
+		///   Loads the configuration properties from XML node.
+		/// </summary>
+		/// <param name="parent">Parent XML node containing the child settings elements.</param>
+		public override void Load(XmlNode parent)
+		{
+			foreach(XmlNode node in parent.ChildNodes)
+			{
+				if(node.NodeType == XmlNodeType.Element && string.Compare(node.Name, "setting", true) == 0)
+				{
+					XmlAttribute nameAttrib = node.Attributes["name"];
+					XmlAttribute valueAttrib = node.Attributes["value"];
+					if(nameAttrib != null && valueAttrib != null)
+					{
+						// Set AllowTrueFalseStrings if found.
+						if (nameAttrib.Value == "AllowTrueFalseStrings")
+						{
+							bool value;
+							if (bool.TryParse(valueAttrib.Value, out value))
+								AllowTrueFalseStrings = value;
+						}
+
+						// Set AllowYesNoStrings if found.
+						if (nameAttrib.Value == "AllowYesNoStrings")
+						{
+							bool value;
+							if (bool.TryParse(valueAttrib.Value, out value))
+								AllowYesNoStrings = value;
+						}
+
+						// Set AllowZeroOneStrings if found.
+						if (nameAttrib.Value == "AllowZeroOneStrings")
+						{
+							bool value;
+							if (bool.TryParse(valueAttrib.Value, out value))
+								AllowZeroOneStrings = value;
+						}
+					}
+				}
+			}
 		}
 
 		/// <summary>

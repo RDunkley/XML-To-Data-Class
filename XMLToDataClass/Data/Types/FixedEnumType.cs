@@ -15,6 +15,7 @@
 using System;
 using System.Collections.Generic;
 using CSCodeGen;
+using System.Xml;
 
 namespace XMLToDataClass.Data.Types
 {
@@ -240,6 +241,64 @@ namespace XMLToDataClass.Data.Types
 			codeLines.Add(string.Format("throw new InvalidDataException(string.Format(\"The enumerated type value specified ({{0}}) is not a valid {0} string or value representation\", value));", DataTypeString));
 
 			return codeLines.ToArray();
+		}
+
+		/// <summary>
+		///   Saves the types configuration properties to XML child elements.
+		/// </summary>
+		/// <param name="doc"><see cref="XmlDocument"/> object representing the XML document to be written.</param>
+		/// <param name="parent">Parent <see cref="XmlNode"/> to append the child settings to.</param>
+		public override void Save(XmlDocument doc, XmlNode parent)
+		{
+			// Add AllowValues setting.
+			XmlElement element = doc.CreateElement("setting");
+			XmlAttribute attrib = element.Attributes.Append(doc.CreateAttribute("name"));
+			attrib.Value = "AllowValues";
+			attrib = element.Attributes.Append(doc.CreateAttribute("value"));
+			attrib.Value = AllowValues.ToString();
+			parent.AppendChild(element);
+
+			// Add IgnoreCase setting.
+			element = doc.CreateElement("setting");
+			attrib = element.Attributes.Append(doc.CreateAttribute("name"));
+			attrib.Value = "IgnoreCase";
+			attrib = element.Attributes.Append(doc.CreateAttribute("value"));
+			attrib.Value = IgnoreCase.ToString();
+			parent.AppendChild(element);
+		}
+
+		/// <summary>
+		///   Loads the configuration properties from XML node.
+		/// </summary>
+		/// <param name="parent">Parent XML node containing the child settings elements.</param>
+		public override void Load(XmlNode parent)
+		{
+			foreach (XmlNode node in parent.ChildNodes)
+			{
+				if (node.NodeType == XmlNodeType.Element && string.Compare(node.Name, "setting", true) == 0)
+				{
+					XmlAttribute nameAttrib = node.Attributes["name"];
+					XmlAttribute valueAttrib = node.Attributes["value"];
+					if (nameAttrib != null && valueAttrib != null)
+					{
+						// Set AllowValues if found.
+						if (nameAttrib.Value == "AllowValues")
+						{
+							bool value;
+							if (bool.TryParse(valueAttrib.Value, out value))
+								AllowValues = value;
+						}
+
+						// Set IgnoreCase if found.
+						if (nameAttrib.Value == "IgnoreCase")
+						{
+							bool value;
+							if (bool.TryParse(valueAttrib.Value, out value))
+								IgnoreCase = value;
+						}
+					}
+				}
+			}
 		}
 
 		/// <summary>

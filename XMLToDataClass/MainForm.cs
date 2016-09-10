@@ -139,6 +139,8 @@ namespace XMLToDataClass
 		/// <param name="e"><see cref="EventArgs"/> containing the arguments for the event.</param>
 		private void processButton_Click(object sender, EventArgs e)
 		{
+			generateButton.Enabled = false;
+
 			CSCodeGen.DefaultValues.CompanyName = Properties.Settings.Default.CSCodeGenCompanyName;
 			CSCodeGen.DefaultValues.Developer = Properties.Settings.Default.CSCodeGenDeveloper;
 			CSCodeGen.DefaultValues.UseTabs = Properties.Settings.Default.CSCodeGenUseTabs;
@@ -146,7 +148,7 @@ namespace XMLToDataClass
 			CSCodeGen.DefaultValues.NumCharactersPerLine = Properties.Settings.Default.CSCodeGenNumCharsPerLine;
 			CSCodeGen.DefaultValues.TabSize = Properties.Settings.Default.CSCodeGenIndentSize;
 			CSCodeGen.DefaultValues.FileInfoTemplate = ParseTemplate(Properties.Settings.Default.CSCodeGenFileHeaderTemplate);
-			CSCodeGen.DefaultValues.CopyrightTemplate = ParseTemplate(Properties.Settings.Default.CSCodeGenCopyrightTemplate);
+			CSCodeGen.DefaultValues.CopyrightTemplate = MergeTemplate(ParseTemplate(Properties.Settings.Default.CSCodeGenCopyrightTemplate));
 			CSCodeGen.DefaultValues.LicenseTemplate = ParseTemplate(Properties.Settings.Default.CSCodeGenLicenseTemplate);
 
 			string codePath = codeTextBox.Text;
@@ -155,6 +157,7 @@ namespace XMLToDataClass
 			if(codePath.Length == 0)
 			{
 				MessageBox.Show("Path to the code folder cannot be empty", "Error Processing XML", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				generateButton.Enabled = true;
 				return;
 			}
 
@@ -166,12 +169,14 @@ namespace XMLToDataClass
 			catch (Exception ex)
 			{
 				MessageBox.Show("Unable to obtain the path to the code folder: " + ex.Message, "Error Processing XML", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				generateButton.Enabled = true;
 				return;
 			}
 
 			if (nameSpace.Length == 0)
 			{
 				MessageBox.Show("The Namespace cannot be empty", "Error Processing XML", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				generateButton.Enabled = true;
 				return;
 			}
 
@@ -194,6 +199,39 @@ namespace XMLToDataClass
 			Properties.Settings.Default.Save();
 
 			MessageBox.Show("Code files were generated successfully", "Processing Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+			generateButton.Enabled = true;
+		}
+
+		private void saveConfigButton_Click(object sender, EventArgs e)
+		{
+			SaveFileDialog dialog = new SaveFileDialog();
+			dialog.CheckPathExists = true;
+			dialog.OverwritePrompt = true;
+			dialog.Title = "Specify the file and path to save the configuration data to";
+			dialog.Filter = "Config files (*.x2dconf)|*.x2dconf|All files (*.*)|*.*";
+			dialog.DefaultExt = "x2dconf";
+
+			if (dialog.ShowDialog() != DialogResult.OK)
+				return;
+
+			mInfo.Save(dialog.FileName);
+		}
+
+		private void loadConfigButton_Click(object sender, EventArgs e)
+		{
+			OpenFileDialog dialog = new OpenFileDialog();
+			dialog.CheckFileExists = true;
+			dialog.CheckPathExists = true;
+			dialog.Filter = "Config files (*.x2dconf)|*.x2dconf|All files (*.*)|*.*";
+			dialog.DefaultExt = "x2dconf";
+			dialog.Multiselect = false;
+			dialog.Title = "Specify the file and path to load the configuration data from";
+
+			if (dialog.ShowDialog() != DialogResult.OK)
+				return;
+
+			mInfo.Load(dialog.FileName);
+			UpdateDetailView();
 		}
 
 		/// <summary>
@@ -203,7 +241,9 @@ namespace XMLToDataClass
 		private void UpdateGUIAccess(bool enable)
 		{
 			mainSplitContainer.Enabled = enable;
-			processButton.Enabled = enable;
+			generateButton.Enabled = enable;
+			saveConfigButton.Enabled = enable;
+			loadConfigButton.Enabled = enable;
 		}
 
 		/// <summary>

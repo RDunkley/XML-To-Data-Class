@@ -41,10 +41,10 @@ namespace XMLToDataClass.View
 
 		private void mainDataGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
 		{
-			if(e.RowIndex == valueColumn.Index)
+			if(e.ColumnIndex == valueColumn.Index)
 			{
 				string key = (string)mainDataGridView.Rows[e.RowIndex].Cells[keyColumn.Index].Value;
-				string newValue = (string)mainDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
+				string newValue = (string)mainDataGridView.Rows[e.RowIndex].Cells[valueColumn.Index].Value;
 				mType.TypeLookup[key] = newValue;
 			}
 

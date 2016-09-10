@@ -138,6 +138,29 @@ namespace XMLToDataClass.Data
 			return false;
 		}
 
+		public void Save(XmlDocument doc, XmlNode parent)
+		{
+			XmlElement element = Info.Save(doc, parent);
+			XmlAttribute attrib = element.Attributes.Append(doc.CreateAttribute("Include"));
+			attrib.Value = Include.ToString();
+		}
+
+		public void Load(XmlNode parent, bool ignoreCase)
+		{
+			XmlElement element = Info.Load(parent, ignoreCase);
+
+			if(element != null)
+			{
+				XmlAttribute attrib = element.Attributes["Include"];
+				if(attrib != null)
+				{
+					bool boolValue;
+					if (bool.TryParse(attrib.Value, out boolValue))
+						Include = boolValue;
+				}
+			}
+		}
+
 		#endregion Methods
 	}
 }

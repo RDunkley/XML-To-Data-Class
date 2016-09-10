@@ -14,6 +14,7 @@
 using CSCodeGen;
 using System;
 using System.Collections.Generic;
+using System.Xml;
 
 namespace XMLToDataClass.Data.Types
 {
@@ -278,6 +279,49 @@ namespace XMLToDataClass.Data.Types
 		private string GetEnumTypeName(string propertyName)
 		{
 			return string.Format("{0}Enum", propertyName);
+		}
+
+		/// <summary>
+		///   Saves the types configuration properties to XML child elements.
+		/// </summary>
+		/// <param name="doc"><see cref="XmlDocument"/> object representing the XML document to be written.</param>
+		/// <param name="parent">Parent <see cref="XmlNode"/> to append the child settings to.</param>
+		public override void Save(XmlDocument doc, XmlNode parent)
+		{
+			// Add the DateTimeSelect option.
+			foreach (string key in TypeLookup.Keys)
+			{
+				XmlElement element = doc.CreateElement("setting");
+				XmlAttribute attrib = element.Attributes.Append(doc.CreateAttribute("name"));
+				attrib.Value = key;
+				attrib = element.Attributes.Append(doc.CreateAttribute("value"));
+				attrib.Value = TypeLookup[key];
+				parent.AppendChild(element);
+			}
+		}
+
+		/// <summary>
+		///   Loads the configuration properties from XML node.
+		/// </summary>
+		/// <param name="parent">Parent XML node containing the child settings elements.</param>
+		public override void Load(XmlNode parent)
+		{
+			foreach (XmlNode node in parent.ChildNodes)
+			{
+				if (node.NodeType == XmlNodeType.Element && string.Compare(node.Name, "setting", true) == 0)
+				{
+					XmlAttribute nameAttrib = node.Attributes["name"];
+					XmlAttribute valueAttrib = node.Attributes["value"];
+					if (nameAttrib != null && valueAttrib != null)
+					{
+						// Set name is found.
+						if (TypeLookup.ContainsKey(nameAttrib.Value))
+							TypeLookup[nameAttrib.Value] = valueAttrib.Value;
+						else
+							TypeLookup.Add(nameAttrib.Value, valueAttrib.Value);
+					}
+				}
+			}
 		}
 
 		/// <summary>

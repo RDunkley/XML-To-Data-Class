@@ -13,6 +13,7 @@
 //********************************************************************************************************************************
 using CSCodeGen;
 using System.Collections.Generic;
+using System.Xml;
 
 namespace XMLToDataClass.Data.Types
 {
@@ -96,6 +97,19 @@ namespace XMLToDataClass.Data.Types
 		/// <param name="value">String value to be parsed.</param>
 		/// <returns>True if the string can be parsed to this value type, false otherwise.</returns>
 		bool TryParse(string value);
+
+		/// <summary>
+		///   Saves the types configuration properties to XML child elements.
+		/// </summary>
+		/// <param name="doc"><see cref="XmlDocument"/> object representing the XML document to be written.</param>
+		/// <param name="parent">Parent <see cref="XmlNode"/> to append the child settings to.</param>
+		void Save(XmlDocument doc, XmlNode parent);
+
+		/// <summary>
+		///   Loads the configuration properties from XML node.
+		/// </summary>
+		/// <param name="parent">Parent XML node containing the child settings elements.</param>
+		void Load(XmlNode parent);
 
 		#endregion Methods
 	}

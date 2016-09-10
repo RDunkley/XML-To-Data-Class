@@ -22,6 +22,9 @@ namespace XMLToDataClass.View
 	{
 		private IFloatingPointType<T> mType;
 
+		private bool mMinimumValueError = false;
+		private bool mMaximumValueError = false;
+
 		public event EventHandler SettingsChanged;
 
 		public FloatingPointSettings(IFloatingPointType<T> type)
@@ -37,45 +40,73 @@ namespace XMLToDataClass.View
 
 			InitializeComponent();
 
-			minimumTextBox.Text = type.MinimumValue.ToString("N", NumberFormatInfo.CurrentInfo);
-			maximumTextBox.Text = type.MaximumValue.ToString("N", NumberFormatInfo.CurrentInfo);
+			minimumTextBox.Text = type.MinimumValue.ToString();
+			maximumTextBox.Text = type.MaximumValue.ToString();
 
 			currencyCheckBox.Checked = type.AllowCurrency;
 			exponentCheckBox.Checked = type.AllowExponent;
 			parenthesesCheckBox.Checked = type.AllowParentheses;
 			percentCheckBox.Checked = type.AllowPercent;
+
+			UpdateErrorMessage();
 		}
 
 		private void minimumTextBox_TextChanged(object sender, EventArgs e)
 		{
 			if(!mType.TryParseForMinMax(minimumTextBox.Text))
 			{
-				// Revert to previous value.
-				minimumTextBox.Text = mType.MinimumValue.ToString("N", NumberFormatInfo.CurrentInfo);
+				// Show the error.
+				mMinimumValueError = true;
+				UpdateErrorMessage();
 				return;
 			}
 			else
 			{
 				// Parse value and assign to minimum value.
 				mType.MinimumValue = mType.ParseForMinMax(minimumTextBox.Text);
+				mMinimumValueError = false;
 			}
 
+			UpdateErrorMessage();
+
 			SettingsChanged?.Invoke(this, null);
+		}
+
+		private void UpdateErrorMessage()
+		{
+			if(mMinimumValueError)
+			{
+				if (mMaximumValueError)
+					inputErrorLabel.Text = "Maximum and Minimum Values are not valid floating point values, they will be ignored until fixed";
+				else
+					inputErrorLabel.Text = "Minimum Value is not a valid floating point value, it will be ignored until fixed";
+			}
+			else
+			{
+				if (mMaximumValueError)
+					inputErrorLabel.Text = "Maximum Value is not a valid floating point value, it will be ignored until fixed";
+				else
+					inputErrorLabel.Text = string.Empty;
+			}
 		}
 
 		private void maximumTextBox_TextChanged(object sender, EventArgs e)
 		{
 			if (!mType.TryParseForMinMax(maximumTextBox.Text))
 			{
-				// Revert to previous value.
-				maximumTextBox.Text = mType.MaximumValue.ToString("N", NumberFormatInfo.CurrentInfo);
+				// Show the error.
+				mMaximumValueError = true;
+				UpdateErrorMessage();
 				return;
 			}
 			else
 			{
 				// Parse value and assign to minimum value.
 				mType.MaximumValue = mType.ParseForMinMax(maximumTextBox.Text);
+				mMaximumValueError = false;
 			}
+
+			UpdateErrorMessage();
 
 			SettingsChanged?.Invoke(this, null);
 		}

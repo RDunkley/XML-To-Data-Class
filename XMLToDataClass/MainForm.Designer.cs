@@ -46,7 +46,7 @@ namespace XMLToDataClass
 			this.codeTextBox = new System.Windows.Forms.TextBox();
 			this.codeBrowseButton = new System.Windows.Forms.Button();
 			this.label2 = new System.Windows.Forms.Label();
-			this.processButton = new System.Windows.Forms.Button();
+			this.generateButton = new System.Windows.Forms.Button();
 			this.mainTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
 			this.mainSplitContainer = new System.Windows.Forms.SplitContainer();
 			this.elementGroupBox = new System.Windows.Forms.GroupBox();
@@ -63,11 +63,15 @@ namespace XMLToDataClass
 			this.label5 = new System.Windows.Forms.Label();
 			this.solutionTextBox = new System.Windows.Forms.TextBox();
 			this.settingsButton = new System.Windows.Forms.Button();
+			this.buttonFlowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
+			this.saveConfigButton = new System.Windows.Forms.Button();
+			this.loadConfigButton = new System.Windows.Forms.Button();
 			this.mainTableLayoutPanel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.mainSplitContainer)).BeginInit();
 			this.mainSplitContainer.Panel1.SuspendLayout();
 			this.mainSplitContainer.SuspendLayout();
 			this.elementGroupBox.SuspendLayout();
+			this.buttonFlowLayoutPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// codeTextBox
@@ -100,24 +104,23 @@ namespace XMLToDataClass
 			this.label2.Text = "Output Folder:";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// processButton
+			// generateButton
 			// 
-			this.processButton.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.processButton.Location = new System.Drawing.Point(3, 441);
-			this.processButton.Name = "processButton";
-			this.processButton.Size = new System.Drawing.Size(79, 23);
-			this.processButton.TabIndex = 6;
-			this.processButton.Text = "Process";
-			this.processButton.UseVisualStyleBackColor = true;
-			this.processButton.Click += new System.EventHandler(this.processButton_Click);
+			this.generateButton.AutoSize = true;
+			this.generateButton.Location = new System.Drawing.Point(3, 3);
+			this.generateButton.Name = "generateButton";
+			this.generateButton.Size = new System.Drawing.Size(89, 23);
+			this.generateButton.TabIndex = 6;
+			this.generateButton.Text = "Generate Code";
+			this.generateButton.UseVisualStyleBackColor = true;
+			this.generateButton.Click += new System.EventHandler(this.processButton_Click);
 			// 
 			// mainTableLayoutPanel
 			// 
 			this.mainTableLayoutPanel.ColumnCount = 3;
 			this.mainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.mainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.mainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 81F));
-			this.mainTableLayoutPanel.Controls.Add(this.processButton, 0, 8);
+			this.mainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.mainTableLayoutPanel.Controls.Add(this.mainSplitContainer, 0, 7);
 			this.mainTableLayoutPanel.Controls.Add(this.label1, 0, 0);
 			this.mainTableLayoutPanel.Controls.Add(this.xmlFilePathLabel, 1, 0);
@@ -133,7 +136,8 @@ namespace XMLToDataClass
 			this.mainTableLayoutPanel.Controls.Add(this.solutionCheckBox, 1, 5);
 			this.mainTableLayoutPanel.Controls.Add(this.label5, 0, 6);
 			this.mainTableLayoutPanel.Controls.Add(this.solutionTextBox, 1, 6);
-			this.mainTableLayoutPanel.Controls.Add(this.settingsButton, 1, 8);
+			this.mainTableLayoutPanel.Controls.Add(this.settingsButton, 2, 8);
+			this.mainTableLayoutPanel.Controls.Add(this.buttonFlowLayoutPanel, 0, 8);
 			this.mainTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.mainTableLayoutPanel.Location = new System.Drawing.Point(0, 0);
 			this.mainTableLayoutPanel.Name = "mainTableLayoutPanel";
@@ -146,7 +150,7 @@ namespace XMLToDataClass
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
+			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
 			this.mainTableLayoutPanel.Size = new System.Drawing.Size(583, 467);
 			this.mainTableLayoutPanel.TabIndex = 7;
 			// 
@@ -164,7 +168,7 @@ namespace XMLToDataClass
 			// mainSplitContainer.Panel2
 			// 
 			this.mainSplitContainer.Panel2.AutoScroll = true;
-			this.mainSplitContainer.Size = new System.Drawing.Size(577, 250);
+			this.mainSplitContainer.Size = new System.Drawing.Size(577, 244);
 			this.mainSplitContainer.SplitterDistance = 191;
 			this.mainSplitContainer.TabIndex = 7;
 			// 
@@ -174,7 +178,7 @@ namespace XMLToDataClass
 			this.elementGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.elementGroupBox.Location = new System.Drawing.Point(0, 0);
 			this.elementGroupBox.Name = "elementGroupBox";
-			this.elementGroupBox.Size = new System.Drawing.Size(191, 250);
+			this.elementGroupBox.Size = new System.Drawing.Size(191, 244);
 			this.elementGroupBox.TabIndex = 0;
 			this.elementGroupBox.TabStop = false;
 			this.elementGroupBox.Text = "Elements";
@@ -184,7 +188,7 @@ namespace XMLToDataClass
 			this.mainTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.mainTreeView.Location = new System.Drawing.Point(3, 16);
 			this.mainTreeView.Name = "mainTreeView";
-			this.mainTreeView.Size = new System.Drawing.Size(185, 231);
+			this.mainTreeView.Size = new System.Drawing.Size(185, 225);
 			this.mainTreeView.TabIndex = 0;
 			this.mainTreeView.AfterExpand += new System.Windows.Forms.TreeViewEventHandler(this.mainTreeView_AfterExpand);
 			// 
@@ -306,13 +310,47 @@ namespace XMLToDataClass
 			// 
 			// settingsButton
 			// 
-			this.settingsButton.Location = new System.Drawing.Point(88, 441);
+			this.settingsButton.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.settingsButton.Location = new System.Drawing.Point(505, 435);
 			this.settingsButton.Name = "settingsButton";
-			this.settingsButton.Size = new System.Drawing.Size(75, 23);
+			this.settingsButton.Size = new System.Drawing.Size(75, 29);
 			this.settingsButton.TabIndex = 20;
 			this.settingsButton.Text = "Settings";
 			this.settingsButton.UseVisualStyleBackColor = true;
 			this.settingsButton.Click += new System.EventHandler(this.settingsButton_Click);
+			// 
+			// buttonFlowLayoutPanel
+			// 
+			this.mainTableLayoutPanel.SetColumnSpan(this.buttonFlowLayoutPanel, 2);
+			this.buttonFlowLayoutPanel.Controls.Add(this.generateButton);
+			this.buttonFlowLayoutPanel.Controls.Add(this.saveConfigButton);
+			this.buttonFlowLayoutPanel.Controls.Add(this.loadConfigButton);
+			this.buttonFlowLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.buttonFlowLayoutPanel.Location = new System.Drawing.Point(3, 435);
+			this.buttonFlowLayoutPanel.Name = "buttonFlowLayoutPanel";
+			this.buttonFlowLayoutPanel.Size = new System.Drawing.Size(496, 29);
+			this.buttonFlowLayoutPanel.TabIndex = 21;
+			// 
+			// saveConfigButton
+			// 
+			this.saveConfigButton.AutoSize = true;
+			this.saveConfigButton.Location = new System.Drawing.Point(98, 3);
+			this.saveConfigButton.Name = "saveConfigButton";
+			this.saveConfigButton.Size = new System.Drawing.Size(75, 23);
+			this.saveConfigButton.TabIndex = 7;
+			this.saveConfigButton.Text = "Save";
+			this.saveConfigButton.UseVisualStyleBackColor = true;
+			this.saveConfigButton.Click += new System.EventHandler(this.saveConfigButton_Click);
+			// 
+			// loadConfigButton
+			// 
+			this.loadConfigButton.Location = new System.Drawing.Point(179, 3);
+			this.loadConfigButton.Name = "loadConfigButton";
+			this.loadConfigButton.Size = new System.Drawing.Size(75, 23);
+			this.loadConfigButton.TabIndex = 8;
+			this.loadConfigButton.Text = "Load";
+			this.loadConfigButton.UseVisualStyleBackColor = true;
+			this.loadConfigButton.Click += new System.EventHandler(this.loadConfigButton_Click);
 			// 
 			// MainForm
 			// 
@@ -328,6 +366,8 @@ namespace XMLToDataClass
 			((System.ComponentModel.ISupportInitialize)(this.mainSplitContainer)).EndInit();
 			this.mainSplitContainer.ResumeLayout(false);
 			this.elementGroupBox.ResumeLayout(false);
+			this.buttonFlowLayoutPanel.ResumeLayout(false);
+			this.buttonFlowLayoutPanel.PerformLayout();
 			this.ResumeLayout(false);
 
         }
@@ -337,7 +377,7 @@ namespace XMLToDataClass
 		private System.Windows.Forms.TextBox codeTextBox;
 		private System.Windows.Forms.Button codeBrowseButton;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button processButton;
+        private System.Windows.Forms.Button generateButton;
 		private System.Windows.Forms.TableLayoutPanel mainTableLayoutPanel;
 		private System.Windows.Forms.SplitContainer mainSplitContainer;
 		private System.Windows.Forms.GroupBox elementGroupBox;
@@ -354,6 +394,9 @@ namespace XMLToDataClass
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.TextBox solutionTextBox;
 		private System.Windows.Forms.Button settingsButton;
+		private System.Windows.Forms.FlowLayoutPanel buttonFlowLayoutPanel;
+		private System.Windows.Forms.Button saveConfigButton;
+		private System.Windows.Forms.Button loadConfigButton;
 	}
 }
 

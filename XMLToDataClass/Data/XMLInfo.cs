@@ -464,6 +464,43 @@ namespace XMLToDataClass.Data
 			}
 		}
 
+		public void Save(string filePath)
+		{
+			XmlDocument doc = new XmlDocument();
+			XmlElement root = doc.CreateElement("save_data");
+			doc.AppendChild(root);
+
+			XmlAttribute attrib = root.Attributes.Append(doc.CreateAttribute("MainClassName"));
+			attrib.Value = MainClassName;
+
+			// Save all the element configuration.
+			foreach (ElementInfo element in Elements.Values)
+				element.Save(doc, root);
+
+			doc.Save(filePath);
+		}
+
+		public void Load(string filePath)
+		{
+			XmlDocument doc = new XmlDocument();
+			doc.Load(filePath);
+
+			foreach(XmlNode node in doc.ChildNodes)
+			{
+				if(node.NodeType == XmlNodeType.Element && string.Compare(node.Name, "save_data", true) == 0)
+				{
+					XmlAttribute attrib = node.Attributes["MainClassName"];
+					if (attrib != null)
+						MainClassName = attrib.Value;
+
+					// Load all the element configurations.
+					foreach (ElementInfo element in Elements.Values)
+						element.Load(node, CaseSensitive);
+					break;
+				}
+			}
+		}
+
 		#endregion Methods
 	}
 }

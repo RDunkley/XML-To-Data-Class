@@ -14,6 +14,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Xml;
 using XMLToDataClass.Data.Types;
 
 namespace XMLToDataClass.Data
@@ -212,6 +213,90 @@ namespace XMLToDataClass.Data
 				}
 			}
 			return builder.ToString();
+		}
+
+		public XmlElement Save(XmlDocument doc, XmlNode parent)
+		{
+			XmlElement element = doc.CreateElement(Name);
+			XmlAttribute attrib = element.Attributes.Append(doc.CreateAttribute("SelectedDataType"));
+			attrib.Value = Enum.GetName(typeof(DataType), SelectedDataType);
+
+			attrib = element.Attributes.Append(doc.CreateAttribute("CanBeEmpty"));
+			attrib.Value = CanBeEmpty.ToString();
+
+			attrib = element.Attributes.Append(doc.CreateAttribute("IsOptional"));
+			attrib.Value = IsOptional.ToString();
+
+			attrib = element.Attributes.Append(doc.CreateAttribute("PropertyName"));
+			attrib.Value = PropertyName;
+
+			foreach(DataType key in mTypeLookup.Keys)
+			{
+				// Save each child data type as a separate child element.
+				XmlElement child = doc.CreateElement(Enum.GetName(typeof(DataType), key));
+				mTypeLookup[key].Save(doc, child);
+				element.AppendChild(child);
+			}
+
+			parent.AppendChild(element);
+			return element;
+		}
+
+		public XmlElement Load(XmlNode parent, bool ignoreCase)
+		{
+			foreach(XmlNode node in parent.ChildNodes)
+			{
+				if(node.NodeType == XmlNodeType.Element && string.Compare(node.Name, Name, ignoreCase) == 0)
+				{
+					XmlAttribute attrib = node.Attributes["SelectedDataType"];
+					if(attrib != null)
+					{
+						DataType dataTypeValue;
+						if (Enum.TryParse<DataType>(attrib.Value, out dataTypeValue))
+							SelectedDataType = dataTypeValue;
+					}
+
+					attrib = node.Attributes["CanBeEmpty"];
+					if(attrib != null)
+					{
+						bool boolValue;
+						if (bool.TryParse(attrib.Value, out boolValue))
+							CanBeEmpty = boolValue;
+					}
+
+					attrib = node.Attributes["IsOptional"];
+					if (attrib != null)
+					{
+						bool boolValue;
+						if (bool.TryParse(attrib.Value, out boolValue))
+							IsOptional = boolValue;
+					}
+
+					attrib = node.Attributes["PropertyName"];
+					if(attrib != null)
+					{
+						PropertyName = attrib.Value;
+					}
+
+					// Parse the data type settings.
+					foreach(XmlNode child in node.ChildNodes)
+					{
+						if(child.NodeType == XmlNodeType.Element)
+						{
+							DataType nodeType;
+							if(Enum.TryParse<DataType>(child.Name, out nodeType))
+							{
+								// Found a data type element so load it.
+								mTypeLookup[nodeType].Load(child);
+							}
+						}
+					}
+
+					return node as XmlElement;
+				}
+			}
+
+			return null;
 		}
 
 		#endregion Methods

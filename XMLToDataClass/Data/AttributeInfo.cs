@@ -151,6 +151,16 @@ namespace XMLToDataClass.Data
 			return lowerCaseList.ToArray();
 		}
 
+		public void Save(XmlDocument doc, XmlNode parent)
+		{
+			Info.Save(doc, parent);
+		}
+
+		public void Load(XmlNode parent, bool ignoreCase)
+		{
+			Info.Load(parent, ignoreCase);
+		}
+
 		#endregion Methods
 	}
 }
