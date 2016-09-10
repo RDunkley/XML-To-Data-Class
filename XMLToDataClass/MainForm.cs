@@ -144,6 +144,7 @@ namespace XMLToDataClass
 			CSCodeGen.DefaultValues.CompanyName = Properties.Settings.Default.CSCodeGenCompanyName;
 			CSCodeGen.DefaultValues.Developer = Properties.Settings.Default.CSCodeGenDeveloper;
 			CSCodeGen.DefaultValues.UseTabs = Properties.Settings.Default.CSCodeGenUseTabs;
+			CSCodeGen.DefaultValues.IncludeSubHeader = Properties.Settings.Default.CSCodeGenIncludeSubHeader;
 			CSCodeGen.DefaultValues.FlowerBoxCharacter = Properties.Settings.Default.CSCodeGenFlowerBoxCharacter;
 			CSCodeGen.DefaultValues.NumCharactersPerLine = Properties.Settings.Default.CSCodeGenNumCharsPerLine;
 			CSCodeGen.DefaultValues.TabSize = Properties.Settings.Default.CSCodeGenIndentSize;
@@ -474,9 +475,10 @@ namespace XMLToDataClass
 		private void settingsButton_Click(object sender, EventArgs e)
 		{
 			SettingsForm form = new SettingsForm();
-			form.CompanyName = Properties.Settings.Default.CSCodeGenCompanyName;
+			form.Company = Properties.Settings.Default.CSCodeGenCompanyName;
 			form.Developer = Properties.Settings.Default.CSCodeGenDeveloper;
 			form.UseTabs = Properties.Settings.Default.CSCodeGenUseTabs;
+			form.IncludeSubHeader = Properties.Settings.Default.CSCodeGenIncludeSubHeader;
 			form.FlowerBoxCharacter = Properties.Settings.Default.CSCodeGenFlowerBoxCharacter;
 			form.NumberOfCharsPerLine = Properties.Settings.Default.CSCodeGenNumCharsPerLine;
 			form.IndentSize = Properties.Settings.Default.CSCodeGenIndentSize;
@@ -487,9 +489,10 @@ namespace XMLToDataClass
 			if (form.ShowDialog() != DialogResult.OK)
 				return;
 
-			Properties.Settings.Default.CSCodeGenCompanyName = form.CompanyName;
+			Properties.Settings.Default.CSCodeGenCompanyName = form.Company;
 			Properties.Settings.Default.CSCodeGenDeveloper = form.Developer;
 			Properties.Settings.Default.CSCodeGenUseTabs = form.UseTabs;
+			Properties.Settings.Default.CSCodeGenIncludeSubHeader = form.IncludeSubHeader;
 			Properties.Settings.Default.CSCodeGenFlowerBoxCharacter = form.FlowerBoxCharacter;
 			Properties.Settings.Default.CSCodeGenNumCharsPerLine = form.NumberOfCharsPerLine;
 			Properties.Settings.Default.CSCodeGenIndentSize = form.IndentSize;

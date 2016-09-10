@@ -25,7 +25,7 @@ namespace XMLToDataClass
 		/// <summary>
 		///   Gets or sets the name of the company.
 		/// </summary>
-		public string CompanyName
+		public string Company
 		{
 			get
 			{
@@ -94,6 +94,21 @@ namespace XMLToDataClass
 			set
 			{
 				flowerTextBox.Text = value.ToString();
+			}
+		}
+
+		/// <summary>
+		///   Gets or sets whether to include the sub-header in the generated files.
+		/// </summary>
+		public bool IncludeSubHeader
+		{
+			get
+			{
+				return subHeaderCheckBox.Checked;
+			}
+			set
+			{
+				subHeaderCheckBox.Checked = value;
 			}
 		}
 

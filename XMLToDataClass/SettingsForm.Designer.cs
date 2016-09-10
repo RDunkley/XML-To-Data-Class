@@ -50,6 +50,7 @@
 			this.licenseRichTextBox = new System.Windows.Forms.RichTextBox();
 			this.okButton = new System.Windows.Forms.Button();
 			this.cancelButton = new System.Windows.Forms.Button();
+			this.subHeaderCheckBox = new System.Windows.Forms.CheckBox();
 			this.mainTableLayoutPanel.SuspendLayout();
 			this.templateGroupBox.SuspendLayout();
 			this.mainTabControl.SuspendLayout();
@@ -73,12 +74,13 @@
 			this.mainTableLayoutPanel.Controls.Add(this.flowerTextBox, 3, 0);
 			this.mainTableLayoutPanel.Controls.Add(this.label5, 2, 1);
 			this.mainTableLayoutPanel.Controls.Add(this.numPerLineTextBox, 3, 1);
-			this.mainTableLayoutPanel.Controls.Add(this.tabCheckBox, 1, 2);
+			this.mainTableLayoutPanel.Controls.Add(this.tabCheckBox, 0, 2);
 			this.mainTableLayoutPanel.Controls.Add(this.label4, 2, 2);
 			this.mainTableLayoutPanel.Controls.Add(this.indentTextBox, 3, 2);
 			this.mainTableLayoutPanel.Controls.Add(this.templateGroupBox, 0, 3);
 			this.mainTableLayoutPanel.Controls.Add(this.okButton, 1, 4);
 			this.mainTableLayoutPanel.Controls.Add(this.cancelButton, 2, 4);
+			this.mainTableLayoutPanel.Controls.Add(this.subHeaderCheckBox, 1, 2);
 			this.mainTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.mainTableLayoutPanel.Location = new System.Drawing.Point(0, 0);
 			this.mainTableLayoutPanel.Name = "mainTableLayoutPanel";
@@ -97,17 +99,17 @@
 			this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.label1.Location = new System.Drawing.Point(3, 0);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(85, 26);
+			this.label1.Size = new System.Drawing.Size(72, 26);
 			this.label1.TabIndex = 0;
-			this.label1.Text = "Company Name:";
+			this.label1.Text = "Company:";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// companyTextBox
 			// 
 			this.companyTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.companyTextBox.Location = new System.Drawing.Point(94, 3);
+			this.companyTextBox.Location = new System.Drawing.Point(81, 3);
 			this.companyTextBox.Name = "companyTextBox";
-			this.companyTextBox.Size = new System.Drawing.Size(133, 20);
+			this.companyTextBox.Size = new System.Drawing.Size(146, 20);
 			this.companyTextBox.TabIndex = 1;
 			// 
 			// label2
@@ -116,7 +118,7 @@
 			this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.label2.Location = new System.Drawing.Point(3, 26);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(85, 26);
+			this.label2.Size = new System.Drawing.Size(72, 26);
 			this.label2.TabIndex = 2;
 			this.label2.Text = "Developer:";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -124,9 +126,9 @@
 			// developerTextBox
 			// 
 			this.developerTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.developerTextBox.Location = new System.Drawing.Point(94, 29);
+			this.developerTextBox.Location = new System.Drawing.Point(81, 29);
 			this.developerTextBox.Name = "developerTextBox";
-			this.developerTextBox.Size = new System.Drawing.Size(133, 20);
+			this.developerTextBox.Size = new System.Drawing.Size(146, 20);
 			this.developerTextBox.TabIndex = 3;
 			// 
 			// label3
@@ -172,9 +174,9 @@
 			// 
 			this.tabCheckBox.AutoSize = true;
 			this.tabCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tabCheckBox.Location = new System.Drawing.Point(94, 55);
+			this.tabCheckBox.Location = new System.Drawing.Point(3, 55);
 			this.tabCheckBox.Name = "tabCheckBox";
-			this.tabCheckBox.Size = new System.Drawing.Size(133, 20);
+			this.tabCheckBox.Size = new System.Drawing.Size(72, 20);
 			this.tabCheckBox.TabIndex = 8;
 			this.tabCheckBox.Text = "Use Tabs";
 			this.tabCheckBox.UseVisualStyleBackColor = true;
@@ -313,6 +315,17 @@
 			this.cancelButton.Text = "Cancel";
 			this.cancelButton.UseVisualStyleBackColor = true;
 			// 
+			// subHeaderCheckBox
+			// 
+			this.subHeaderCheckBox.AutoSize = true;
+			this.subHeaderCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.subHeaderCheckBox.Location = new System.Drawing.Point(81, 55);
+			this.subHeaderCheckBox.Name = "subHeaderCheckBox";
+			this.subHeaderCheckBox.Size = new System.Drawing.Size(146, 20);
+			this.subHeaderCheckBox.TabIndex = 15;
+			this.subHeaderCheckBox.Text = "Include Sub-Header";
+			this.subHeaderCheckBox.UseVisualStyleBackColor = true;
+			// 
 			// SettingsForm
 			// 
 			this.AcceptButton = this.okButton;
@@ -360,5 +373,6 @@
 		private System.Windows.Forms.RichTextBox licenseRichTextBox;
 		private System.Windows.Forms.Button okButton;
 		private System.Windows.Forms.Button cancelButton;
+		private System.Windows.Forms.CheckBox subHeaderCheckBox;
 	}
 }

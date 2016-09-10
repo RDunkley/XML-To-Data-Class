@@ -214,5 +214,17 @@ namespace XMLToDataClass.Properties {
                 this["CSCodeGenLicenseTemplate"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool CSCodeGenIncludeSubHeader {
+            get {
+                return ((bool)(this["CSCodeGenIncludeSubHeader"]));
+            }
+            set {
+                this["CSCodeGenIncludeSubHeader"] = value;
+            }
+        }
     }
 }
