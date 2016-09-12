@@ -78,6 +78,7 @@
     <Compile Include="Data\Types\SerialPortParityEnumType.cs" />
     <Compile Include="Data\Types\SerialPortStopBitsEnumType.cs" />
     <Compile Include="Data\Types\StringType.cs" />
+    <Compile Include="Data\Types\VersionType.cs" />
     <Compile Include="Data\XMLInfo.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -159,6 +160,12 @@
     <Compile Include="View\TextInputForm.Designer.cs">
       <DependentUpon>TextInputForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="View\VersionTypeSettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="View\VersionTypeSettings.Designer.cs">
+      <DependentUpon>VersionTypeSettings.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -207,6 +214,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="View\TextInputForm.resx">
       <DependentUpon>TextInputForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\VersionTypeSettings.resx">
+      <DependentUpon>VersionTypeSettings.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">

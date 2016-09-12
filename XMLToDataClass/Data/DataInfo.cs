@@ -109,6 +109,7 @@ namespace XMLToDataClass.Data
 			mTypeLookup.Add(DataType.Enum, new EnumType(this, possibleValues, ignoreCase));
 			mTypeLookup.Add(DataType.SerialPortParity, new SerialPortParityEnumType(this, possibleValues, ignoreCase));
 			mTypeLookup.Add(DataType.SerialPortStopBits, new SerialPortStopBitsEnumType(this, possibleValues, ignoreCase));
+			mTypeLookup.Add(DataType.Version, new VersionType(this, possibleValues, ignoreCase));
 			DetermineDefaultSelectedType();
 		}
 

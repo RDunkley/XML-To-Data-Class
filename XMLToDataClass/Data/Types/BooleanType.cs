@@ -84,7 +84,6 @@ namespace XMLToDataClass.Data.Types
 			AllowZeroOneStrings = DefaultAllowZeroOneStrings;
 
 			Type = DataType.Boolean;
-			IsNullable = true;
 			DataTypeString = "bool";
 			DisplayName = "Boolean";
 		}

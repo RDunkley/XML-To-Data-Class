@@ -157,6 +157,10 @@ namespace XMLToDataClass.View
 					control = new FixedEnumSettings<StopBits>(Info.SelectedDataTypeObject as SerialPortStopBitsEnumType);
 					((FixedEnumSettings<StopBits>)control).SettingsChanged += DataInfoPanel_SettingsChanged;
 					break;
+				case DataType.Version:
+					control = new VersionTypeSettings(Info.SelectedDataTypeObject as VersionType);
+					((VersionTypeSettings)control).SettingsChanged += DataInfoPanel_SettingsChanged;
+					break;
 				default:
 					throw new NotImplementedException("The data type specified is not recognized as a valid type");
 			}

@@ -73,7 +73,6 @@ namespace XMLToDataClass.Data.Types
 			Culture = DefaultCulture;
 
 			Type = DataType.DateTime;
-			IsNullable = true;
 			DataTypeString = "DateTime";
 			DisplayName = "Date/Time";
 		}

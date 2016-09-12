@@ -105,7 +105,6 @@ namespace XMLToDataClass.Data.Types
 				default:
 					throw new ArgumentException("The generic type must be created with the following value types as T: float or double.");
 			}
-			IsNullable = true;
 			DataTypeString = Enum.GetName(typeof(DataType), Type).ToLower();
 			Usings.Add("System.Globalization");
 		}

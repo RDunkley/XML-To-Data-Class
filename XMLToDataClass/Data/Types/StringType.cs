@@ -72,6 +72,7 @@ namespace XMLToDataClass.Data.Types
 
 			Type = DataType.String;
 			IsNullable = false;
+			IsArray = true;
 			DataTypeString = "string";
 			DisplayName = "String";
 		}

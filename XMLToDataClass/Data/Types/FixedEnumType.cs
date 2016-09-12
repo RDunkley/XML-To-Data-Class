@@ -77,7 +77,6 @@ namespace XMLToDataClass.Data.Types
 			AllowValues = DefaultAllowValues;
 			IgnoreCase = DefaultIgnoreCase;
 
-			IsNullable = true;
 			DataTypeString = typeof(T).Name;
 			DisplayName = string.Format("{0} enumerated type", DataTypeString);
 		}

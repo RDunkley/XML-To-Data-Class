@@ -22,72 +22,72 @@ namespace XMLToDataClass.Data
 		/// <summary>
 		///   Represents a boolean value type.
 		/// </summary>
-		Boolean = 5,
+		Boolean = 6,
 
 		/// <summary>
 		///   Represents a 8-bit unsigned integer.
 		/// </summary>
-		Byte = 8,
+		Byte = 9,
 
 		/// <summary>
 		///   Represents a 64-bit unsigned integer.
 		/// </summary>
-		Int = 6,
+		Int = 7,
 
 		/// <summary>
 		///   Represents a 64-bit integer.
 		/// </summary>
-		Long = 12,
+		Long = 13,
 
 		/// <summary>
 		///   Represents a 8-bit integer.
 		/// </summary>
-		SByte = 7,
+		SByte = 8,
 
 		/// <summary>
 		///   Represents a 16-bit integer.
 		/// </summary>
-		Short = 9,
+		Short = 10,
 
 		/// <summary>
 		///   Represents a string type.
 		/// </summary>
-		String = 14,
+		String = 15,
 
 		/// <summary>
 		///   Represents a 32-bit unsigned integer.
 		/// </summary>
-		UInt = 11,
+		UInt = 12,
 
 		/// <summary>
 		///   Represents a 64-bit unsigned integer.
 		/// </summary>
-		ULong = 13,
+		ULong = 14,
 
 		/// <summary>
 		///   Represents a 16-bit unsigned integer.
 		/// </summary>
-		UShort = 10,
+		UShort = 11,
 
 		/// <summary>
 		///   Represents a 32-bit floating point value.
 		/// </summary>
-		Float = 4,
+		Float = 5,
 
 		/// <summary>
 		///   Represents a 64-bit floating point value.
 		/// </summary>
-		Double = 3,
+		Double = 4,
 
 		/// <summary>
 		///   Represents a date time value.
 		/// </summary>
-		DateTime = 2,
+		DateTime = 3,
 
 		/// <summary>
 		///  Represents an enumerated type.
 		/// </summary>
-		Enum = 15,
+		Enum = 16,
 
 		/// <summary>
 		///   Represents a serial port parity enumeration.
@@ -98,5 +98,10 @@ namespace XMLToDataClass.Data
 		///   Represents a serial port stop bits enumeration.
 		/// </summary>
 		SerialPortStopBits = 0,
+
+		/// <summary>
+		///   Represents a version.
+		/// </summary>
+		Version = 2,
 	}
 }

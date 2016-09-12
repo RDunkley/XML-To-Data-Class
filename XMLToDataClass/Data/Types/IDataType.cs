@@ -37,6 +37,11 @@ namespace XMLToDataClass.Data.Types
 		bool IsNullable { get; }
 
 		/// <summary>
+		///   True if the data type supports 'Length' property, false otherwise.
+		/// </summary>
+		bool IsArray { get; }
+
+		/// <summary>
 		///   <see cref="DataType"/> of this data type.
 		/// </summary>
 		DataType Type { get; }

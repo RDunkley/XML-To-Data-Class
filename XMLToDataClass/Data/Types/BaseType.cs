@@ -61,6 +61,11 @@ namespace XMLToDataClass.Data.Types
 		public bool IsNullable { get; protected set; }
 
 		/// <summary>
+		///   True if the data type supports 'Length' property, false otherwise.
+		/// </summary>
+		public bool IsArray { get; protected set; }
+
+		/// <summary>
 		///   <see cref="DataType"/> of this data type.
 		/// </summary>
 		public DataType Type { get; protected set;}
@@ -92,6 +97,8 @@ namespace XMLToDataClass.Data.Types
 			mPossibleValues = possibleValues;
 			mIgnoreCase = ignoreCase;
 			Usings = new List<string>();
+			IsNullable = true;
+			IsArray = false;
 		}
 
 		/// <summary>

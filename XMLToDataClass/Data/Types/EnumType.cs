@@ -42,7 +42,6 @@ namespace XMLToDataClass.Data.Types
 		public EnumType(DataInfo info, string[] possibleValues, bool ignoreCase) : base(info, possibleValues, ignoreCase)
 		{
 			Type = DataType.Enum;
-			IsNullable = true;
 			DataTypeString = GetEnumTypeName(mInfo.PropertyName);
 			DisplayName = "Custom Enumeration";
 

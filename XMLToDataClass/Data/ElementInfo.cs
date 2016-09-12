@@ -471,9 +471,8 @@ namespace XMLToDataClass.Data
 			if (Text.Include)
 			{
 				string name = StringUtility.GetLowerCamelCase(Text.Info.PropertyName, true);
-				bool? canBeNull;
-				bool? canBeEmpty;
-				DetermineDataConstructorInputChecks(Text.Info, out canBeNull, out canBeEmpty);
+				bool? canBeNull = DetermineDataConstructorNullCheck(Text.Info);
+				bool? canBeEmpty = DetermineDataContructorEmptyCheck(Text.Info);
 				cInfo.Parameters.Add(new ParameterInfo
 				(
 					Text.Info.GetDataTypeString(),
@@ -488,9 +487,8 @@ namespace XMLToDataClass.Data
 			if (CDATA.Include)
 			{
 				string name = StringUtility.GetLowerCamelCase(CDATA.Info.PropertyName, true);
-				bool? canBeNull;
-				bool? canBeEmpty;
-				DetermineDataConstructorInputChecks(CDATA.Info, out canBeNull, out canBeEmpty);
+				bool? canBeNull = DetermineDataConstructorNullCheck(CDATA.Info);
+				bool? canBeEmpty = DetermineDataContructorEmptyCheck(CDATA.Info);
 				cInfo.Parameters.Add(new ParameterInfo
 				(
 					CDATA.Info.GetDataTypeString(),
@@ -506,9 +504,8 @@ namespace XMLToDataClass.Data
 			foreach (AttributeInfo attrib in Attributes)
 			{
 				string name = StringUtility.GetLowerCamelCase(attrib.Info.PropertyName, true);
-				bool? canBeNull;
-				bool? canBeEmpty;
-				DetermineDataConstructorInputChecks(attrib.Info, out canBeNull, out canBeEmpty);
+				bool? canBeNull = DetermineDataConstructorNullCheck(attrib.Info);
+				bool? canBeEmpty = DetermineDataContructorEmptyCheck(attrib.Info);
 				cInfo.Parameters.Add(new ParameterInfo
 				(
 					attrib.Info.GetDataTypeString(),
@@ -540,19 +537,111 @@ namespace XMLToDataClass.Data
 			return cInfo;
 		}
 
+		private bool? DetermineDataConstructorNullCheck(DataInfo info)
+		{
+			// Here is a truth table for the following logic:
+			//
+			// IsOptional	CanBeEmpty	IsNullable	IsArray	CanBeNull
+			// 0			0			0			0		0
+			// 1			0			0			0		1
+			// 0			1			0			0		1
+			// 1			1			0			0		1
+			// 0			0			1			0		NULL
+			// 1			0			1			0		1
+			// 0			1			1			0		NULL
+			// 1			1			1			0		1
+			// 0			0			0			1		0
+			// 1			0			0			1		1
+			// 0			1			0			1		0
+			// 1			1			0			1		1
+			// 0			0			1			1		NULL
+			// 1			0			1			1		1
+			// 0			1			1			1		NULL
+			// 1			1			1			1		1
+			if (!info.SelectedDataTypeObject.IsArray)
+			{
+				if(!info.SelectedDataTypeObject.IsNullable)
+				{
+					return info.IsOptional || info.CanBeEmpty;
+				}
+				else
+				{
+					if (!info.IsOptional)
+						return null;
+					else
+						return true;
+				}
+			}
+			else
+			{
+				if(!info.SelectedDataTypeObject.IsNullable)
+				{
+					return info.IsOptional;
+				}
+				else
+				{
+					if (info.IsOptional)
+						return true;
+					else
+						return null;
+				}
+			}
+		}
+
+		private bool? DetermineDataContructorEmptyCheck(DataInfo info)
+		{
+			// Here is a truth table for the following logic:
+			//
+			// IsOptional	CanBeEmpty	IsNullable	IsArray	CanBeEmpty
+			// 0			0			0			0		NULL
+			// 1			0			0			0		NULL
+			// 0			1			0			0		NULL
+			// 1			1			0			0		NULL
+			// 0			0			1			0		NULL
+			// 1			0			1			0		NULL
+			// 0			1			1			0		NULL
+			// 1			1			1			0		NULL
+			// 0			0			0			1		0
+			// 1			0			0			1		0
+			// 0			1			0			1		1
+			// 1			1			0			1		1
+			// 0			0			1			1		NULL
+			// 1			0			1			1		NULL
+			// 0			1			1			1		NULL
+			// 1			1			1			1		NULL
+
+			if (!info.SelectedDataTypeObject.IsArray)
+				return null;
+			else
+			{
+				if (info.SelectedDataTypeObject.IsNullable)
+					return null;
+				else
+					return info.CanBeEmpty;
+			}
+		}
+
 		private void DetermineDataConstructorInputChecks(DataInfo info, out bool? canBeNull, out bool? canBeEmpty)
 		{
 			// Here is a truth table for the following logic:
 			//
-			// IsOptional	CanBeEmpty	IsNullable	CanBeNull	CanBeEmpty
-			// 1			1			0			1			1
-			// 0			1			0			0			1
-			// 1			0			0			1			0
-			// 0			0			0			0			0
-			// 0			1			1			NULL		NULL
-			// 0			0			1			NULL		NULL
-			// 1			0			1			1			NULL
-			// 1			1			1			1			NULL
+			// IsOptional	CanBeEmpty	IsNullable	IsArray	CanBeNull	CanBeEmpty
+			// 1			1			0			0		1			0
+			// 0			1			0			0		1			0
+			// 1			0			0			0		1			0
+			// 0			0			0			0		0			0
+			// 0			1			1			0		NULL		NULL
+			// 0			0			1			0		NULL		NULL
+			// 1			0			1			0		1			NULL
+			// 1			1			1			0		1			NULL
+			// 1			1			0			1		1			1
+			// 0			1			0			1		0			1
+			// 1			0			0			1		1			0
+			// 0			0			0			1		0			0
+			// 0			1			1			1		NULL		NULL
+			// 0			0			1			1		NULL		NULL
+			// 1			0			1			1		1			NULL
+			// 1			1			1			1		1			NULL
 			canBeNull = null;
 			canBeEmpty = null;
 			if (info.SelectedDataTypeObject.IsNullable)
@@ -562,7 +651,7 @@ namespace XMLToDataClass.Data
 			}
 			else
 			{
-				canBeNull = info.IsOptional;
+				canBeNull = info.IsOptional || info.CanBeEmpty;
 				canBeEmpty = info.CanBeEmpty;
 			}
 		}

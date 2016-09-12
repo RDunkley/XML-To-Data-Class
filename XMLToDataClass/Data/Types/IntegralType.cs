@@ -127,7 +127,6 @@ namespace XMLToDataClass.Data.Types
 				default:
 					throw new ArgumentException("The generic type must be created with the following value types as T: byte, sbyte, ushort, short, uint, int, ulong, and long.");
 			}
-			IsNullable = true;
 			DataTypeString = Enum.GetName(typeof(DataType), Type).ToLower();
 			string signedString = "signed";
 			if (IsUnsigned())
