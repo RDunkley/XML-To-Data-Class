@@ -161,6 +161,10 @@ namespace XMLToDataClass.View
 					control = new VersionTypeSettings(Info.SelectedDataTypeObject as VersionType);
 					((VersionTypeSettings)control).SettingsChanged += DataInfoPanel_SettingsChanged;
 					break;
+				case DataType.TimeSpan:
+					control = new TimeSpanSettings(Info.SelectedDataTypeObject as TimeSpanType);
+					((TimeSpanSettings)control).SettingsChanged += DataInfoPanel_SettingsChanged;
+					break;
 				default:
 					throw new NotImplementedException("The data type specified is not recognized as a valid type");
 			}

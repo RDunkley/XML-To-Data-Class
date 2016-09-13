@@ -1,7 +1,7 @@
 ﻿//********************************************************************************************************************************
-// Filename:    DateTimeType.cs
+// Filename:    TimeSpanType.cs
 // Owner:       Richard Dunkley
-// Description: Class which represents a date/time value in an XML file.
+// Description: Class which represents a time span value in an XML file.
 //********************************************************************************************************************************
 // Copyright © Richard Dunkley 2016
 //
@@ -11,42 +11,19 @@
 // CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and
 // limitations under the License.
 //********************************************************************************************************************************
-using CSCodeGen;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Xml;
+using CSCodeGen;
+using System.Globalization;
 
 namespace XMLToDataClass.Data.Types
 {
-	public class DateTimeType : BaseType
+	public class TimeSpanType : BaseType
 	{
-		#region Enumerations
-
-		public enum DateTimeOption
-		{
-			DateTime,
-			Date,
-			Time,
-			YearMonth,
-			MonthDay,
-		}
-
-		#endregion Enumerations
-
 		#region Properties
 
-		/// <summary>
-		///   Default setting to allow 'True' and 'False' strings.
-		/// </summary>
-		public static DateTimeOption DefaultDateTimeSelect { get; set; }
-
 		public static CultureInfo DefaultCulture { get; set; }
-
-		/// <summary>
-		///   True to allow 'True' and 'False' strings, false to disallow.
-		/// </summary>
-		public DateTimeOption DateTimeSelect { get; set; }
 
 		public CultureInfo Culture { get; set; }
 
@@ -54,27 +31,26 @@ namespace XMLToDataClass.Data.Types
 
 		#region Methods
 
-		static DateTimeType()
+		static TimeSpanType()
 		{
-			DefaultDateTimeSelect = DateTimeOption.DateTime;
 			DefaultCulture = CultureInfo.CurrentCulture;
 		}
 
 		/// <summary>
-		///   Instantiates a new <see cref="DateTimeType"/> object.
+		///   Instantiates a new <see cref="TimeSpanType"/> object.
 		/// </summary>
 		/// <param name="info"><see cref="DataInfo"/> object associated with this type.</param>
 		/// <param name="possibleValues">Possible values the data type will have to parse. Can be empty.</param>
 		/// <param name="ignoreCase">True if the case of the values should be ignored, false otherwise. May not have any bearing on certain types.</param>
 		/// <exception cref="ArgumentNullException"><i>possibleValues</i> or <i>info</i> is a null reference.</exception>
-		public DateTimeType(DataInfo info, string[] possibleValues, bool ignoreCase) : base(info, possibleValues, ignoreCase)
+		public TimeSpanType(DataInfo info, string[] possibleValues, bool ignoreCase) : base(info, possibleValues, ignoreCase)
 		{
-			DateTimeSelect = DefaultDateTimeSelect;
 			Culture = DefaultCulture;
 
-			Type = DataType.DateTime;
-			DataTypeString = "DateTime";
-			DisplayName = "Date/Time";
+			Type = DataType.TimeSpan;
+			DataTypeString = "TimeSpan";
+			DisplayName = "Duration of Time";
+			Usings.Add("System.Globalization");
 		}
 
 		/// <summary>
@@ -102,19 +78,10 @@ namespace XMLToDataClass.Data.Types
 					"public",
 					"bool",
 					string.Format("{0}NullIsEmpty", mInfo.PropertyName),
-					string.Format("True if the null {0} DateTime should be represented as an empty string in XML, false if it shouldn't be included.", mInfo.PropertyName)
+					string.Format("True if the null {0} TimeSpan should be represented as an empty string in XML, false if it shouldn't be included.", mInfo.PropertyName)
 				));
 			}
 
-			string formatPropertyName = GetFormatPropertyName(mInfo.PropertyName);
-
-			propList.Add(new PropertyInfo
-			(
-				"public",
-				"string",
-				formatPropertyName,
-				string.Format("Stores how the {0} date/time is converted to XML string", mInfo.PropertyName)
-			));
 			return propList.ToArray();
 		}
 
@@ -122,10 +89,12 @@ namespace XMLToDataClass.Data.Types
 		///   Generates the export method code for the boolean.
 		/// </summary>
 		/// <returns>String array representing the export method code.</returns>
-		/// <exception cref="InvalidOperationException">An attempt was made to generate a boolean parsing method, but none of the valid boolean string pairs were allowed. At least one boolean string pair (Ex: 'true/false', 'yes/no', or '0/1') must be allowed.</exception>
+		/// <exception cref="InvalidOperationException">An attempt was made to generate a parsing method, but the <see cref="Culture"/> specified is null.</exception>
 		public override string[] GenerateExportMethodCode()
 		{
-			string formatPropertyName = GetFormatPropertyName(mInfo.PropertyName);
+			if (Culture == null)
+				throw new InvalidOperationException("Culture is a null reference");
+
 			List<string> codeLines = new List<string>();
 
 			string name;
@@ -161,20 +130,22 @@ namespace XMLToDataClass.Data.Types
 				}
 			}
 
-
 			codeLines.Add(string.Empty);
 			codeLines.Add(string.Format("CultureInfo culture = new CultureInfo(\"{0}\");", Culture.Name));
-			codeLines.Add(string.Format("return {0}.ToString({1}, culture);", name, formatPropertyName));
+			codeLines.Add(string.Format("return {0}.ToString(\"c\", culture);", name));
 			return codeLines.ToArray();
 		}
 
 		/// <summary>
-		///   Generates the import method code for the boolean.
+		///   Generates the import method code for the type.
 		/// </summary>
 		/// <returns>String array representing the import method code.</returns>
-		/// <exception cref="InvalidOperationException">An attempt was made to generate a boolean parsing method, but none of the valid boolean string pairs were allowed. At least one boolean string pair (Ex: 'true/false', 'yes/no', or '0/1') must be allowed.</exception>
+		/// <exception cref="InvalidOperationException">An attempt was made to generate a parsing method, but the <see cref="Culture"/> specified is null.</exception>
 		public override string[] GenerateImportMethodCode()
 		{
+			if (Culture == null)
+				throw new InvalidOperationException("Culture is a null reference");
+
 			List<string> codeLines = new List<string>();
 			codeLines.Add("if (value == null)");
 			if (mInfo.IsOptional)
@@ -206,86 +177,16 @@ namespace XMLToDataClass.Data.Types
 				codeLines.Add(string.Format("	throw new InvalidDataException(\"The string value for '{0}' is an empty string.\");", mInfo.Name));
 			}
 
-			string formatPropertyName = GetFormatPropertyName(mInfo.PropertyName);
 			codeLines.Add(string.Format("CultureInfo info = CultureInfo.GetCultureInfo(\"{0}\");", Culture.Name));
-			codeLines.Add("DateTimeStyles styles = DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.RoundtripKind;");
-			codeLines.Add("DateTime returnValue;");
-			List<string> options = new List<string>();
-			if(DateTimeSelect == DateTimeOption.Date || DateTimeSelect == DateTimeOption.DateTime)
-			{
-				options.Add("d");
-				options.Add("D");
-			}
-			if(DateTimeSelect == DateTimeOption.Time || DateTimeSelect == DateTimeOption.DateTime)
-			{
-				options.Add("t");
-				options.Add("T");
-			}
-			if (DateTimeSelect == DateTimeOption.MonthDay || DateTimeSelect == DateTimeOption.DateTime)
-				options.Add("m");
-			if (DateTimeSelect == DateTimeOption.YearMonth || DateTimeSelect == DateTimeOption.DateTime)
-				options.Add("y");
-			if (DateTimeSelect == DateTimeOption.DateTime)
-			{
-				options.Add("f");
-				options.Add("F");
-				options.Add("g");
-				options.Add("G");
-				options.Add("o");
-				options.Add("R");
-				options.Add("s");
-				options.Add("u");
-				options.Add("U");
-			}
-
-			foreach(string option in options)
-			{
-				codeLines.Add(string.Empty);
-				codeLines.Add(string.Format("if(DateTime.TryParseExact(value, \"{0}\", info, styles, out returnValue))", option));
-				codeLines.Add("{");
-				codeLines.Add(string.Format("	{0} = returnValue;", mInfo.PropertyName));
-				codeLines.Add(string.Format("	{0} = \"{1}\";", formatPropertyName, option));
-				codeLines.Add("	return;");
-				codeLines.Add("}");
-			}
-
+			codeLines.Add("TimeSpan returnValue;");
+			codeLines.Add("if(TimeSpan.TryParse(value, info, out returnValue))");
+			codeLines.Add("{");
+			codeLines.Add(string.Format("	{0} = returnValue;", mInfo.PropertyName));
+			codeLines.Add("	return;");
+			codeLines.Add("}");
 			codeLines.Add(string.Empty);
-			codeLines.Add("throw new InvalidDataException(string.Format(\"The Date/Time value specified ({0}) is not a valid DateTime standard string representation\", value));");
+			codeLines.Add("throw new InvalidDataException(string.Format(\"The time duration value specified ({0}) is not a valid TimeSpan standard string representation\", value));");
 			return codeLines.ToArray();
-		}
-
-		/// <summary>
-		///   Gets the stored format property's name.
-		/// </summary>
-		/// <param name="propertyName">Property name of the corresponding <see cref="DataInfo"/> object.</param>
-		/// <returns>Stored enumeration property name.</returns>
-		private string GetFormatPropertyName(string propertyName)
-		{
-			return string.Format("{0}ParsedFormat", propertyName);
-		}
-
-		/// <summary>
-		///   Saves the types configuration properties to XML child elements.
-		/// </summary>
-		/// <param name="doc"><see cref="XmlDocument"/> object representing the XML document to be written.</param>
-		/// <param name="parent">Parent <see cref="XmlNode"/> to append the child settings to.</param>
-		public override void Save(XmlDocument doc, XmlNode parent)
-		{
-			// Add the DateTimeSelect option.
-			XmlElement element = doc.CreateElement("setting");
-			XmlAttribute attrib = element.Attributes.Append(doc.CreateAttribute("name"));
-			attrib.Value = "DateTimeSelect";
-			attrib = element.Attributes.Append(doc.CreateAttribute("value"));
-			attrib.Value = Enum.GetName(typeof(DateTimeOption), DateTimeSelect);
-			parent.AppendChild(element);
-
-			// Add the Culture option.
-			element = doc.CreateElement("setting");
-			attrib = element.Attributes.Append(doc.CreateAttribute("name"));
-			attrib.Value = "Culture";
-			attrib = element.Attributes.Append(doc.CreateAttribute("value"));
-			attrib.Value = Culture.ToString();
-			parent.AppendChild(element);
 		}
 
 		/// <summary>
@@ -302,14 +203,6 @@ namespace XMLToDataClass.Data.Types
 					XmlAttribute valueAttrib = node.Attributes["value"];
 					if (nameAttrib != null && valueAttrib != null)
 					{
-						// Set DateTimeSelect if found.
-						if (nameAttrib.Value == "DateTimeSelect")
-						{
-							DateTimeOption value;
-							if (Enum.TryParse<DateTimeOption>(valueAttrib.Value, out value))
-								DateTimeSelect = value;
-						}
-
 						// Set Culture if found.
 						if (nameAttrib.Value == "Culture")
 						{
@@ -326,74 +219,56 @@ namespace XMLToDataClass.Data.Types
 		}
 
 		/// <summary>
-		///   Attempts to parse a value to the date/time, using it's current settings.
+		///   Saves the types configuration properties to XML child elements.
+		/// </summary>
+		/// <param name="doc"><see cref="XmlDocument"/> object representing the XML document to be written.</param>
+		/// <param name="parent">Parent <see cref="XmlNode"/> to append the child settings to.</param>
+		public override void Save(XmlDocument doc, XmlNode parent)
+		{
+			// Add the Culture option.
+			XmlElement element = doc.CreateElement("setting");
+			XmlAttribute attrib = element.Attributes.Append(doc.CreateAttribute("name"));
+			attrib.Value = "Culture";
+			attrib = element.Attributes.Append(doc.CreateAttribute("value"));
+			attrib.Value = Culture.ToString();
+			parent.AppendChild(element);
+		}
+
+		/// <summary>
+		///   Attempts to parse a value to the time span, using it's current settings.
 		/// </summary>
 		/// <param name="value">String value to be parsed.</param>
 		/// <returns>True if the string can be parsed to this value type, false otherwise.</returns>
 		public override bool TryParse(string value)
 		{
-			return TryParse(value, DateTimeSelect, Culture);
+			return TryParse(value, Culture);
 		}
 
 		/// <summary>
-		///   Attempts to parse a value to the date/time, using the specified settings.
+		///   Attempts to parse a value to the time span, using the specified settings.
 		/// </summary>
 		/// <param name="value">String value to be parsed.</param>
-		/// <param name="option"></param>
+		/// <param name="culture"><see cref="CultureInfo"/> object to determine the culture to use.</param>
 		/// <returns>True if the string can be parsed to this value type, false otherwise.</returns>
-		private static bool TryParse(string value, DateTimeOption option, CultureInfo culture)
+		private static bool TryParse(string value, CultureInfo culture)
 		{
 			if (value == null)
 				return false;
 			if (value.Length == 0)
 				return false;
 
-			List<string> options = new List<string>();
-			if (option == DateTimeOption.Date || option == DateTimeOption.DateTime)
-			{
-				options.Add("d");
-				options.Add("D");
-			}
-			if (option == DateTimeOption.Time || option == DateTimeOption.DateTime)
-			{
-				options.Add("t");
-				options.Add("T");
-			}
-			if (option == DateTimeOption.MonthDay || option == DateTimeOption.DateTime)
-				options.Add("m");
-			if (option == DateTimeOption.YearMonth || option == DateTimeOption.DateTime)
-				options.Add("Y");
-			if (option == DateTimeOption.DateTime)
-			{
-				options.Add("f");
-				options.Add("F");
-				options.Add("g");
-				options.Add("G");
-				options.Add("o");
-				options.Add("R");
-				options.Add("s");
-				options.Add("u");
-				options.Add("U");
-			}
-
-			DateTimeStyles styles = DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.RoundtripKind;
-			DateTime returnValue;
-			foreach (string item in options)
-			{
-				if (DateTime.TryParseExact(value, item, culture, styles, out returnValue))
-					return true;
-			}
-			return false;
+			TimeSpan parsedValue;
+			return TimeSpan.TryParse(value, culture, out parsedValue);
 		}
 
 		/// <summary>
-		///   Attempts to parse a value to a date/time, using the default settings.
+		///   Attempts to parse a value to a time span, using the default settings.
 		/// </summary>
 		/// <param name="value">String value to be parsed.</param>
 		/// <returns>True if the string can be parsed to this value type, false otherwise.</returns>
 		public static bool TryParseWithDefaults(string value)
 		{
-			return TryParse(value, DefaultDateTimeSelect, DefaultCulture);
+			return TryParse(value, DefaultCulture);
 		}
 
 		#endregion Methods

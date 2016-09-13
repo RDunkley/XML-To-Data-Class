@@ -621,41 +621,6 @@ namespace XMLToDataClass.Data
 			}
 		}
 
-		private void DetermineDataConstructorInputChecks(DataInfo info, out bool? canBeNull, out bool? canBeEmpty)
-		{
-			// Here is a truth table for the following logic:
-			//
-			// IsOptional	CanBeEmpty	IsNullable	IsArray	CanBeNull	CanBeEmpty
-			// 1			1			0			0		1			0
-			// 0			1			0			0		1			0
-			// 1			0			0			0		1			0
-			// 0			0			0			0		0			0
-			// 0			1			1			0		NULL		NULL
-			// 0			0			1			0		NULL		NULL
-			// 1			0			1			0		1			NULL
-			// 1			1			1			0		1			NULL
-			// 1			1			0			1		1			1
-			// 0			1			0			1		0			1
-			// 1			0			0			1		1			0
-			// 0			0			0			1		0			0
-			// 0			1			1			1		NULL		NULL
-			// 0			0			1			1		NULL		NULL
-			// 1			0			1			1		1			NULL
-			// 1			1			1			1		1			NULL
-			canBeNull = null;
-			canBeEmpty = null;
-			if (info.SelectedDataTypeObject.IsNullable)
-			{
-				if (info.IsOptional)
-					canBeNull = true;
-			}
-			else
-			{
-				canBeNull = info.IsOptional || info.CanBeEmpty;
-				canBeEmpty = info.CanBeEmpty;
-			}
-		}
-
 		private ConstructorInfo GenerateDataClassXmlNodeConstructor(bool ignoreCase)
 		{
 			string summary = string.Format("Instantiates a new {0} object from an <see=cref=\"XmlNode\"/> object.", ClassName);

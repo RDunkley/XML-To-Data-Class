@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<a>
+	<b stuff1="6" stuff2="6:12" stuff3="6:12:14" stuff4="6:12:14:45" stuff5="6.12:14:45" stuff6="6:12:14:45.3448" />
+	<b/>
+</a>

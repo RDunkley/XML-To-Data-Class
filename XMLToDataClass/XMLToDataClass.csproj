@@ -78,6 +78,7 @@
     <Compile Include="Data\Types\SerialPortParityEnumType.cs" />
     <Compile Include="Data\Types\SerialPortStopBitsEnumType.cs" />
     <Compile Include="Data\Types\StringType.cs" />
+    <Compile Include="Data\Types\TimeSpanType.cs" />
     <Compile Include="Data\Types\VersionType.cs" />
     <Compile Include="Data\XMLInfo.cs" />
     <Compile Include="MainForm.cs">
@@ -105,6 +106,12 @@
     </Compile>
     <Compile Include="View\BooleanTypeSettings.Designer.cs">
       <DependentUpon>BooleanTypeSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\TimeSpanSettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="View\TimeSpanSettings.Designer.cs">
+      <DependentUpon>TimeSpanSettings.cs</DependentUpon>
     </Compile>
     <Compile Include="View\DateTimeSettings.cs">
       <SubType>UserControl</SubType>
@@ -187,6 +194,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="View\BooleanTypeSettings.resx">
       <DependentUpon>BooleanTypeSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\TimeSpanSettings.resx">
+      <DependentUpon>TimeSpanSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\DateTimeSettings.resx">
       <DependentUpon>DateTimeSettings.cs</DependentUpon>
