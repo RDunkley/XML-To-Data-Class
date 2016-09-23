@@ -376,6 +376,10 @@ namespace XMLToDataClass.Data
 			method.CodeLines.Add("{");
 			method.CodeLines.Add("	throw new InvalidOperationException(\"filePath referenced a file that could not be opened.\", e);");
 			method.CodeLines.Add("}");
+			method.CodeLines.Add("catch(XmlException e)");
+			method.CodeLines.Add("{");
+			method.CodeLines.Add("	throw new InvalidOperationException(\"filePath referenced a file that does not contain valid XML.\", e);");
+			method.CodeLines.Add("}");
 			method.CodeLines.Add(string.Empty);
 
 			// Add the list objects.
