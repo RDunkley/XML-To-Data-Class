@@ -21,6 +21,8 @@ namespace XMLToDataClass.View
 	{
 		private IPAddressType mType;
 
+		public event EventHandler SettingsChanged;
+
 		public IPAddressTypeSettings(IPAddressType type)
 		{
 			if (type == null)
