@@ -111,6 +111,8 @@ namespace XMLToDataClass.Data
 			mTypeLookup.Add(DataType.SerialPortStopBits, new SerialPortStopBitsEnumType(this, possibleValues, ignoreCase));
 			mTypeLookup.Add(DataType.Version, new VersionType(this, possibleValues, ignoreCase));
 			mTypeLookup.Add(DataType.TimeSpan, new TimeSpanType(this, possibleValues, ignoreCase));
+			mTypeLookup.Add(DataType.MACAddress, new MacAddressType(this, possibleValues, ignoreCase));
+			mTypeLookup.Add(DataType.IPAddress, new IPAddressType(this, possibleValues, ignoreCase));
 			DetermineDefaultSelectedType();
 		}
 

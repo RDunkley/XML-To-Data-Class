@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<a>
+	<b stuffcolon="12:34:45:89:ab:cd" stuffdash="12-34-56-ab-cd-ef" stuffdot="123.456.abc.def" stuffnone="123456abcdef" />
+	<b stuffcolon="" stuffdot="f23.456.abc.def" stuffnone="f23456abcdef" />
+	<b/>
+</a>

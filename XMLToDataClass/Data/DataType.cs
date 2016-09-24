@@ -22,72 +22,72 @@ namespace XMLToDataClass.Data
 		/// <summary>
 		///   Represents a boolean value type.
 		/// </summary>
-		Boolean = 7,
+		Boolean = 9,
 
 		/// <summary>
 		///   Represents a 8-bit unsigned integer.
 		/// </summary>
-		Byte = 10,
+		Byte = 12,
 
 		/// <summary>
 		///   Represents a 64-bit unsigned integer.
 		/// </summary>
-		Int = 8,
+		Int = 10,
 
 		/// <summary>
 		///   Represents a 64-bit integer.
 		/// </summary>
-		Long = 14,
+		Long = 16,
 
 		/// <summary>
 		///   Represents a 8-bit integer.
 		/// </summary>
-		SByte = 9,
+		SByte = 11,
 
 		/// <summary>
 		///   Represents a 16-bit integer.
 		/// </summary>
-		Short = 11,
+		Short = 13,
 
 		/// <summary>
 		///   Represents a string type.
 		/// </summary>
-		String = 16,
+		String = 18,
 
 		/// <summary>
 		///   Represents a 32-bit unsigned integer.
 		/// </summary>
-		UInt = 13,
+		UInt = 15,
 
 		/// <summary>
 		///   Represents a 64-bit unsigned integer.
 		/// </summary>
-		ULong = 15,
+		ULong = 17,
 
 		/// <summary>
 		///   Represents a 16-bit unsigned integer.
 		/// </summary>
-		UShort = 12,
+		UShort = 14,
 
 		/// <summary>
 		///   Represents a 32-bit floating point value.
 		/// </summary>
-		Float = 6,
+		Float = 8,
 
 		/// <summary>
 		///   Represents a 64-bit floating point value.
 		/// </summary>
-		Double = 5,
+		Double = 7,
 
 		/// <summary>
 		///   Represents a date time value.
 		/// </summary>
-		DateTime = 4,
+		DateTime = 6,
 
 		/// <summary>
 		///  Represents an enumerated type.
 		/// </summary>
-		Enum = 17,
+		Enum = 19,
 
 		/// <summary>
 		///   Represents a serial port parity enumeration.
@@ -102,11 +102,21 @@ namespace XMLToDataClass.Data
 		/// <summary>
 		///   Represents a version.
 		/// </summary>
-		Version = 2,
+		Version = 4,
 
 		/// <summary>
 		///   Represents a duration of time.
 		/// </summary>
-		TimeSpan = 3,
+		TimeSpan = 5,
+
+		/// <summary>
+		///   Represents a network physical address (MAC address).
+		/// </summary>
+		MACAddress = 2,
+
+		/// <summary>
+		///   Represents a network IP address.
+		/// </summary>
+		IPAddress = 3,
 	}
 }

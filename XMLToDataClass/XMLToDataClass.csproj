@@ -75,6 +75,8 @@
     <Compile Include="Data\Types\IFloatingPointType.cs" />
     <Compile Include="Data\Types\IIntegralType.cs" />
     <Compile Include="Data\Types\IntegralType.cs" />
+    <Compile Include="Data\Types\IPAddressType.cs" />
+    <Compile Include="Data\Types\MacAddressType.cs" />
     <Compile Include="Data\Types\SerialPortParityEnumType.cs" />
     <Compile Include="Data\Types\SerialPortStopBitsEnumType.cs" />
     <Compile Include="Data\Types\StringType.cs" />
@@ -94,6 +96,18 @@
     </Compile>
     <Compile Include="SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\IPAddressTypeSettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="View\IPAddressTypeSettings.Designer.cs">
+      <DependentUpon>IPAddressTypeSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\MacAddressTypeSettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="View\MacAddressTypeSettings.Designer.cs">
+      <DependentUpon>MacAddressTypeSettings.cs</DependentUpon>
     </Compile>
     <Compile Include="View\DataInfoPanel.cs">
       <SubType>UserControl</SubType>
@@ -188,6 +202,12 @@
     </Compile>
     <EmbeddedResource Include="SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\IPAddressTypeSettings.resx">
+      <DependentUpon>IPAddressTypeSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\MacAddressTypeSettings.resx">
+      <DependentUpon>MacAddressTypeSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\DataInfoPanel.resx">
       <DependentUpon>DataInfoPanel.cs</DependentUpon>

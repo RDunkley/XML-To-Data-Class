@@ -375,7 +375,7 @@ namespace XMLToDataClass.Data.Types
 		}
 
 		/// <summary>
-		///   Attempts to parse a value to the boolean, using the specified settings.
+		///   Attempts to parse a value to a Version, using the specified settings.
 		/// </summary>
 		/// <param name="value">String value to be parsed.</param>
 		/// <param name="allowBuild">True if the build component of the version is allowed, false if not.</param>

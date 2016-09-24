@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<a>
+	<b stuffv4="172.16.254.1" stuffv6="2001:db8:0:1234:0:567:8:1" />
+	<b stuffv4="" />
+	<b/>
+</a>

@@ -165,6 +165,14 @@ namespace XMLToDataClass.View
 					control = new TimeSpanSettings(Info.SelectedDataTypeObject as TimeSpanType);
 					((TimeSpanSettings)control).SettingsChanged += DataInfoPanel_SettingsChanged;
 					break;
+				case DataType.MACAddress:
+					control = new MacAddressTypeSettings(Info.SelectedDataTypeObject as MacAddressType);
+					((MacAddressTypeSettings)control).SettingsChanged += DataInfoPanel_SettingsChanged;
+					break;
+				case DataType.IPAddress:
+					control = new IPAddressTypeSettings(Info.SelectedDataTypeObject as IPAddressType);
+					((IPAddressTypeSettings)control).SettingsChanged += DataInfoPanel_SettingsChanged;
+					break;
 				default:
 					throw new NotImplementedException("The data type specified is not recognized as a valid type");
 			}
