@@ -212,11 +212,14 @@ namespace XMLToDataClass
 			dialog.Title = "Specify the file and path to save the configuration data to";
 			dialog.Filter = "Config files (*.x2dconf)|*.x2dconf|All files (*.*)|*.*";
 			dialog.DefaultExt = "x2dconf";
+			dialog.FileName = Properties.Settings.Default.ConfigFileLocation;
 
 			if (dialog.ShowDialog() != DialogResult.OK)
 				return;
 
 			mInfo.Save(dialog.FileName);
+			Properties.Settings.Default.ConfigFileLocation = dialog.FileName;
+			Properties.Settings.Default.Save();
 		}
 
 		private void loadConfigButton_Click(object sender, EventArgs e)
