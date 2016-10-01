@@ -127,12 +127,20 @@ namespace XMLToDataClass.Data.Types
 				default:
 					throw new ArgumentException("The generic type must be created with the following value types as T: byte, sbyte, ushort, short, uint, int, ulong, and long.");
 			}
-			DataTypeString = Enum.GetName(typeof(DataType), Type).ToLower();
 			string signedString = "signed";
 			if (IsUnsigned())
 				signedString = "unsigned";
 			DisplayName = string.Format("{0}-bit {1} integer", GettMaxBitLength().ToString(), signedString);
 			Usings.Add("System.Globalization");
+		}
+
+		/// <summary>
+		///   String of the C# representive data type.
+		/// </summary>
+		/// <returns>String containing the C# data type.</returns>
+		public override string GetDataTypeString()
+		{
+			return Enum.GetName(typeof(DataType), Type).ToLower();
 		}
 
 		/// <summary>
@@ -539,7 +547,8 @@ namespace XMLToDataClass.Data.Types
 			string enumPropertyName = GetEnumPropertyName(mInfo.PropertyName);
 			string enumTypeName = GetEnumTypeName(mInfo.PropertyName);
 
-			codeLines.Add(string.Format("{0} returnValue = 0;", DataTypeString));
+			string dataTypeString = GetDataTypeString();
+			codeLines.Add(string.Format("{0} returnValue = 0;", dataTypeString));
 			codeLines.Add("bool parsed = false;");
 			codeLines.Add("try");
 			codeLines.Add("{");
@@ -550,7 +559,7 @@ namespace XMLToDataClass.Data.Types
 				codeLines.Add("	if (value.Length > 1 && char.ToLower(value[value.Length - 1]) == 'h')");
 				codeLines.Add("	{");
 				codeLines.Add("		// Number is a hexadecimal type 1 number (FFh).");
-				codeLines.Add(string.Format("		returnValue = {0}.Parse(value.Substring(0, value.Length - 1), NumberStyles.AllowHexSpecifier);", DataTypeString));
+				codeLines.Add(string.Format("		returnValue = {0}.Parse(value.Substring(0, value.Length - 1), NumberStyles.AllowHexSpecifier);", dataTypeString));
 				if(count > 1)
 					codeLines.Add(string.Format("		{0} = {1}.HexType1;", enumPropertyName, enumTypeName));
 				codeLines.Add("		parsed = true;");
@@ -567,7 +576,7 @@ namespace XMLToDataClass.Data.Types
 					codeLines.Add("	else if (value.Length > 2 && value[0] == '0' && char.ToLower(value[1]) == 'x')");
 				codeLines.Add("	{");
 				codeLines.Add("		// Number is specified as a hexadecimal type 2 number (0xFF).");
-				codeLines.Add(string.Format("		returnValue = {0}.Parse(value.Substring(2), NumberStyles.AllowHexSpecifier);", DataTypeString));
+				codeLines.Add(string.Format("		returnValue = {0}.Parse(value.Substring(2), NumberStyles.AllowHexSpecifier);", dataTypeString));
 				if (count > 1)
 					codeLines.Add(string.Format("		{0} = {1}.HexType2;", enumPropertyName, enumTypeName));
 				codeLines.Add("		parsed = true;");
@@ -602,7 +611,7 @@ namespace XMLToDataClass.Data.Types
 					space = "	";
 				}
 				codeLines.Add(string.Format("{0}	// Attempt to parse the number as just an integer.", space));
-				codeLines.Add(string.Format("{0}	returnValue = {1}.Parse(value, NumberStyles.Integer | NumberStyles.AllowThousands);", space, DataTypeString));
+				codeLines.Add(string.Format("{0}	returnValue = {1}.Parse(value, NumberStyles.Integer | NumberStyles.AllowThousands);", space, dataTypeString));
 				if (count > 1)
 					codeLines.Add(string.Format("{0}	{1} = {2}.Integer;", space, enumPropertyName, enumTypeName));
 				codeLines.Add(string.Format("{0}	parsed = true;", space));
@@ -612,27 +621,27 @@ namespace XMLToDataClass.Data.Types
 			codeLines.Add("}");
 			codeLines.Add("catch (FormatException e)");
 			codeLines.Add("{");
-			codeLines.Add(string.Format("	throw new InvalidDataException(string.Format(\"The {0} value specified ({{0}}) is not in a valid {0} string format: {{1}}.\", value, e.Message), e);", DataTypeString));
+			codeLines.Add(string.Format("	throw new InvalidDataException(string.Format(\"The {0} value specified ({{0}}) is not in a valid {0} string format: {{1}}.\", value, e.Message), e);", dataTypeString));
 			codeLines.Add("}");
 			codeLines.Add("catch (OverflowException e)");
 			codeLines.Add("{");
-			codeLines.Add(string.Format("	throw new InvalidDataException(string.Format(\"The {0} value specified ({{0}}) was larger or smaller than a {0} value (Min: {{1}}, Max: {{2}}).\", value, {0}.MinValue.ToString(), {0}.MaxValue.ToString()), e);", DataTypeString));
+			codeLines.Add(string.Format("	throw new InvalidDataException(string.Format(\"The {0} value specified ({{0}}) was larger or smaller than a {0} value (Min: {{1}}, Max: {{2}}).\", value, {0}.MinValue.ToString(), {0}.MaxValue.ToString()), e);", dataTypeString));
 			codeLines.Add("}");
 			codeLines.Add(string.Empty);
 			codeLines.Add("if(!parsed)");
-			codeLines.Add(string.Format("	throw new InvalidDataException(string.Format(\"The {0} value specified ({{0}}) is not in a valid {0} string format.\", value));", DataTypeString));
+			codeLines.Add(string.Format("	throw new InvalidDataException(string.Format(\"The {0} value specified ({{0}}) is not in a valid {0} string format.\", value));", dataTypeString));
 			codeLines.Add(string.Empty);
 			if (MaximumValue.CompareTo(GetMaxValue()) < 0)
 			{
-				codeLines.Add(string.Format("// Verify that the {0} value has not excedded the maximum size.", DataTypeString));
+				codeLines.Add(string.Format("// Verify that the {0} value has not excedded the maximum size.", dataTypeString));
 				codeLines.Add(string.Format("if(returnValue > {0})", MaximumValue.ToString()));
-				codeLines.Add(string.Format("	throw new InvalidDataException(string.Format(\"The {0} value specified ({{0}}) was larger than the maximum value allowed for this type ({1}).\", value));", DataTypeString, MaximumValue.ToString()));
+				codeLines.Add(string.Format("	throw new InvalidDataException(string.Format(\"The {0} value specified ({{0}}) was larger than the maximum value allowed for this type ({1}).\", value));", dataTypeString, MaximumValue.ToString()));
 			}
 			if (MinimumValue.CompareTo(GetMinValue()) > 0)
 			{
-				codeLines.Add(string.Format("// Verify that the {0} value is not lower than the minimum size.", DataTypeString));
+				codeLines.Add(string.Format("// Verify that the {0} value is not lower than the minimum size.", dataTypeString));
 				codeLines.Add(string.Format("if(returnValue < {0})", MinimumValue.ToString()));
-				codeLines.Add(string.Format("	throw new InvalidDataException(string.Format(\"The {0} value specified ({{0}}) was less than the minimum value allowed for this type ({1}).\", value));", DataTypeString, MinimumValue.ToString()));
+				codeLines.Add(string.Format("	throw new InvalidDataException(string.Format(\"The {0} value specified ({{0}}) was less than the minimum value allowed for this type ({1}).\", value));", dataTypeString, MinimumValue.ToString()));
 			}
 			codeLines.Add(string.Format("{0} = returnValue;", mInfo.PropertyName));
 			return codeLines.ToArray();

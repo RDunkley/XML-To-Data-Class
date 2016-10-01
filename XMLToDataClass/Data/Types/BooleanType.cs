@@ -84,8 +84,16 @@ namespace XMLToDataClass.Data.Types
 			AllowZeroOneStrings = DefaultAllowZeroOneStrings;
 
 			Type = DataType.Boolean;
-			DataTypeString = "bool";
 			DisplayName = "Boolean";
+		}
+
+		/// <summary>
+		///   String of the C# representive data type.
+		/// </summary>
+		/// <returns>String containing the C# data type.</returns>
+		public override string GetDataTypeString()
+		{
+			return "bool";
 		}
 
 		/// <summary>

@@ -226,5 +226,17 @@ namespace XMLToDataClass.Properties {
                 this["CSCodeGenIncludeSubHeader"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ConfigFileLocation {
+            get {
+                return ((string)(this["ConfigFileLocation"]));
+            }
+            set {
+                this["ConfigFileLocation"] = value;
+            }
+        }
     }
 }

@@ -48,9 +48,17 @@ namespace XMLToDataClass.Data.Types
 			Culture = DefaultCulture;
 
 			Type = DataType.TimeSpan;
-			DataTypeString = "TimeSpan";
 			DisplayName = "Duration of Time";
 			Usings.Add("System.Globalization");
+		}
+
+		/// <summary>
+		///   String of the C# representive data type.
+		/// </summary>
+		/// <returns>String containing the C# data type.</returns>
+		public override string GetDataTypeString()
+		{
+			return "TimeSpan";
 		}
 
 		/// <summary>

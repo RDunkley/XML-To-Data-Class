@@ -48,6 +48,7 @@ namespace XMLToDataClass
 		{
 			InitializeComponent();
 
+			mLoadForm.FilePath = Properties.Settings.Default.XMLFileLocation;
 			xmlFilePathLabel.Text = "";
 			namespaceTextBox.Text = Properties.Settings.Default.Namespace;
 			projectCheckBox.Checked = Properties.Settings.Default.Project;
@@ -227,11 +228,14 @@ namespace XMLToDataClass
 			dialog.DefaultExt = "x2dconf";
 			dialog.Multiselect = false;
 			dialog.Title = "Specify the file and path to load the configuration data from";
+			dialog.FileName = Properties.Settings.Default.ConfigFileLocation;
 
 			if (dialog.ShowDialog() != DialogResult.OK)
 				return;
 
 			mInfo.Load(dialog.FileName);
+			Properties.Settings.Default.ConfigFileLocation = dialog.FileName;
+			Properties.Settings.Default.Save();
 			UpdateDetailView();
 		}
 
@@ -410,6 +414,8 @@ namespace XMLToDataClass
 			}
 
 			xmlFilePathLabel.Text = mLoadForm.FilePath;
+			Properties.Settings.Default.XMLFileLocation = mLoadForm.FilePath;
+			Properties.Settings.Default.Save();
 			UpdateTreeView();
 		}
 

@@ -47,8 +47,16 @@ namespace XMLToDataClass.Data.Types
 
 			Type = DataType.Version;
 			IsNullable = false;
-			DataTypeString = "Version";
 			DisplayName = "Version";
+		}
+
+		/// <summary>
+		///   String of the C# representive data type.
+		/// </summary>
+		/// <returns>String containing the C# data type.</returns>
+		public override string GetDataTypeString()
+		{
+			return "Version";
 		}
 
 		public override EnumInfo[] GenerateAdditionalEnums()

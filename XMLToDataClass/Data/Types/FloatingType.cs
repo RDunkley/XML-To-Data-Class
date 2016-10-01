@@ -105,8 +105,16 @@ namespace XMLToDataClass.Data.Types
 				default:
 					throw new ArgumentException("The generic type must be created with the following value types as T: float or double.");
 			}
-			DataTypeString = Enum.GetName(typeof(DataType), Type).ToLower();
 			Usings.Add("System.Globalization");
+		}
+
+		/// <summary>
+		///   String of the C# representive data type.
+		/// </summary>
+		/// <returns>String containing the C# data type.</returns>
+		public override string GetDataTypeString()
+		{
+			return Enum.GetName(typeof(DataType), Type).ToLower();
 		}
 
 		/// <summary>
@@ -416,7 +424,8 @@ namespace XMLToDataClass.Data.Types
 			string enumPropertyName = GetEnumPropertyName(mInfo.PropertyName);
 			string enumTypeName = GetEnumTypeName(mInfo.PropertyName);
 
-			codeLines.Add(string.Format("{0} returnValue = 0;", DataTypeString));
+			string dataTypeString = GetDataTypeString();
+			codeLines.Add(string.Format("{0} returnValue = 0;", dataTypeString));
 			codeLines.Add("value = value.Trim();");
 			codeLines.Add("try");
 			codeLines.Add("{");
@@ -427,7 +436,7 @@ namespace XMLToDataClass.Data.Types
 				codeLines.Add("	if (value.Contains(NumberFormatInfo.CurrentInfo.CurrencySymbol))");
 				codeLines.Add("	{");
 				codeLines.Add("		// Number is represented as currency ($123.45).");
-				codeLines.Add(string.Format("		returnValue = {0}.Parse(value, NumberStyles.Currency);", DataTypeString));
+				codeLines.Add(string.Format("		returnValue = {0}.Parse(value, NumberStyles.Currency);", dataTypeString));
 				if (count > 1)
 					codeLines.Add(string.Format("		{0} = {1}.Currency;", enumPropertyName, enumTypeName));
 				codeLines.Add("	}");
@@ -443,7 +452,7 @@ namespace XMLToDataClass.Data.Types
 					codeLines.Add("	else if (value.Length > 1 && value[value.Length-1] == '%')");
 				codeLines.Add("	{");
 				codeLines.Add("		// Number is a percentage.");
-				codeLines.Add(string.Format("		returnValue = {0}.Parse(value.Substring(0, value.Length-1), NumberStyles.Number) / 100;", DataTypeString));
+				codeLines.Add(string.Format("		returnValue = {0}.Parse(value.Substring(0, value.Length-1), NumberStyles.Number) / 100;", dataTypeString));
 				if (count > 1)
 					codeLines.Add(string.Format("		{0} = {1}.Percent;", enumPropertyName, enumTypeName));
 				codeLines.Add("	}");
@@ -458,7 +467,7 @@ namespace XMLToDataClass.Data.Types
 					codeLines.Add("	else if (value.Contains(\"(\") && value.Contains(\")\"))");
 				codeLines.Add("	{");
 				codeLines.Add("		// Number is specified negative by parentheses.");
-				codeLines.Add(string.Format("		returnValue = {0}.Parse(value, NumberStyles.Number|NumberStyles.AllowParentheses);", DataTypeString));
+				codeLines.Add(string.Format("		returnValue = {0}.Parse(value, NumberStyles.Number|NumberStyles.AllowParentheses);", dataTypeString));
 				if (count > 1)
 					codeLines.Add(string.Format("		{0} = {1}.NegativeParentheses;", enumPropertyName, enumTypeName));
 				codeLines.Add("	}");
@@ -474,7 +483,7 @@ namespace XMLToDataClass.Data.Types
 					codeLines.Add("	else if (value.Contains(\"E\") || value.Contains(\"e\"))");
 				codeLines.Add("	{");
 				codeLines.Add("		// Number is an exponent.");
-				codeLines.Add(string.Format("		returnValue = {0}.Parse(value, NumberStyles.Float);", DataTypeString));
+				codeLines.Add(string.Format("		returnValue = {0}.Parse(value, NumberStyles.Float);", dataTypeString));
 				if (count > 1)
 					codeLines.Add(string.Format("		{0} = {1}.Exponent;", enumPropertyName, enumTypeName));
 				codeLines.Add("	}");
@@ -490,7 +499,7 @@ namespace XMLToDataClass.Data.Types
 				space = "	";
 			}
 			codeLines.Add(string.Format("{0}	// Attempt to parse the number as just an decimal.", space));
-			codeLines.Add(string.Format("{0}	returnValue = {1}.Parse(value, NumberStyles.Number);", space, DataTypeString));
+			codeLines.Add(string.Format("{0}	returnValue = {1}.Parse(value, NumberStyles.Number);", space, dataTypeString));
 			if (count > 1)
 				codeLines.Add(string.Format("{0}	{1} = {2}.Decimal;", space, enumPropertyName, enumTypeName));
 			if (!first)
@@ -499,24 +508,24 @@ namespace XMLToDataClass.Data.Types
 			codeLines.Add("}");
 			codeLines.Add("catch (FormatException e)");
 			codeLines.Add("{");
-			codeLines.Add(string.Format("	throw new InvalidDataException(string.Format(\"The {0} value specified ({{0}}) is not in a valid {0} string format: {{1}}.\", value, e.Message), e);", DataTypeString));
+			codeLines.Add(string.Format("	throw new InvalidDataException(string.Format(\"The {0} value specified ({{0}}) is not in a valid {0} string format: {{1}}.\", value, e.Message), e);", dataTypeString));
 			codeLines.Add("}");
 			codeLines.Add("catch (OverflowException e)");
 			codeLines.Add("{");
-			codeLines.Add(string.Format("	throw new InvalidDataException(string.Format(\"The {0} value specified ({{0}}) was larger or smaller than a {0} value (Min: {{1}}, Max: {{2}}).\", value, {0}.MinValue.ToString(), {0}.MaxValue.ToString()), e);", DataTypeString));
+			codeLines.Add(string.Format("	throw new InvalidDataException(string.Format(\"The {0} value specified ({{0}}) was larger or smaller than a {0} value (Min: {{1}}, Max: {{2}}).\", value, {0}.MinValue.ToString(), {0}.MaxValue.ToString()), e);", dataTypeString));
 			codeLines.Add("}");
 			codeLines.Add(string.Empty);
 			if (MaximumValue.CompareTo(GetMaxValue()) < 0)
 			{
-				codeLines.Add(string.Format("// Verify that the {0} value has not excedded the maximum size.", DataTypeString));
+				codeLines.Add(string.Format("// Verify that the {0} value has not excedded the maximum size.", dataTypeString));
 				codeLines.Add(string.Format("if(returnValue > {0})", MaximumValue.ToString()));
-				codeLines.Add(string.Format("	throw new InvalidDataException(string.Format(\"The {0} value specified ({{0}}) was larger than the maximum value allowed for this type ({1}).\", value));", DataTypeString, MaximumValue.ToString()));
+				codeLines.Add(string.Format("	throw new InvalidDataException(string.Format(\"The {0} value specified ({{0}}) was larger than the maximum value allowed for this type ({1}).\", value));", dataTypeString, MaximumValue.ToString()));
 			}
 			if (MinimumValue.CompareTo(GetMinValue()) > 0)
 			{
-				codeLines.Add(string.Format("// Verify that the {0} value is not lower than the minimum size.", DataTypeString));
+				codeLines.Add(string.Format("// Verify that the {0} value is not lower than the minimum size.", dataTypeString));
 				codeLines.Add(string.Format("if(returnValue < {0})", MinimumValue.ToString()));
-				codeLines.Add(string.Format("	throw new InvalidDataException(string.Format(\"The {0} value specified ({{0}}) was less than the minimum value allowed for this type ({1}).\", value));", DataTypeString, MinimumValue.ToString()));
+				codeLines.Add(string.Format("	throw new InvalidDataException(string.Format(\"The {0} value specified ({{0}}) was less than the minimum value allowed for this type ({1}).\", value));", dataTypeString, MinimumValue.ToString()));
 			}
 			codeLines.Add(string.Format("{0} = returnValue;", mInfo.PropertyName));
 			return codeLines.ToArray();

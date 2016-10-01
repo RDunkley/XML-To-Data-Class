@@ -51,11 +51,19 @@ namespace XMLToDataClass.Data.Types
 
 			Type = DataType.MACAddress;
 			IsNullable = false;
-			DataTypeString = "PhysicalAddress";
 			DisplayName = "PhysicalAddress";
 
 			Usings.Add("System.Net.NetworkInformation");
 			Usings.Add("System.Text.RegularExpressions");
+		}
+
+		/// <summary>
+		///   String of the C# representive data type.
+		/// </summary>
+		/// <returns>String containing the C# data type.</returns>
+		public override string GetDataTypeString()
+		{
+			return "PhysicalAddress";
 		}
 
 		public override EnumInfo[] GenerateAdditionalEnums()

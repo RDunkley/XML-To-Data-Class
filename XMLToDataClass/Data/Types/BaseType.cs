@@ -46,11 +46,6 @@ namespace XMLToDataClass.Data.Types
 		#region Properties
 
 		/// <summary>
-		///   String of the C# representive data type.
-		/// </summary>
-		public string DataTypeString { get; protected set; }
-
-		/// <summary>
 		///   Name of the data type which can be displayed to the user.
 		/// </summary>
 		public string DisplayName { get; protected set; }
@@ -100,6 +95,11 @@ namespace XMLToDataClass.Data.Types
 			IsNullable = true;
 			IsArray = false;
 		}
+
+		/// <summary>
+		///   String of the C# representive data type.
+		/// </summary>
+		public abstract string GetDataTypeString();
 
 		/// <summary>
 		///   Abstract method to generate additional enumerations used by the import or export methods.

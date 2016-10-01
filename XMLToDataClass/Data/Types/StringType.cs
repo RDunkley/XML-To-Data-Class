@@ -73,8 +73,16 @@ namespace XMLToDataClass.Data.Types
 			Type = DataType.String;
 			IsNullable = false;
 			IsArray = true;
-			DataTypeString = "string";
 			DisplayName = "String";
+		}
+
+		/// <summary>
+		///   String of the C# representive data type.
+		/// </summary>
+		/// <returns>String containing the C# data type.</returns>
+		public override string GetDataTypeString()
+		{
+			return "string";
 		}
 
 		/// <summary>

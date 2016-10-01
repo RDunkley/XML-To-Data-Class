@@ -26,10 +26,18 @@ namespace XMLToDataClass.Data.Types
 		{
 			Type = DataType.IPAddress;
 			IsNullable = false;
-			DataTypeString = "IPAddress";
 			DisplayName = "IPAddress";
 
 			Usings.Add("System.Net");
+		}
+
+		/// <summary>
+		///   String of the C# representive data type.
+		/// </summary>
+		/// <returns>String containing the C# data type.</returns>
+		public override string GetDataTypeString()
+		{
+			return "IPAddress";
 		}
 
 		public override EnumInfo[] GenerateAdditionalEnums()

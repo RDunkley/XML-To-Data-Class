@@ -77,8 +77,16 @@ namespace XMLToDataClass.Data.Types
 			AllowValues = DefaultAllowValues;
 			IgnoreCase = DefaultIgnoreCase;
 
-			DataTypeString = typeof(T).Name;
-			DisplayName = string.Format("{0} enumerated type", DataTypeString);
+			DisplayName = string.Format("{0} enumerated type", GetDataTypeString());
+		}
+
+		/// <summary>
+		///   String of the C# representive data type.
+		/// </summary>
+		/// <returns>String containing the C# data type.</returns>
+		public override string GetDataTypeString()
+		{
+			return typeof(T).Name;
 		}
 
 		/// <summary>
@@ -218,9 +226,10 @@ namespace XMLToDataClass.Data.Types
 				codeLines.Add(string.Format("	throw new InvalidDataException(\"The string value for '{0}' is an empty string.\");", mInfo.Name));
 			}
 
+			string dataTypeString = GetDataTypeString();
 			codeLines.Add(string.Empty);
-			codeLines.Add(string.Format("{0} temp;", DataTypeString));
-			codeLines.Add(string.Format("if(Enum.TryParse<{0}>(value, {1}, out temp))", DataTypeString, IgnoreCase.ToString().ToLower()));
+			codeLines.Add(string.Format("{0} temp;", dataTypeString));
+			codeLines.Add(string.Format("if(Enum.TryParse<{0}>(value, {1}, out temp))", dataTypeString, IgnoreCase.ToString().ToLower()));
 			codeLines.Add("{");
 			codeLines.Add(string.Format("	{0} = temp;", mInfo.PropertyName));
 			codeLines.Add("	return;");
@@ -229,15 +238,15 @@ namespace XMLToDataClass.Data.Types
 			if (AllowValues)
 			{
 				codeLines.Add(string.Empty);
-				codeLines.Add(string.Format("if(Enum.IsDefined(typeof({0}), value))", DataTypeString));
+				codeLines.Add(string.Format("if(Enum.IsDefined(typeof({0}), value))", dataTypeString));
 				codeLines.Add("{");
-				codeLines.Add(string.Format("	{0} = ({1})value;", mInfo.PropertyName, DataTypeString));
+				codeLines.Add(string.Format("	{0} = ({1})value;", mInfo.PropertyName, dataTypeString));
 				codeLines.Add("	return;");
 				codeLines.Add("}");
 			}
 
 			codeLines.Add(string.Empty);
-			codeLines.Add(string.Format("throw new InvalidDataException(string.Format(\"The enumerated type value specified ({{0}}) is not a valid {0} string or value representation\", value));", DataTypeString));
+			codeLines.Add(string.Format("throw new InvalidDataException(string.Format(\"The enumerated type value specified ({{0}}) is not a valid {0} string or value representation\", value));", dataTypeString));
 
 			return codeLines.ToArray();
 		}

@@ -42,7 +42,6 @@ namespace XMLToDataClass.Data.Types
 		public EnumType(DataInfo info, string[] possibleValues, bool ignoreCase) : base(info, possibleValues, ignoreCase)
 		{
 			Type = DataType.Enum;
-			DataTypeString = GetEnumTypeName(mInfo.PropertyName);
 			DisplayName = "Custom Enumeration";
 
 			List<string> valueList = new List<string>();
@@ -67,6 +66,15 @@ namespace XMLToDataClass.Data.Types
 			TypeLookup = new Dictionary<string, string>();
 			for(int i = 0; i < valueList.Count; i++)
 				TypeLookup.Add(valueList[i], nameList[i]);
+		}
+
+		/// <summary>
+		///   String of the C# representive data type.
+		/// </summary>
+		/// <returns>String containing the C# data type.</returns>
+		public override string GetDataTypeString()
+		{
+			return GetEnumTypeName(mInfo.PropertyName);
 		}
 
 		private string CreateAlternativeName(string duplicateName, List<string> names)

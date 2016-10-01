@@ -39,6 +39,10 @@ namespace XMLToDataClass.View
 			{
 				return filePathTextBox.Text;
 			}
+			set
+			{
+				filePathTextBox.Text = value;
+			}
 		}
 
 		public LoadForm()
@@ -57,6 +61,7 @@ namespace XMLToDataClass.View
 			dialog.Filter = "XML files (*.xml)|*.xml|All files (*.*)|*.*";
 			dialog.Multiselect = false;
 			dialog.Title = "Select XML file to Generate Code For";
+			dialog.FileName = filePathTextBox.Text;
 
 			if (dialog.ShowDialog() != DialogResult.OK)
 				return;

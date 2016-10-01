@@ -141,8 +141,8 @@ namespace XMLToDataClass.Data
 		public string GetDataTypeString()
 		{
 			if (SelectedDataTypeObject.IsNullable && (IsOptional || CanBeEmpty))
-				return string.Format("{0}?", SelectedDataTypeObject.DataTypeString);
-			return SelectedDataTypeObject.DataTypeString;
+				return string.Format("{0}?", SelectedDataTypeObject.GetDataTypeString());
+			return SelectedDataTypeObject.GetDataTypeString();
 		}
 
 		/// <summary>
