@@ -51,7 +51,7 @@ namespace XMLToDataClass.Data
 		///   Instantiates a new <see cref="XMLInfo"/> object using the specified <see cref="XmlDocument"/>.
 		/// </summary>
 		/// <param name="doc"><see cref="XmlDocument"/> object to be parsed.</param>
-		/// <exception cref="ArgumentNullException"><i>doc</i> is a null reference.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="doc"/> is a null reference.</exception>
 		/// <exception cref="InvalidDataException">The XML file could not be loaded.</exception>
 		public XMLInfo(string filePath, bool maintainHierarchy, bool ignoreCase)
 		{
@@ -332,8 +332,8 @@ namespace XMLToDataClass.Data
 			MethodInfo method = new MethodInfo("public", "void", "ImportFromXML", summary);
 
 			method.Parameters.Add(new ParameterInfo("string", "filePath", "Path to the XML file containing the data to be imported.", false, false));
-			method.Exceptions.Add(new ExceptionInfo("ArgumentException", "<i>filePath</i> is an invalid file path."));
-			method.Exceptions.Add(new ExceptionInfo("InvalidOperationException", "<i>filePath</i> could not be opened."));
+			method.Exceptions.Add(new ExceptionInfo("ArgumentException", "<paramref name=\"filePath\"/> is an invalid file path."));
+			method.Exceptions.Add(new ExceptionInfo("InvalidOperationException", "<paramref name=\"filePath\"/> could not be opened."));
 			method.Exceptions.Add(new ExceptionInfo("InvalidDataException", "An error occurred while parsing the XML data."));
 
 			method.CodeLines.Add("if(filePath == null)");
@@ -398,8 +398,8 @@ namespace XMLToDataClass.Data
 			MethodInfo method = new MethodInfo("public", "void", "ExportToXML", summary);
 
 			method.Parameters.Add(new ParameterInfo("string", "filePath", "Path to the XML file to be written to. If file exists all contents will be destroyed.", false, false));
-			method.Exceptions.Add(new ExceptionInfo("ArgumentException", "<i>filePath</i> is an invalid file path."));
-			method.Exceptions.Add(new ExceptionInfo("InvalidOperationException", "<i>filePath</i> could not be opened."));
+			method.Exceptions.Add(new ExceptionInfo("ArgumentException", "<paramref name=\"filePath\"/> is an invalid file path."));
+			method.Exceptions.Add(new ExceptionInfo("InvalidOperationException", "<paramref name=\"filePath\"/> could not be opened."));
 
 			method.CodeLines.Add("XmlDocument doc = new XmlDocument();");
 			if (Version != null || Encoding != null)

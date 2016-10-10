@@ -48,7 +48,7 @@ namespace XMLToDataClass.Data
 		}
 
 		/// <summary>
-		///   Finds all the possible values in the <i>nodes</i> that contain the specified attribute name.
+		///   Finds all the possible values in the <paramref name="nodes"/> that contain the specified attribute name.
 		/// </summary>
 		/// <param name="attribName"></param>
 		/// <param name="nodes"></param>

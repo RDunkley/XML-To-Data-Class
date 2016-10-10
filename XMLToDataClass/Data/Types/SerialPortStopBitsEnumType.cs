@@ -27,7 +27,7 @@ namespace XMLToDataClass.Data.Types
 		/// <param name="possibleValues">Possible values the data type will have to parse. Can be empty.</param>
 		/// <param name="ignoreCase">True if the case of values should be ignored, false if they shouldn't.</param>
 		/// <remarks>This is an abstract class, the inheritor must set the Type property of the base class.</remarks>
-		/// <exception cref="ArgumentNullException"><i>possibleValues</i> or <i>info</i> is a null reference.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="possibleValues"/> or <paramref name="info"/> is a null reference.</exception>
 		public SerialPortStopBitsEnumType(DataInfo info, string[] possibleValues, bool ignoreCase) : base(info, possibleValues, ignoreCase)
 		{
 			Type = DataType.SerialPortStopBits;

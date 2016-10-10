@@ -751,7 +751,7 @@ namespace XMLToDataClass.Data.Types
 		}
 
 		/// <summary>
-		///   Attempts to parse the <i>value</i> string to the integral type.
+		///   Attempts to parse the <paramref name="value"/> string to the integral type.
 		/// </summary>
 		/// <param name="value">String to be parsed.</param>
 		/// <param name="maxValue">Maximum value the parsed integral can have.</param>
@@ -814,7 +814,7 @@ namespace XMLToDataClass.Data.Types
 		}
 
 		/// <summary>
-		///   Attempts to parse the <i>value</i> string to the integral type.
+		///   Attempts to parse the <paramref name="value"/> string to the integral type.
 		/// </summary>
 		/// <param name="value">String to be parsed.</param>
 		/// <returns>True if the value was parsed successfully, false otherwise.</returns>
@@ -825,7 +825,7 @@ namespace XMLToDataClass.Data.Types
 		}
 
 		/// <summary>
-		///   Attempts to parse the <i>value</i> string to the integral type using the default settings.
+		///   Attempts to parse the <paramref name="value"/> string to the integral type using the default settings.
 		/// </summary>
 		/// <param name="value">String to be parsed.</param>
 		/// <param name="returnValue">Parsed value or zero if the parsing was unsuccessful.</param>
@@ -836,11 +836,11 @@ namespace XMLToDataClass.Data.Types
 		}
 
 		/// <summary>
-		///   Parses the <i>value</i> string and returns the parsed value.
+		///   Parses the <paramref name="value"/> string and returns the parsed value.
 		/// </summary>
 		/// <param name="value">String to be parsed.</param>
 		/// <returns>Value parsed from the string.</returns>
-		/// <exception cref="ArgumentNullException"><i>value</i> is a null reference.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="value"/> is a null reference.</exception>
 		/// <exception cref="ArgumentException">The string provided was not valid.</exception>
 		public T Parse(string value)
 		{
@@ -848,13 +848,13 @@ namespace XMLToDataClass.Data.Types
 		}
 
 		/// <summary>
-		///   Parses the <i>text</i> string and returns the parsed value.
+		///   Parses the <paramref name="text"/> string and returns the parsed value.
 		/// </summary>
 		/// <param name="text">Text to be parsed</param>
 		/// <param name="style"><see cref="NumberStyles"/> representing the style of the text to be parsed.</param>
 		/// <returns>Value parsed from the string.</returns>
-		/// <exception cref="FormatException"><i>text</i> is not of the correct format.</exception>
-		/// <exception cref="OverflowException"><i>text</i> represents a number less than the minimum value for that type or a number greater than the maximum value for that type.</exception>
+		/// <exception cref="FormatException"><paramref name="text"/> is not of the correct format.</exception>
+		/// <exception cref="OverflowException"><paramref name="text"/> represents a number less than the minimum value for that type or a number greater than the maximum value for that type.</exception>
 		private static T Parse(string text, NumberStyles style)
 		{
 			switch (typeof(T).Name.ToLower())
@@ -875,13 +875,13 @@ namespace XMLToDataClass.Data.Types
 		}
 
 		/// <summary>
-		///   Parses the <i>value</i> string and returns the parsed value.
+		///   Parses the <paramref name="value"/> string and returns the parsed value.
 		/// </summary>
 		/// <param name="value">String to be parsed.</param>
 		/// <param name="maxValue">Maximum value the parsed integral can have.</param>
 		/// <param name="minValue">Minimum value the parsed integral can have.</param>
 		/// <returns>Value parsed from the string.</returns>
-		/// <exception cref="ArgumentNullException"><i>value</i> is a null reference.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="value"/> is a null reference.</exception>
 		/// <exception cref="ArgumentException">The string provided was not valid.</exception>
 		private static T Parse(string value, T minValue, T maxValue, bool allowCurrency, bool allowExponent, bool allowParentheses, bool allowPercent)
 		{
@@ -944,12 +944,12 @@ namespace XMLToDataClass.Data.Types
 		}
 
 		/// <summary>
-		///   Parses the <i>value</i> string and returns the parsed value.
+		///   Parses the <paramref name="value"/> string and returns the parsed value.
 		/// </summary>
 		/// <param name="value">String to be parsed.</param>
 		/// <returns>Value parsed from the string.</returns>
 		/// <remarks>This method is used to parse values for min and max and does not allow hex, or binary string values.</remarks>
-		/// <exception cref="ArgumentNullException"><i>value</i> is a null reference.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="value"/> is a null reference.</exception>
 		/// <exception cref="ArgumentException">The string provided was not valid.</exception>
 		public T ParseForMinMax(string value)
 		{
@@ -957,7 +957,7 @@ namespace XMLToDataClass.Data.Types
 		}
 
 		/// <summary>
-		///   Parses the <i>value</i> string using the default settings and returns the parsed value.
+		///   Parses the <paramref name="value"/> string using the default settings and returns the parsed value.
 		/// </summary>
 		/// <param name="value">String to be parsed.</param>
 		/// <returns>Value parsed from the string.</returns>

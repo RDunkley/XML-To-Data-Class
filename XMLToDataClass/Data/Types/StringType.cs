@@ -64,7 +64,7 @@ namespace XMLToDataClass.Data.Types
 		/// <param name="info"><see cref="DataInfo"/> object associated with this type.</param>
 		/// <param name="possibleValues">Possible values the data type will have to parse. Can be empty.</param>
 		/// <param name="ignoreCase">True if the case of values should be ignored, false if they shouldn't.</param>
-		/// <exception cref="ArgumentNullException"><i>possibleValues</i> or <i>info</i> is a null reference.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="possibleValues"/> or <paramref name="info"/> is a null reference.</exception>
 		public StringType(DataInfo info, string[] possibleValues, bool ignoreCase) : base(info, possibleValues, ignoreCase)
 		{
 			MinimumLength = DefaultMinimumLength;

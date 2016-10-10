@@ -627,7 +627,7 @@ namespace XMLToDataClass.Data
 			ConstructorInfo cInfo = new ConstructorInfo("public", ClassName, summary);
 
 			cInfo.Parameters.Add(new ParameterInfo("XmlNode", "node", "<see cref=\"XmlNode\"/> containing the data to extract.", false));
-			cInfo.Exceptions.Add(new ExceptionInfo("ArgumentException", string.Format("<i>node</i> does not correspond to a {0} node or is not an 'Element' type node.", Name)));
+			cInfo.Exceptions.Add(new ExceptionInfo("ArgumentException", string.Format("<paramref name=\"node\"/> does not correspond to a {0} node or is not an 'Element' type node.", Name)));
 			cInfo.Exceptions.Add(new ExceptionInfo("InvalidDataException", "An error occurred while reading the data into the node, or one of it's child nodes."));
 
 			cInfo.CodeLines.Add("if (node.NodeType != XmlNodeType.Element)");

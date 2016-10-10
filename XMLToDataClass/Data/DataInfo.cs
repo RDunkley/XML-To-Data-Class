@@ -188,8 +188,8 @@ namespace XMLToDataClass.Data
 		/// </summary>
 		/// <param name="name">Name of the XML node.</param>
 		/// <returns>Generated property name.</returns>
-		/// <exception cref="ArgumentNullException"><i>name</i> is a null reference.</exception>
-		/// <exception cref="ArgumentException"><i>name</i> is an empty string.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="name"/> is a null reference.</exception>
+		/// <exception cref="ArgumentException"><paramref name="name"/> is an empty string.</exception>
 		private string GeneratePropertyName(string name)
 		{
 			if (name == null)

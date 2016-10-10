@@ -50,7 +50,7 @@ namespace XMLToDataClass.Data
 		}
 
 		/// <summary>
-		///   Finds all the possible values of CDATA in the <i>nodes</i>.
+		///   Finds all the possible values of CDATA in the <paramref name="nodes"/>.
 		/// </summary>
 		/// <param name="nodes"></param>
 		/// <returns></returns>

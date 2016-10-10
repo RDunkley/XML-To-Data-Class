@@ -53,7 +53,7 @@ namespace XMLToDataClass.Data.Types
 		bool TryParse(string value);
 
 		/// <summary>
-		///   Attempts to parse the <i>value</i> string to the integral type.
+		///   Attempts to parse the <paramref name="value"/> string to the integral type.
 		/// </summary>
 		/// <param name="value">String to be parsed.</param>
 		/// <returns>True if the value was parsed successfully, false otherwise.</returns>
@@ -65,17 +65,17 @@ namespace XMLToDataClass.Data.Types
 		/// </summary>
 		/// <param name="value">String value to be parsed.</param>
 		/// <returns>The integral type parsed from the string.</returns>
-		/// <exception cref="ArgumentNullException"><i>value</i> is a null reference.</exception>
-		/// <exception cref="ArgumentException"><i>value</i> is an empty string.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="value"/> is a null reference.</exception>
+		/// <exception cref="ArgumentException"><paramref name="value"/> is an empty string.</exception>
 		T Parse(string value);
 
 		/// <summary>
-		///   Parses the <i>value</i> string and returns the parsed value.
+		///   Parses the <paramref name="value"/> string and returns the parsed value.
 		/// </summary>
 		/// <param name="value">String to be parsed.</param>
 		/// <returns>Value parsed from the string.</returns>
 		/// <remarks>This method is used to parse values for min and max and does not allow hex, or binary string values.</remarks>
-		/// <exception cref="ArgumentNullException"><i>value</i> is a null reference.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="value"/> is a null reference.</exception>
 		/// <exception cref="ArgumentException">The string provided was not valid.</exception>
 		T ParseForMinMax(string value);
 
