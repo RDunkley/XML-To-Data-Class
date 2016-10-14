@@ -336,8 +336,6 @@ namespace XMLToDataClass.Data
 			method.Exceptions.Add(new ExceptionInfo("InvalidOperationException", "<paramref name=\"filePath\"/> could not be opened."));
 			method.Exceptions.Add(new ExceptionInfo("InvalidDataException", "An error occurred while parsing the XML data."));
 
-			method.CodeLines.Add("if(filePath == null)");
-			method.CodeLines.Add("   throw new ArgumentNullException(\"filePath\");");
 			method.CodeLines.Add(string.Empty);
 			method.CodeLines.Add("XmlDocument doc = new XmlDocument();");
 			method.CodeLines.Add("try");
