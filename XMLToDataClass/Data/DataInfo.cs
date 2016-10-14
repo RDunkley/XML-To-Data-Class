@@ -11,6 +11,7 @@
 // CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and
 // limitations under the License.
 //********************************************************************************************************************************
+using CSCodeGen;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -84,7 +85,7 @@ namespace XMLToDataClass.Data
 				throw new ArgumentException("name is an empty string");
 
 			Name = name;
-			PropertyName = GeneratePropertyName(name);
+			PropertyName = StringUtility.GetUpperCamelCase(name);
 			CanBeEmpty = canBeEmpty;
 			IsOptional = optional;
 
@@ -181,42 +182,6 @@ namespace XMLToDataClass.Data
 			List<DataType> typeList = new List<DataType>(mTypeLookup.Count);
 			typeList.AddRange(mTypeLookup.Keys);
 			return typeList.ToArray();
-		}
-
-		/// <summary>
-		///   Generates the property name from the XML node name.
-		/// </summary>
-		/// <param name="name">Name of the XML node.</param>
-		/// <returns>Generated property name.</returns>
-		/// <exception cref="ArgumentNullException"><paramref name="name"/> is a null reference.</exception>
-		/// <exception cref="ArgumentException"><paramref name="name"/> is an empty string.</exception>
-		private string GeneratePropertyName(string name)
-		{
-			if (name == null)
-				throw new ArgumentNullException("name is a null reference");
-			if (name.Length == 0)
-				throw new ArgumentException("name is an empty string");
-
-			StringBuilder builder = new StringBuilder();
-			bool capNext = true;
-			for (int i = 0; i < name.Length; i++)
-			{
-				if (name[i] == '_')
-				{
-					capNext = true;
-				}
-				else
-				{
-					if (capNext)
-					{
-						builder.Append(char.ToUpper(name[i]));
-						capNext = false;
-					}
-					else
-						builder.Append(name[i]);
-				}
-			}
-			return builder.ToString();
 		}
 
 		public XmlElement Save(XmlDocument doc, XmlNode parent)

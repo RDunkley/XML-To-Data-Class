@@ -87,7 +87,7 @@ namespace XMLToDataClass.Data
 			Name = elementName;
 			if (ignoreCase)
 				Name = elementName.ToLower();
-			ClassName = GenerateClassName(Name);
+			ClassName = StringUtility.GetUpperCamelCase(elementName);
 
 			// Parse all the attribute names in the nodes.
 			string[] attribNames = AttributeInfo.GetAllAttributeNames(nodes, ignoreCase);
@@ -160,35 +160,6 @@ namespace XMLToDataClass.Data
 		private string GenerateChildArrayNameProperty(string className)
 		{
 			return string.Format("{0}s", className);
-		}
-
-		/// <summary>
-		///   Generates a class name from the XML node name.
-		/// </summary>
-		/// <param name="name">XML node name.</param>
-		/// <returns>Generated class name.</returns>
-		private static string GenerateClassName(string name)
-		{
-			StringBuilder builder = new StringBuilder();
-			bool capNext = true;
-			for (int i = 0; i < name.Length; i++)
-			{
-				if (name[i] == '_')
-				{
-					capNext = true;
-				}
-				else
-				{
-					if (capNext)
-					{
-						builder.Append(char.ToUpper(name[i]));
-						capNext = false;
-					}
-					else
-						builder.Append(name[i]);
-				}
-			}
-			return builder.ToString();
 		}
 
 		public ClassInfo GenerateDataClass(bool preserveHierarchy, bool ignoreCase)
