@@ -433,9 +433,13 @@ namespace XMLToDataClass.Data
 			return method;
 		}
 
+		/// <summary>
+		///   Generates a class constructor from the element information. <see cref=""/>
+		/// </summary>
+		/// <returns></returns>
 		private ConstructorInfo GenerateDataClassConstructor()
 		{
-			string summary = string.Format("Instantiates a new {0} object using the provided information.", ClassName);
+			string summary = string.Format("Instantiates a new <see cref=\"{0}\"/> object using the provided information.", ClassName);
 			ConstructorInfo cInfo = new ConstructorInfo("public", ClassName, summary);
 
 			// Add parameters for each property.
@@ -594,7 +598,7 @@ namespace XMLToDataClass.Data
 
 		private ConstructorInfo GenerateDataClassXmlNodeConstructor(bool ignoreCase)
 		{
-			string summary = string.Format("Instantiates a new {0} object from an <see=cref=\"XmlNode\"/> object.", ClassName);
+			string summary = string.Format("Instantiates a new <see cref=\"{0}\"/> object from an <see=cref=\"XmlNode\"/> object.", ClassName);
 			ConstructorInfo cInfo = new ConstructorInfo("public", ClassName, summary);
 
 			cInfo.Parameters.Add(new ParameterInfo("XmlNode", "node", "<see cref=\"XmlNode\"/> containing the data to extract.", false));
