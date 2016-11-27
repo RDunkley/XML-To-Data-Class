@@ -353,6 +353,9 @@ namespace XMLToDataClass
 		/// </summary>
 		private void UpdateDetailView()
 		{
+			if (mInfo != null)
+				mainClassTextBox.Text = mInfo.MainClassName;
+
 			mainSplitContainer.Panel2.Controls.Clear();
 			if(mainTreeView.SelectedNode != null)
 			{
