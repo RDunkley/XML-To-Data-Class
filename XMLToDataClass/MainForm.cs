@@ -231,7 +231,15 @@ namespace XMLToDataClass
 			dialog.DefaultExt = "x2dconf";
 			dialog.Multiselect = false;
 			dialog.Title = "Specify the file and path to load the configuration data from";
-			dialog.FileName = Properties.Settings.Default.ConfigFileLocation;
+			try
+			{
+				dialog.InitialDirectory = Path.GetDirectoryName(Properties.Settings.Default.ConfigFileLocation);
+				dialog.FileName = Path.GetFileName(Properties.Settings.Default.ConfigFileLocation);
+			}
+			catch (Exception)
+			{
+				// Ignore exception and just use the default.
+			}
 
 			if (dialog.ShowDialog() != DialogResult.OK)
 				return;
