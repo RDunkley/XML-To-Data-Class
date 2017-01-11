@@ -431,12 +431,12 @@ namespace XMLToDataClass
 			catch (InvalidDataException error)
 			{
 				MessageBox.Show(error.Message, "Error Parsing XML File", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				Application.Exit();
+				return;
 			}
 			catch (Exception error)
 			{
 				MessageBox.Show(error.Message, "Error Parsing XML File", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				Application.Exit();
+				return;
 			}
 
 			xmlFilePathLabel.Text = mLoadForm.FilePath;
