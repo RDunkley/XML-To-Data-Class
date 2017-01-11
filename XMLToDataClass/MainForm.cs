@@ -167,13 +167,32 @@ namespace XMLToDataClass
 			try
 			{
 				codePath = Path.GetFullPath(codePath);
-
 			}
 			catch (Exception ex)
 			{
 				MessageBox.Show("Unable to obtain the path to the code folder: " + ex.Message, "Error Processing XML", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				generateButton.Enabled = true;
 				return;
+			}
+
+			if(!Directory.Exists(codePath))
+			{
+				if (MessageBox.Show("The code output folder does not exist. Should it be created?", "Output Folder Does Not Exist", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
+				{
+					generateButton.Enabled = true;
+					return;
+				}
+
+				try
+				{
+					Directory.CreateDirectory(codePath);
+				}
+				catch(Exception ex)
+				{
+					MessageBox.Show("Unable to create the path to the code folder: " + ex.Message, "Error Creating Output Folder", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					generateButton.Enabled = true;
+					return;
+				}
 			}
 
 			if (nameSpace.Length == 0)
