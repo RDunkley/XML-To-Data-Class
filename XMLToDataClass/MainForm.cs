@@ -377,18 +377,24 @@ namespace XMLToDataClass
 				else if (mainTreeView.SelectedNode.Tag is CDataInfo)
 				{
 					CDataInfo info = mainTreeView.SelectedNode.Tag as CDataInfo;
-					DataInfoPanel panel = new DataInfoPanel(info.Info);
-					mainSplitContainer.Panel2.Controls.Add(panel);
-					panel.Dock = DockStyle.Fill;
-					panel.Enabled = info.Include;
+					if (info.Include)
+					{
+						DataInfoPanel panel = new DataInfoPanel(info.Info);
+						mainSplitContainer.Panel2.Controls.Add(panel);
+						panel.Dock = DockStyle.Fill;
+						panel.Enabled = info.Include;
+					}
 				}
 				else if (mainTreeView.SelectedNode.Tag is TextInfo)
 				{
 					TextInfo info = mainTreeView.SelectedNode.Tag as TextInfo;
-					DataInfoPanel panel = new DataInfoPanel(info.Info);
-					mainSplitContainer.Panel2.Controls.Add(panel);
-					panel.Dock = DockStyle.Fill;
-					panel.Enabled = info.Include;
+					if (info.Include)
+					{
+						DataInfoPanel panel = new DataInfoPanel(info.Info);
+						mainSplitContainer.Panel2.Controls.Add(panel);
+						panel.Dock = DockStyle.Fill;
+						panel.Enabled = info.Include;
+					}
 				}
 				else if(mainTreeView.SelectedNode.Tag is DataInfo)
 				{
