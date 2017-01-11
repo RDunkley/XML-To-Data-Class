@@ -61,6 +61,7 @@ namespace XMLToDataClass
 			else
 				codeTextBox.Text = Environment.CurrentDirectory;
 
+			mainSplitContainer.Panel2.AutoScroll = true;
 
 			mainTreeView.AfterSelect += mainTreeView_AfterSelect;
 			UpdateProjectSolutionInfo();
@@ -365,6 +366,7 @@ namespace XMLToDataClass
 					{
 						ElementInfoPanel panel = new ElementInfoPanel(mainTreeView.SelectedNode.Tag as ElementInfo);
 						mainSplitContainer.Panel2.Controls.Add(panel);
+						mainSplitContainer.Panel2.AutoScrollMinSize = panel.MinimumSize;
 						panel.Dock = DockStyle.Fill;
 					}
 				}
@@ -372,6 +374,7 @@ namespace XMLToDataClass
 				{
 					DataInfoPanel panel = new DataInfoPanel(((AttributeInfo)mainTreeView.SelectedNode.Tag).Info);
 					mainSplitContainer.Panel2.Controls.Add(panel);
+					mainSplitContainer.Panel2.AutoScrollMinSize = panel.MinimumSize;
 					panel.Dock = DockStyle.Fill;
 				}
 				else if (mainTreeView.SelectedNode.Tag is CDataInfo)
@@ -381,6 +384,7 @@ namespace XMLToDataClass
 					{
 						DataInfoPanel panel = new DataInfoPanel(info.Info);
 						mainSplitContainer.Panel2.Controls.Add(panel);
+						mainSplitContainer.Panel2.AutoScrollMinSize = panel.MinimumSize;
 						panel.Dock = DockStyle.Fill;
 						panel.Enabled = info.Include;
 					}
@@ -392,6 +396,7 @@ namespace XMLToDataClass
 					{
 						DataInfoPanel panel = new DataInfoPanel(info.Info);
 						mainSplitContainer.Panel2.Controls.Add(panel);
+						mainSplitContainer.Panel2.AutoScrollMinSize = panel.MinimumSize;
 						panel.Dock = DockStyle.Fill;
 						panel.Enabled = info.Include;
 					}
@@ -400,6 +405,7 @@ namespace XMLToDataClass
 				{
 					DataInfoPanel panel = new DataInfoPanel(mainTreeView.SelectedNode.Tag as DataInfo);
 					mainSplitContainer.Panel2.Controls.Add(panel);
+					mainSplitContainer.Panel2.AutoScrollMinSize = panel.MinimumSize;
 					panel.Dock = DockStyle.Fill;
 				}
 			}

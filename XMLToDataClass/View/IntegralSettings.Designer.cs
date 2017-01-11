@@ -66,7 +66,7 @@ namespace XMLToDataClass.View
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.mainTableLayoutPanel.Size = new System.Drawing.Size(346, 165);
+			this.mainTableLayoutPanel.Size = new System.Drawing.Size(273, 163);
 			this.mainTableLayoutPanel.TabIndex = 0;
 			// 
 			// label1
@@ -96,7 +96,7 @@ namespace XMLToDataClass.View
 			this.minimumTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.minimumTextBox.Location = new System.Drawing.Point(93, 3);
 			this.minimumTextBox.Name = "minimumTextBox";
-			this.minimumTextBox.Size = new System.Drawing.Size(250, 20);
+			this.minimumTextBox.Size = new System.Drawing.Size(177, 20);
 			this.minimumTextBox.TabIndex = 2;
 			this.minimumTextBox.TextChanged += new System.EventHandler(this.minimumTextBox_TextChanged);
 			// 
@@ -105,7 +105,7 @@ namespace XMLToDataClass.View
 			this.maximumTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.maximumTextBox.Location = new System.Drawing.Point(93, 29);
 			this.maximumTextBox.Name = "maximumTextBox";
-			this.maximumTextBox.Size = new System.Drawing.Size(250, 20);
+			this.maximumTextBox.Size = new System.Drawing.Size(177, 20);
 			this.maximumTextBox.TabIndex = 3;
 			this.maximumTextBox.TextChanged += new System.EventHandler(this.maximumTextBox_TextChanged);
 			// 
@@ -116,7 +116,7 @@ namespace XMLToDataClass.View
 			this.hex1CheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.hex1CheckBox.Location = new System.Drawing.Point(3, 55);
 			this.hex1CheckBox.Name = "hex1CheckBox";
-			this.hex1CheckBox.Size = new System.Drawing.Size(340, 17);
+			this.hex1CheckBox.Size = new System.Drawing.Size(267, 17);
 			this.hex1CheckBox.TabIndex = 4;
 			this.hex1CheckBox.Text = "Allow Hexadecimal Values (Ex: FFh)";
 			this.hex1CheckBox.UseVisualStyleBackColor = true;
@@ -129,7 +129,7 @@ namespace XMLToDataClass.View
 			this.hex2CheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.hex2CheckBox.Location = new System.Drawing.Point(3, 78);
 			this.hex2CheckBox.Name = "hex2CheckBox";
-			this.hex2CheckBox.Size = new System.Drawing.Size(340, 17);
+			this.hex2CheckBox.Size = new System.Drawing.Size(267, 17);
 			this.hex2CheckBox.TabIndex = 5;
 			this.hex2CheckBox.Text = "Allow Hexadecimal Values (Ex: 0xFF)";
 			this.hex2CheckBox.UseVisualStyleBackColor = true;
@@ -142,7 +142,7 @@ namespace XMLToDataClass.View
 			this.binaryCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.binaryCheckBox.Location = new System.Drawing.Point(3, 101);
 			this.binaryCheckBox.Name = "binaryCheckBox";
-			this.binaryCheckBox.Size = new System.Drawing.Size(340, 17);
+			this.binaryCheckBox.Size = new System.Drawing.Size(267, 17);
 			this.binaryCheckBox.TabIndex = 6;
 			this.binaryCheckBox.Text = "Allow Binary Values (Ex: 1011b)";
 			this.binaryCheckBox.UseVisualStyleBackColor = true;
@@ -155,7 +155,7 @@ namespace XMLToDataClass.View
 			this.integerCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.integerCheckBox.Location = new System.Drawing.Point(3, 124);
 			this.integerCheckBox.Name = "integerCheckBox";
-			this.integerCheckBox.Size = new System.Drawing.Size(340, 17);
+			this.integerCheckBox.Size = new System.Drawing.Size(267, 17);
 			this.integerCheckBox.TabIndex = 7;
 			this.integerCheckBox.Text = "Allow Integer Values (Ex: 1,234, 1234 or -1234)";
 			this.integerCheckBox.UseVisualStyleBackColor = true;
@@ -166,8 +166,9 @@ namespace XMLToDataClass.View
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.mainTableLayoutPanel);
+			this.MinimumSize = new System.Drawing.Size(273, 163);
 			this.Name = "IntegralSettings";
-			this.Size = new System.Drawing.Size(346, 165);
+			this.Size = new System.Drawing.Size(273, 163);
 			this.mainTableLayoutPanel.ResumeLayout(false);
 			this.mainTableLayoutPanel.PerformLayout();
 			this.ResumeLayout(false);

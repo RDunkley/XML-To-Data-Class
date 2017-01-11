@@ -177,6 +177,7 @@ namespace XMLToDataClass.View
 					throw new NotImplementedException("The data type specified is not recognized as a valid type");
 			}
 			typePanel.Controls.Add(control);
+			typePanel.MinimumSize = control.MinimumSize;
 			control.Dock = DockStyle.Fill;
 
 			UpdateError();

@@ -71,7 +71,7 @@
 			this.dataTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
 			this.dataTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
 			this.dataTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.dataTableLayoutPanel.Size = new System.Drawing.Size(382, 374);
+			this.dataTableLayoutPanel.Size = new System.Drawing.Size(323, 317);
 			this.dataTableLayoutPanel.TabIndex = 3;
 			// 
 			// propertyNameTextBox
@@ -80,7 +80,7 @@
 			this.propertyNameTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.propertyNameTextBox.Location = new System.Drawing.Point(89, 23);
 			this.propertyNameTextBox.Name = "propertyNameTextBox";
-			this.propertyNameTextBox.Size = new System.Drawing.Size(290, 20);
+			this.propertyNameTextBox.Size = new System.Drawing.Size(231, 20);
 			this.propertyNameTextBox.TabIndex = 1;
 			this.propertyNameTextBox.TextChanged += new System.EventHandler(this.propertyNameTextBox_TextChanged);
 			// 
@@ -158,7 +158,7 @@
 			this.nameLabel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.nameLabel.Location = new System.Drawing.Point(89, 0);
 			this.nameLabel.Name = "nameLabel";
-			this.nameLabel.Size = new System.Drawing.Size(290, 20);
+			this.nameLabel.Size = new System.Drawing.Size(231, 20);
 			this.nameLabel.TabIndex = 11;
 			this.nameLabel.Text = "Name";
 			this.nameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -180,7 +180,7 @@
 			this.typePanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.typePanel.Location = new System.Drawing.Point(3, 157);
 			this.typePanel.Name = "typePanel";
-			this.typePanel.Size = new System.Drawing.Size(376, 214);
+			this.typePanel.Size = new System.Drawing.Size(317, 157);
 			this.typePanel.TabIndex = 13;
 			// 
 			// errorLabel
@@ -190,7 +190,7 @@
 			this.errorLabel.ForeColor = System.Drawing.Color.Red;
 			this.errorLabel.Location = new System.Drawing.Point(195, 69);
 			this.errorLabel.Name = "errorLabel";
-			this.errorLabel.Size = new System.Drawing.Size(184, 27);
+			this.errorLabel.Size = new System.Drawing.Size(125, 27);
 			this.errorLabel.TabIndex = 14;
 			this.errorLabel.Text = "Error";
 			this.errorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -200,8 +200,9 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.dataTableLayoutPanel);
+			this.MinimumSize = new System.Drawing.Size(323, 317);
 			this.Name = "DataInfoPanel";
-			this.Size = new System.Drawing.Size(382, 374);
+			this.Size = new System.Drawing.Size(323, 317);
 			this.dataTableLayoutPanel.ResumeLayout(false);
 			this.dataTableLayoutPanel.PerformLayout();
 			this.ResumeLayout(false);

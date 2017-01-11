@@ -57,7 +57,7 @@
 			this.mainDataGridView.ShowCellErrors = false;
 			this.mainDataGridView.ShowEditingIcon = false;
 			this.mainDataGridView.ShowRowErrors = false;
-			this.mainDataGridView.Size = new System.Drawing.Size(318, 164);
+			this.mainDataGridView.Size = new System.Drawing.Size(288, 157);
 			this.mainDataGridView.TabIndex = 0;
 			// 
 			// keyColumn
@@ -91,13 +91,13 @@
 			this.mainTableLayoutPanel.RowCount = 2;
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.mainTableLayoutPanel.Size = new System.Drawing.Size(324, 199);
+			this.mainTableLayoutPanel.Size = new System.Drawing.Size(294, 192);
 			this.mainTableLayoutPanel.TabIndex = 1;
 			// 
 			// addButton
 			// 
 			this.addButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.addButton.Location = new System.Drawing.Point(84, 173);
+			this.addButton.Location = new System.Drawing.Point(69, 166);
 			this.addButton.Name = "addButton";
 			this.addButton.Size = new System.Drawing.Size(75, 23);
 			this.addButton.TabIndex = 1;
@@ -107,7 +107,7 @@
 			// 
 			// removeButton
 			// 
-			this.removeButton.Location = new System.Drawing.Point(165, 173);
+			this.removeButton.Location = new System.Drawing.Point(150, 166);
 			this.removeButton.Name = "removeButton";
 			this.removeButton.Size = new System.Drawing.Size(75, 23);
 			this.removeButton.TabIndex = 2;
@@ -120,8 +120,9 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.mainTableLayoutPanel);
+			this.MinimumSize = new System.Drawing.Size(294, 192);
 			this.Name = "EnumTypeSettings";
-			this.Size = new System.Drawing.Size(324, 199);
+			this.Size = new System.Drawing.Size(294, 192);
 			((System.ComponentModel.ISupportInitialize)(this.mainDataGridView)).EndInit();
 			this.mainTableLayoutPanel.ResumeLayout(false);
 			this.ResumeLayout(false);

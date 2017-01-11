@@ -56,7 +56,7 @@ namespace XMLToDataClass.View
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.mainTableLayoutPanel.Size = new System.Drawing.Size(371, 166);
+			this.mainTableLayoutPanel.Size = new System.Drawing.Size(224, 164);
 			this.mainTableLayoutPanel.TabIndex = 0;
 			// 
 			// valuesCheckBox
@@ -65,7 +65,7 @@ namespace XMLToDataClass.View
 			this.valuesCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.valuesCheckBox.Location = new System.Drawing.Point(3, 3);
 			this.valuesCheckBox.Name = "valuesCheckBox";
-			this.valuesCheckBox.Size = new System.Drawing.Size(365, 17);
+			this.valuesCheckBox.Size = new System.Drawing.Size(218, 17);
 			this.valuesCheckBox.TabIndex = 0;
 			this.valuesCheckBox.Text = "Allow values as well as names";
 			this.valuesCheckBox.UseVisualStyleBackColor = true;
@@ -77,7 +77,7 @@ namespace XMLToDataClass.View
 			this.ignoreCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ignoreCheckBox.Location = new System.Drawing.Point(3, 26);
 			this.ignoreCheckBox.Name = "ignoreCheckBox";
-			this.ignoreCheckBox.Size = new System.Drawing.Size(365, 17);
+			this.ignoreCheckBox.Size = new System.Drawing.Size(218, 17);
 			this.ignoreCheckBox.TabIndex = 1;
 			this.ignoreCheckBox.Text = "Ignore Case for Names";
 			this.ignoreCheckBox.UseVisualStyleBackColor = true;
@@ -103,7 +103,7 @@ namespace XMLToDataClass.View
 			this.mainDataGridView.ShowCellErrors = false;
 			this.mainDataGridView.ShowEditingIcon = false;
 			this.mainDataGridView.ShowRowErrors = false;
-			this.mainDataGridView.Size = new System.Drawing.Size(365, 114);
+			this.mainDataGridView.Size = new System.Drawing.Size(218, 112);
 			this.mainDataGridView.TabIndex = 2;
 			// 
 			// nameColumn
@@ -128,8 +128,9 @@ namespace XMLToDataClass.View
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.mainTableLayoutPanel);
+			this.MinimumSize = new System.Drawing.Size(224, 164);
 			this.Name = "FixedEnumSettings";
-			this.Size = new System.Drawing.Size(371, 166);
+			this.Size = new System.Drawing.Size(224, 164);
 			this.mainTableLayoutPanel.ResumeLayout(false);
 			this.mainTableLayoutPanel.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.mainDataGridView)).EndInit();

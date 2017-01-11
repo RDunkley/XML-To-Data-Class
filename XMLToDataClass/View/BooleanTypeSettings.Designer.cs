@@ -39,18 +39,18 @@
 			// 
 			this.mainTableLayoutPanel.ColumnCount = 1;
 			this.mainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.mainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.mainTableLayoutPanel.Controls.Add(this.allowTrueFalseCheckBox, 0, 0);
 			this.mainTableLayoutPanel.Controls.Add(this.allowZeroOneCheckBox, 0, 1);
 			this.mainTableLayoutPanel.Controls.Add(this.allowYesNoCheckBox, 0, 2);
 			this.mainTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.mainTableLayoutPanel.Location = new System.Drawing.Point(0, 0);
 			this.mainTableLayoutPanel.Name = "mainTableLayoutPanel";
-			this.mainTableLayoutPanel.RowCount = 3;
-			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-			this.mainTableLayoutPanel.Size = new System.Drawing.Size(319, 160);
+			this.mainTableLayoutPanel.RowCount = 4;
+			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.mainTableLayoutPanel.Size = new System.Drawing.Size(272, 77);
 			this.mainTableLayoutPanel.TabIndex = 0;
 			// 
 			// allowTrueFalseCheckBox
@@ -59,7 +59,7 @@
 			this.allowTrueFalseCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.allowTrueFalseCheckBox.Location = new System.Drawing.Point(3, 3);
 			this.allowTrueFalseCheckBox.Name = "allowTrueFalseCheckBox";
-			this.allowTrueFalseCheckBox.Size = new System.Drawing.Size(313, 47);
+			this.allowTrueFalseCheckBox.Size = new System.Drawing.Size(266, 17);
 			this.allowTrueFalseCheckBox.TabIndex = 0;
 			this.allowTrueFalseCheckBox.Text = "Allow \"True\" and \"False\" strings";
 			this.allowTrueFalseCheckBox.UseVisualStyleBackColor = true;
@@ -69,9 +69,9 @@
 			// 
 			this.allowZeroOneCheckBox.AutoSize = true;
 			this.allowZeroOneCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.allowZeroOneCheckBox.Location = new System.Drawing.Point(3, 56);
+			this.allowZeroOneCheckBox.Location = new System.Drawing.Point(3, 26);
 			this.allowZeroOneCheckBox.Name = "allowZeroOneCheckBox";
-			this.allowZeroOneCheckBox.Size = new System.Drawing.Size(313, 47);
+			this.allowZeroOneCheckBox.Size = new System.Drawing.Size(266, 17);
 			this.allowZeroOneCheckBox.TabIndex = 1;
 			this.allowZeroOneCheckBox.Text = "Allow \"0\" and \"1\" strings (0 - false, 1 - true)";
 			this.allowZeroOneCheckBox.UseVisualStyleBackColor = true;
@@ -81,9 +81,9 @@
 			// 
 			this.allowYesNoCheckBox.AutoSize = true;
 			this.allowYesNoCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.allowYesNoCheckBox.Location = new System.Drawing.Point(3, 109);
+			this.allowYesNoCheckBox.Location = new System.Drawing.Point(3, 49);
 			this.allowYesNoCheckBox.Name = "allowYesNoCheckBox";
-			this.allowYesNoCheckBox.Size = new System.Drawing.Size(313, 48);
+			this.allowYesNoCheckBox.Size = new System.Drawing.Size(266, 17);
 			this.allowYesNoCheckBox.TabIndex = 2;
 			this.allowYesNoCheckBox.Text = "Allow \"Yes\" and \"No\" strings (no - false, yes - true)";
 			this.allowYesNoCheckBox.UseVisualStyleBackColor = true;
@@ -94,8 +94,9 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.mainTableLayoutPanel);
+			this.MinimumSize = new System.Drawing.Size(272, 77);
 			this.Name = "BooleanTypeSettings";
-			this.Size = new System.Drawing.Size(319, 160);
+			this.Size = new System.Drawing.Size(272, 77);
 			this.mainTableLayoutPanel.ResumeLayout(false);
 			this.mainTableLayoutPanel.PerformLayout();
 			this.ResumeLayout(false);

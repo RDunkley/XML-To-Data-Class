@@ -69,7 +69,7 @@ namespace XMLToDataClass.View
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.mainTableLayoutPanel.Size = new System.Drawing.Size(346, 165);
+			this.mainTableLayoutPanel.Size = new System.Drawing.Size(346, 169);
 			this.mainTableLayoutPanel.TabIndex = 0;
 			// 
 			// label1
@@ -183,8 +183,9 @@ namespace XMLToDataClass.View
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.mainTableLayoutPanel);
+			this.MinimumSize = new System.Drawing.Size(346, 169);
 			this.Name = "FloatingPointSettings";
-			this.Size = new System.Drawing.Size(346, 165);
+			this.Size = new System.Drawing.Size(346, 169);
 			this.mainTableLayoutPanel.ResumeLayout(false);
 			this.mainTableLayoutPanel.PerformLayout();
 			this.ResumeLayout(false);

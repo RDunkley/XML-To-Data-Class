@@ -47,7 +47,7 @@
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.mainTableLayoutPanel.Size = new System.Drawing.Size(286, 159);
+			this.mainTableLayoutPanel.Size = new System.Drawing.Size(133, 78);
 			this.mainTableLayoutPanel.TabIndex = 0;
 			// 
 			// allowBuildCheckBox
@@ -56,7 +56,7 @@
 			this.allowBuildCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.allowBuildCheckBox.Location = new System.Drawing.Point(3, 3);
 			this.allowBuildCheckBox.Name = "allowBuildCheckBox";
-			this.allowBuildCheckBox.Size = new System.Drawing.Size(280, 17);
+			this.allowBuildCheckBox.Size = new System.Drawing.Size(127, 17);
 			this.allowBuildCheckBox.TabIndex = 0;
 			this.allowBuildCheckBox.Text = "Allow Build";
 			this.allowBuildCheckBox.UseVisualStyleBackColor = true;
@@ -68,7 +68,7 @@
 			this.allowRevisionCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.allowRevisionCheckBox.Location = new System.Drawing.Point(3, 26);
 			this.allowRevisionCheckBox.Name = "allowRevisionCheckBox";
-			this.allowRevisionCheckBox.Size = new System.Drawing.Size(280, 17);
+			this.allowRevisionCheckBox.Size = new System.Drawing.Size(127, 17);
 			this.allowRevisionCheckBox.TabIndex = 1;
 			this.allowRevisionCheckBox.Text = "Allow Revision";
 			this.allowRevisionCheckBox.UseVisualStyleBackColor = true;
@@ -79,8 +79,9 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.mainTableLayoutPanel);
+			this.MinimumSize = new System.Drawing.Size(133, 78);
 			this.Name = "VersionTypeSettings";
-			this.Size = new System.Drawing.Size(286, 159);
+			this.Size = new System.Drawing.Size(133, 78);
 			this.mainTableLayoutPanel.ResumeLayout(false);
 			this.mainTableLayoutPanel.PerformLayout();
 			this.ResumeLayout(false);

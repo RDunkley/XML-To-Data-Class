@@ -55,7 +55,7 @@
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.mainTableLayoutPanel.Size = new System.Drawing.Size(350, 165);
+			this.mainTableLayoutPanel.Size = new System.Drawing.Size(290, 75);
 			this.mainTableLayoutPanel.TabIndex = 0;
 			// 
 			// minimumTextBox
@@ -63,7 +63,7 @@
 			this.minimumTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.minimumTextBox.Location = new System.Drawing.Point(169, 3);
 			this.minimumTextBox.Name = "minimumTextBox";
-			this.minimumTextBox.Size = new System.Drawing.Size(119, 20);
+			this.minimumTextBox.Size = new System.Drawing.Size(59, 20);
 			this.minimumTextBox.TabIndex = 0;
 			this.minimumTextBox.Text = "0";
 			this.minimumTextBox.TextChanged += new System.EventHandler(this.minimumTextBox_TextChanged);
@@ -95,7 +95,7 @@
 			this.maximumTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.maximumTextBox.Location = new System.Drawing.Point(169, 29);
 			this.maximumTextBox.Name = "maximumTextBox";
-			this.maximumTextBox.Size = new System.Drawing.Size(119, 20);
+			this.maximumTextBox.Size = new System.Drawing.Size(59, 20);
 			this.maximumTextBox.TabIndex = 3;
 			this.maximumTextBox.Text = "0";
 			this.maximumTextBox.TextChanged += new System.EventHandler(this.maximumTextBox_TextChanged);
@@ -104,7 +104,7 @@
 			// 
 			this.label3.AutoSize = true;
 			this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label3.Location = new System.Drawing.Point(294, 26);
+			this.label3.Location = new System.Drawing.Point(234, 26);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(53, 26);
 			this.label3.TabIndex = 4;
@@ -116,8 +116,9 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.mainTableLayoutPanel);
+			this.MinimumSize = new System.Drawing.Size(290, 75);
 			this.Name = "StringTypeSettings";
-			this.Size = new System.Drawing.Size(350, 165);
+			this.Size = new System.Drawing.Size(290, 75);
 			this.mainTableLayoutPanel.ResumeLayout(false);
 			this.mainTableLayoutPanel.PerformLayout();
 			this.ResumeLayout(false);

@@ -52,7 +52,7 @@
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.mainTableLayoutPanel.Size = new System.Drawing.Size(303, 168);
+			this.mainTableLayoutPanel.Size = new System.Drawing.Size(220, 81);
 			this.mainTableLayoutPanel.TabIndex = 0;
 			// 
 			// label1
@@ -72,7 +72,7 @@
 			this.mainComboBox.FormattingEnabled = true;
 			this.mainComboBox.Location = new System.Drawing.Point(97, 30);
 			this.mainComboBox.Name = "mainComboBox";
-			this.mainComboBox.Size = new System.Drawing.Size(203, 21);
+			this.mainComboBox.Size = new System.Drawing.Size(120, 21);
 			this.mainComboBox.TabIndex = 1;
 			this.mainComboBox.SelectedIndexChanged += new System.EventHandler(this.mainComboBox_SelectedIndexChanged);
 			// 
@@ -93,7 +93,7 @@
 			this.cultureComboBox.FormattingEnabled = true;
 			this.cultureComboBox.Location = new System.Drawing.Point(97, 3);
 			this.cultureComboBox.Name = "cultureComboBox";
-			this.cultureComboBox.Size = new System.Drawing.Size(203, 21);
+			this.cultureComboBox.Size = new System.Drawing.Size(120, 21);
 			this.cultureComboBox.TabIndex = 3;
 			this.cultureComboBox.SelectedIndexChanged += new System.EventHandler(this.cultureComboBox_SelectedIndexChanged);
 			// 
@@ -102,8 +102,9 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.mainTableLayoutPanel);
+			this.MinimumSize = new System.Drawing.Size(220, 81);
 			this.Name = "DateTimeSettings";
-			this.Size = new System.Drawing.Size(303, 168);
+			this.Size = new System.Drawing.Size(220, 81);
 			this.mainTableLayoutPanel.ResumeLayout(false);
 			this.mainTableLayoutPanel.PerformLayout();
 			this.ResumeLayout(false);
