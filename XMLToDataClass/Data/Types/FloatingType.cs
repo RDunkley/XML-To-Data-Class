@@ -82,8 +82,7 @@ namespace XMLToDataClass.Data.Types
 		/// </summary>
 		/// <param name="info"><see cref="DataInfo"/> object associated with this type.</param>
 		/// <param name="possibleValues">Possible values the data type will have to parse. Can be empty.</param>
-		/// <param name="ignoreCase">True if the case of the values should be ignored, false otherwise. May not have any bearing on certain types.</param>
-		public FloatingType(DataInfo info, string[] possibleValues, bool ignoreCase) : base(info, possibleValues, ignoreCase)
+		public FloatingType(DataInfo info, string[] possibleValues) : base(info, possibleValues)
 		{
 			AllowCurrency = DefaultAllowCurrency;
 			AllowParentheses = DefaultAllowParentheses;

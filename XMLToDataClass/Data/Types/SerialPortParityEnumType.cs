@@ -25,10 +25,9 @@ namespace XMLToDataClass.Data.Types
 		/// </summary>
 		/// <param name="info"><see cref="DataInfo"/> object associated with this type.</param>
 		/// <param name="possibleValues">Possible values the data type will have to parse. Can be empty.</param>
-		/// <param name="ignoreCase">True if the case of values should be ignored, false if they shouldn't.</param>
 		/// <remarks>This is an abstract class, the inheritor must set the Type property of the base class.</remarks>
 		/// <exception cref="ArgumentNullException"><paramref name="possibleValues"/> or <paramref name="info"/> is a null reference.</exception>
-		public SerialPortParityEnumType(DataInfo info, string[] possibleValues, bool ignoreCase) : base(info, possibleValues, ignoreCase)
+		public SerialPortParityEnumType(DataInfo info, string[] possibleValues) : base(info, possibleValues)
 		{
 			Type = DataType.SerialPortParity;
 			Usings.Add("System.IO.Ports");

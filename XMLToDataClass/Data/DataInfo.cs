@@ -77,7 +77,7 @@ namespace XMLToDataClass.Data
 		///   Instantiates a new <see cref="AttributeInfo"/> object.
 		/// </summary>
 		/// <param name="name">Name of the attribute.</param>
-		public DataInfo(string name, string[] possibleValues, bool optional, bool canBeEmpty, bool ignoreCase)
+		public DataInfo(string name, string[] possibleValues, bool optional, bool canBeEmpty)
 		{
 			if (name == null)
 				throw new ArgumentNullException("name");
@@ -91,29 +91,29 @@ namespace XMLToDataClass.Data
 
 			// Create the possible data type objects.
 			mTypeLookup = new Dictionary<DataType, IDataType>();
-			mTypeLookup.Add(DataType.Boolean, new BooleanType(this, possibleValues, ignoreCase));
-			mTypeLookup.Add(DataType.Byte, new IntegralType<byte>(this, possibleValues, ignoreCase));
-			mTypeLookup.Add(DataType.Double, new FloatingType<double>(this, possibleValues, ignoreCase));
+			mTypeLookup.Add(DataType.Boolean, new BooleanType(this, possibleValues));
+			mTypeLookup.Add(DataType.Byte, new IntegralType<byte>(this, possibleValues));
+			mTypeLookup.Add(DataType.Double, new FloatingType<double>(this, possibleValues));
 
-			FloatingType<float> type = new FloatingType<Single>(this, possibleValues, ignoreCase);
-			mTypeLookup.Add(DataType.Float, new FloatingType<float>(this, possibleValues, ignoreCase));
+			FloatingType<float> type = new FloatingType<Single>(this, possibleValues);
+			mTypeLookup.Add(DataType.Float, new FloatingType<float>(this, possibleValues));
 
-			mTypeLookup.Add(DataType.Int, new IntegralType<int>(this, possibleValues, ignoreCase));
-			mTypeLookup.Add(DataType.Long, new IntegralType<long>(this, possibleValues, ignoreCase));
-			mTypeLookup.Add(DataType.SByte, new IntegralType<sbyte>(this, possibleValues, ignoreCase));
-			mTypeLookup.Add(DataType.Short, new IntegralType<short>(this, possibleValues, ignoreCase));
-			mTypeLookup.Add(DataType.String, new StringType(this, possibleValues, ignoreCase));
-			mTypeLookup.Add(DataType.UInt, new IntegralType<uint>(this, possibleValues, ignoreCase));
-			mTypeLookup.Add(DataType.ULong, new IntegralType<ulong>(this, possibleValues, ignoreCase));
-			mTypeLookup.Add(DataType.UShort, new IntegralType<ushort>(this, possibleValues, ignoreCase));
-			mTypeLookup.Add(DataType.DateTime, new DateTimeType(this, possibleValues, ignoreCase));
-			mTypeLookup.Add(DataType.Enum, new EnumType(this, possibleValues, ignoreCase));
-			mTypeLookup.Add(DataType.SerialPortParity, new SerialPortParityEnumType(this, possibleValues, ignoreCase));
-			mTypeLookup.Add(DataType.SerialPortStopBits, new SerialPortStopBitsEnumType(this, possibleValues, ignoreCase));
-			mTypeLookup.Add(DataType.Version, new VersionType(this, possibleValues, ignoreCase));
-			mTypeLookup.Add(DataType.TimeSpan, new TimeSpanType(this, possibleValues, ignoreCase));
-			mTypeLookup.Add(DataType.MACAddress, new MacAddressType(this, possibleValues, ignoreCase));
-			mTypeLookup.Add(DataType.IPAddress, new IPAddressType(this, possibleValues, ignoreCase));
+			mTypeLookup.Add(DataType.Int, new IntegralType<int>(this, possibleValues));
+			mTypeLookup.Add(DataType.Long, new IntegralType<long>(this, possibleValues));
+			mTypeLookup.Add(DataType.SByte, new IntegralType<sbyte>(this, possibleValues));
+			mTypeLookup.Add(DataType.Short, new IntegralType<short>(this, possibleValues));
+			mTypeLookup.Add(DataType.String, new StringType(this, possibleValues));
+			mTypeLookup.Add(DataType.UInt, new IntegralType<uint>(this, possibleValues));
+			mTypeLookup.Add(DataType.ULong, new IntegralType<ulong>(this, possibleValues));
+			mTypeLookup.Add(DataType.UShort, new IntegralType<ushort>(this, possibleValues));
+			mTypeLookup.Add(DataType.DateTime, new DateTimeType(this, possibleValues));
+			mTypeLookup.Add(DataType.Enum, new EnumType(this, possibleValues));
+			mTypeLookup.Add(DataType.SerialPortParity, new SerialPortParityEnumType(this, possibleValues));
+			mTypeLookup.Add(DataType.SerialPortStopBits, new SerialPortStopBitsEnumType(this, possibleValues));
+			mTypeLookup.Add(DataType.Version, new VersionType(this, possibleValues));
+			mTypeLookup.Add(DataType.TimeSpan, new TimeSpanType(this, possibleValues));
+			mTypeLookup.Add(DataType.MACAddress, new MacAddressType(this, possibleValues));
+			mTypeLookup.Add(DataType.IPAddress, new IPAddressType(this, possibleValues));
 			DetermineDefaultSelectedType();
 		}
 
@@ -211,11 +211,11 @@ namespace XMLToDataClass.Data
 			return element;
 		}
 
-		public XmlElement Load(XmlNode parent, bool ignoreCase)
+		public XmlElement Load(XmlNode parent)
 		{
 			foreach(XmlNode node in parent.ChildNodes)
 			{
-				if(node.NodeType == XmlNodeType.Element && string.Compare(node.Name, Name, ignoreCase) == 0)
+				if(node.NodeType == XmlNodeType.Element && string.Compare(node.Name, Name, false) == 0)
 				{
 					XmlAttribute attrib = node.Attributes["SelectedDataType"];
 					if(attrib != null)

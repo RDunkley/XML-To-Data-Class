@@ -33,7 +33,6 @@
 			this.filePathTextBox = new System.Windows.Forms.TextBox();
 			this.browseButton = new System.Windows.Forms.Button();
 			this.hierarchyCheckBox = new System.Windows.Forms.CheckBox();
-			this.caseCheckBox = new System.Windows.Forms.CheckBox();
 			this.okButton = new System.Windows.Forms.Button();
 			this.cancelButton = new System.Windows.Forms.Button();
 			this.mainTableLayoutPanel.SuspendLayout();
@@ -50,18 +49,17 @@
 			this.mainTableLayoutPanel.Controls.Add(this.filePathTextBox, 1, 0);
 			this.mainTableLayoutPanel.Controls.Add(this.browseButton, 3, 0);
 			this.mainTableLayoutPanel.Controls.Add(this.hierarchyCheckBox, 1, 1);
-			this.mainTableLayoutPanel.Controls.Add(this.caseCheckBox, 1, 2);
-			this.mainTableLayoutPanel.Controls.Add(this.okButton, 1, 3);
-			this.mainTableLayoutPanel.Controls.Add(this.cancelButton, 2, 3);
+			this.mainTableLayoutPanel.Controls.Add(this.okButton, 1, 2);
+			this.mainTableLayoutPanel.Controls.Add(this.cancelButton, 2, 2);
 			this.mainTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.mainTableLayoutPanel.Location = new System.Drawing.Point(0, 0);
 			this.mainTableLayoutPanel.Name = "mainTableLayoutPanel";
-			this.mainTableLayoutPanel.RowCount = 4;
-			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.mainTableLayoutPanel.RowCount = 3;
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.mainTableLayoutPanel.Size = new System.Drawing.Size(494, 111);
+			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.mainTableLayoutPanel.Size = new System.Drawing.Size(494, 87);
 			this.mainTableLayoutPanel.TabIndex = 0;
 			// 
 			// label1
@@ -106,23 +104,11 @@
 			this.hierarchyCheckBox.Text = "Preserve Hierarchy";
 			this.hierarchyCheckBox.UseVisualStyleBackColor = true;
 			// 
-			// caseCheckBox
-			// 
-			this.caseCheckBox.AutoSize = true;
-			this.mainTableLayoutPanel.SetColumnSpan(this.caseCheckBox, 2);
-			this.caseCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.caseCheckBox.Location = new System.Drawing.Point(85, 55);
-			this.caseCheckBox.Name = "caseCheckBox";
-			this.caseCheckBox.Size = new System.Drawing.Size(324, 17);
-			this.caseCheckBox.TabIndex = 4;
-			this.caseCheckBox.Text = "Ignore Case for Element and Attribute Names";
-			this.caseCheckBox.UseVisualStyleBackColor = true;
-			// 
 			// okButton
 			// 
 			this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.okButton.Location = new System.Drawing.Point(169, 85);
+			this.okButton.Location = new System.Drawing.Point(169, 61);
 			this.okButton.Name = "okButton";
 			this.okButton.Size = new System.Drawing.Size(75, 23);
 			this.okButton.TabIndex = 6;
@@ -133,7 +119,7 @@
 			// 
 			this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.cancelButton.Location = new System.Drawing.Point(250, 85);
+			this.cancelButton.Location = new System.Drawing.Point(250, 61);
 			this.cancelButton.Name = "cancelButton";
 			this.cancelButton.Size = new System.Drawing.Size(75, 23);
 			this.cancelButton.TabIndex = 5;
@@ -145,7 +131,7 @@
 			this.AcceptButton = this.okButton;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(494, 111);
+			this.ClientSize = new System.Drawing.Size(494, 87);
 			this.Controls.Add(this.mainTableLayoutPanel);
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
@@ -165,7 +151,6 @@
 		private System.Windows.Forms.TextBox filePathTextBox;
 		private System.Windows.Forms.Button browseButton;
 		private System.Windows.Forms.CheckBox hierarchyCheckBox;
-		private System.Windows.Forms.CheckBox caseCheckBox;
 		private System.Windows.Forms.Button okButton;
 		private System.Windows.Forms.Button cancelButton;
 	}

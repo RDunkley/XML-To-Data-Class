@@ -32,11 +32,6 @@ namespace XMLToDataClass.Data.Types
 		protected string[] mPossibleValues;
 
 		/// <summary>
-		///   True if the case of the values should be ignored, false otherwise. May not have any bearing on certain types.
-		/// </summary>
-		protected bool mIgnoreCase;
-
-		/// <summary>
 		///   <see cref="DataInfo"/> object assocaited with this type.
 		/// </summary>
 		protected DataInfo mInfo;
@@ -81,7 +76,7 @@ namespace XMLToDataClass.Data.Types
 		/// <param name="possibleValues">Possible values the data type will have to parse. Can be empty.</param>
 		/// <param name="ignoreCase">True if the case of the values should be ignored, false otherwise. May not have any bearing on certain types.</param>
 		/// <exception cref="ArgumentNullException"><paramref name="possibleValues"/> or <paramref name="info"/> is a null reference.</exception>
-		public BaseType(DataInfo info, string[] possibleValues, bool ignoreCase)
+		public BaseType(DataInfo info, string[] possibleValues)
 		{
 			if (info == null)
 				throw new ArgumentNullException("info");
@@ -90,7 +85,6 @@ namespace XMLToDataClass.Data.Types
 
 			mInfo = info;
 			mPossibleValues = possibleValues;
-			mIgnoreCase = ignoreCase;
 			Usings = new List<string>();
 			IsNullable = true;
 			IsArray = false;

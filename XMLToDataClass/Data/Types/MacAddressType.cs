@@ -43,7 +43,7 @@ namespace XMLToDataClass.Data.Types
 			DefaultAllowDotSeparator = true;
 		}
 
-		public MacAddressType(DataInfo info, string[] possibleValues, bool ignoreCase) : base(info, possibleValues, ignoreCase)
+		public MacAddressType(DataInfo info, string[] possibleValues) : base(info, possibleValues)
 		{
 			AllowColonSeparator = DefaultAllowColonSeparator;
 			AllowDashSeparator = DefaultAllowDashSeparator;

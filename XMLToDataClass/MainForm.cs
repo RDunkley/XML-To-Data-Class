@@ -445,7 +445,7 @@ namespace XMLToDataClass
 
 			try
 			{
-				mInfo = new XMLInfo(mLoadForm.FilePath, mLoadForm.PreserveHierarchy, mLoadForm.IgnoreCase);
+				mInfo = new XMLInfo(mLoadForm.FilePath, mLoadForm.PreserveHierarchy);
 			}
 			catch (InvalidDataException error)
 			{

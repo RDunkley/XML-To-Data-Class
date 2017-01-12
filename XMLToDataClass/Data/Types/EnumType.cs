@@ -14,6 +14,7 @@
 using CSCodeGen;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Xml;
 
 namespace XMLToDataClass.Data.Types
@@ -37,9 +38,8 @@ namespace XMLToDataClass.Data.Types
 		/// </summary>
 		/// <param name="info"><see cref="DataInfo"/> object associated with this type.</param>
 		/// <param name="possibleValues">Possible values the data type will have to parse. Can be empty.</param>
-		/// <param name="ignoreCase">True if the case of values should be ignored, false if they shouldn't.</param>
 		/// <exception cref="ArgumentNullException"><paramref name="possibleValues"/> or <paramref name="info"/> is a null reference.</exception>
-		public EnumType(DataInfo info, string[] possibleValues, bool ignoreCase) : base(info, possibleValues, ignoreCase)
+		public EnumType(DataInfo info, string[] possibleValues) : base(info, possibleValues)
 		{
 			Type = DataType.Enum;
 			DisplayName = "Custom Enumeration";
@@ -48,8 +48,6 @@ namespace XMLToDataClass.Data.Types
 			foreach(string value in possibleValues)
 			{
 				string tempValue = value;
-				if (mIgnoreCase)
-					tempValue = value.ToLower();
 				if (!valueList.Contains(tempValue))
 					valueList.Add(tempValue);
 			}
@@ -104,15 +102,80 @@ namespace XMLToDataClass.Data.Types
 			(
 				"public",
 				GetEnumTypeName(mInfo.PropertyName),
-				string.Format("Enumerates the possible values of {0}", mInfo.PropertyName)
+				string.Format("Enumerates the possible values of {0}.", mInfo.PropertyName)
 			);
 
-			foreach(string value in TypeLookup.Keys)
+			// Get all the enumerated type names and their associated strings.
+			Dictionary<string, string[]> lookup = GetEnumNamesWithValues();
+			foreach(string key in lookup.Keys)
+				enumInfo.Values.Add(new EnumValueInfo(key, null, GetEnumDescription(lookup[key])));
+
+			List<EnumInfo> enumList = new List<EnumInfo>();
+			enumList.Add(enumInfo);
+
+			foreach(string key in lookup.Keys)
 			{
-				enumInfo.Values.Add(new EnumValueInfo(TypeLookup[value], null, string.Format("Represents the '{0}' string.", value)));
+				if(lookup[key].Length > 1)
+				{
+					// This enumerated item has multiple strings that will parse to it so create an individual enum for it.
+					enumInfo = new EnumInfo
+					(
+						"public",
+						string.Format("{0}Items", key),
+						string.Format("Enumerates the possible string values that can be parse to {0}.", key)
+					);
+
+					for (int i = 0; i < lookup[key].Length; i++)
+						enumInfo.Values.Add(new EnumValueInfo(string.Format("Option{0}", i.ToString()), null, string.Format("Specified when the '{0}' string is found in the XML.", lookup[key][i])));
+					enumList.Add(enumInfo);
+				}
 			}
 
-			return new EnumInfo[] { enumInfo };
+			return enumList.ToArray();
+		}
+
+		/// <summary>
+		///   Gets a description of the enumerated item.
+		/// </summary>
+		/// <param name="values">Various string values of the enumerated item.</param>
+		/// <returns>Description.</returns>
+		private string GetEnumDescription(string[] values)
+		{
+			StringBuilder sb = new StringBuilder();
+			sb.Append("Represents the ");
+			for (int i = 0; i < values.Length; i++)
+			{
+				sb.AppendFormat("'{0}'", values[i]);
+				if (i != values.Length - 1)
+					sb.AppendFormat(", ");
+			}
+			sb.Append(" string");
+			if (values.Length > 1)
+				sb.Append("s");
+			sb.Append(".");
+			return sb.ToString();
+		}
+
+		/// <summary>
+		///   This method basically inverts the TypeLookup dictionary. Since multiple different keys in the dictionary can
+		///   have the same value it recreates a lookup table based on the unique values and stores all the keys that
+		///   reference that value.
+		/// </summary>
+		/// <returns>Lookup of the enumerated type names and their associated strings.</returns>
+		private Dictionary<string,string[]> GetEnumNamesWithValues()
+		{
+			Dictionary<string, List<string>> lookup = new Dictionary<string, List<string>>();
+			foreach(string value in TypeLookup.Keys)
+			{
+				if (!lookup.ContainsKey(TypeLookup[value]))
+					lookup.Add(TypeLookup[value], new List<string>());
+				lookup[TypeLookup[value]].Add(value);
+			}
+
+			Dictionary<string, string[]> returnLookup = new Dictionary<string, string[]>();
+			foreach(string key in lookup.Keys)
+				returnLookup.Add(key, lookup[key].ToArray());
+			return returnLookup;
 		}
 
 		private void ValidateLookup()
@@ -154,6 +217,22 @@ namespace XMLToDataClass.Data.Types
 					string.Format("True if the null {0} enumeration should be represented as an empty string in XML, false if it shouldn't be included.", mInfo.PropertyName)
 				));
 			}
+
+			Dictionary<string, string[]> lookup = GetEnumNamesWithValues();
+			foreach(string key in lookup.Keys)
+			{
+				if(lookup[key].Length > 1)
+				{
+					propList.Add(new PropertyInfo
+					(
+						"public",
+						string.Format("{0}Items", key),
+						string.Format("{0}StringRepresentation", key),
+						string.Format("Gets or sets the string representation of '{0}', when it's item is selected.", key)
+					));
+				}
+			}
+
 			return propList.ToArray();
 		}
 
@@ -204,13 +283,30 @@ namespace XMLToDataClass.Data.Types
 			}
 
 			string enumTypeName = GetEnumTypeName(mInfo.PropertyName);
+			Dictionary<string, string[]> lookup = GetEnumNamesWithValues();
 			codeLines.Add(string.Empty);
 			codeLines.Add(string.Format("switch({0})", mInfo.PropertyName));
 			codeLines.Add("{");
-			foreach(string value in TypeLookup.Keys)
+			foreach(string key in lookup.Keys)
 			{
-				codeLines.Add(string.Format("	case {0}.{1}:", enumTypeName, TypeLookup[value]));
-				codeLines.Add(string.Format("		return \"{0}\";", value));
+				codeLines.Add(string.Format("	case {0}.{1}:", enumTypeName, key));
+				if (lookup[key].Length == 1)
+				{
+					codeLines.Add(string.Format("		return \"{0}\";", lookup[key][0]));
+				}
+				else
+				{
+					codeLines.Add(string.Format("		switch({0})", string.Format("{0}StringRepresentation", key)));
+					codeLines.Add("		{");
+					for (int i = 0; i < lookup[key].Length; i++)
+					{
+						codeLines.Add(string.Format("			case {0}Items.Option{1}:", key, i.ToString()));
+						codeLines.Add(string.Format("				return \"{0}\";", lookup[key][i]));
+					}
+					codeLines.Add("			default:");
+					codeLines.Add("				throw new NotImplementedException(\"The enumerated type was not recognized as a supported type.\");");
+					codeLines.Add("		}");
+				}
 			}
 			codeLines.Add("	default:");
 			codeLines.Add("		throw new NotImplementedException(\"The enumerated type was not recognized as a supported type.\");");
@@ -261,18 +357,20 @@ namespace XMLToDataClass.Data.Types
 				codeLines.Add(string.Format("	throw new InvalidDataException(\"The string value for '{0}' is an empty string.\");", mInfo.Name));
 			}
 
-			string boolString = "true";
-			if (!mIgnoreCase)
-				boolString = "false";
-
 			string enumTypeName = GetEnumTypeName(mInfo.PropertyName);
-			foreach (string key in TypeLookup.Keys)
+			Dictionary<string, string[]> lookup = GetEnumNamesWithValues();
+			foreach (string key in lookup.Keys)
 			{
-				codeLines.Add(string.Format("if (string.Compare(value, \"{0}\", {1}) == 0)", key, boolString));
-				codeLines.Add("{");
-				codeLines.Add(string.Format("	{0} = {1}.{2};", mInfo.PropertyName, enumTypeName, TypeLookup[key]));
-				codeLines.Add("	return;");
-				codeLines.Add("}");
+				for (int i = 0; i < lookup[key].Length; i++)
+				{
+					codeLines.Add(string.Format("if (string.Compare(value, \"{0}\", false) == 0)", lookup[key][i]));
+					codeLines.Add("{");
+					codeLines.Add(string.Format("	{0} = {1}.{2};", mInfo.PropertyName, enumTypeName, key));
+					if (lookup[key].Length > 1)
+						codeLines.Add(string.Format("	{0}StringRepresentation = {0}Items.Option{1};", key, i.ToString()));
+					codeLines.Add("	return;");
+					codeLines.Add("}");
+				}
 			}
 			codeLines.Add(string.Format("throw new InvalidDataException(string.Format(\"The enum value specified ({{0}}) is not a recognized enumerated type for {0}.\", value));", mInfo.Name));
 			return codeLines.ToArray();
@@ -338,7 +436,7 @@ namespace XMLToDataClass.Data.Types
 		/// <returns>True if the string can be parsed to this value type, false otherwise.</returns>
 		public override bool TryParse(string value)
 		{
-			return TryParse(value, TypeLookup, mIgnoreCase);
+			return TryParse(value, TypeLookup);
 		}
 
 		/// <summary>
@@ -346,9 +444,8 @@ namespace XMLToDataClass.Data.Types
 		/// </summary>
 		/// <param name="value">String value to be parsed.</param>
 		/// <param name="typeLookup">Lookup table to determine if 'value' matches a enumerated item.</param>
-		/// <param name="ignoreCase">True if the case should be ignored, false otherwise.</param>
 		/// <returns>True if the string can be parsed to this value type, false otherwise.</returns>
-		private static bool TryParse(string value, Dictionary<string, string> typeLookup, bool ignoreCase)
+		private static bool TryParse(string value, Dictionary<string, string> typeLookup)
 		{
 			if (value == null)
 				return false;
@@ -357,7 +454,7 @@ namespace XMLToDataClass.Data.Types
 
 			foreach(string key in typeLookup.Keys)
 			{
-				if (string.Compare(value, key, ignoreCase) == 0)
+				if (string.Compare(value, key, false) == 0)
 					return true;
 			}
 			return false;

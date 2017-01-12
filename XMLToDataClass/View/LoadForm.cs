@@ -25,13 +25,6 @@ namespace XMLToDataClass.View
 				return hierarchyCheckBox.Checked;
 			}
 		}
-		public bool IgnoreCase
-		{
-			get
-			{
-				return caseCheckBox.Checked;
-			}
-		}
 
 		public string FilePath
 		{
@@ -50,7 +43,6 @@ namespace XMLToDataClass.View
 			InitializeComponent();
 
 			hierarchyCheckBox.Checked = true;
-			caseCheckBox.Checked = true;
 		}
 
 		private void browseButton_Click(object sender, EventArgs e)

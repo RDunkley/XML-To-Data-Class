@@ -60,7 +60,7 @@ namespace XMLToDataClass.Data
 
 		#region Methods
 
-		public ElementInfo(XmlNode[] nodes, bool ignoreCase)
+		public ElementInfo(XmlNode[] nodes)
 		{
 			if (nodes == null)
 				throw new ArgumentNullException("nodes");
@@ -79,23 +79,21 @@ namespace XMLToDataClass.Data
 				}
 				else
 				{
-					if (string.Compare(elementName, node.Name, ignoreCase) != 0)
+					if (string.Compare(elementName, node.Name, false) != 0)
 						throw new ArgumentException("One or more of the nodes provided do not contain the same element name");
 				}
 			}
 
 			Name = elementName;
-			if (ignoreCase)
-				Name = elementName.ToLower();
 			ClassName = StringUtility.GetUpperCamelCase(elementName);
 
 			// Parse all the attribute names in the nodes.
-			string[] attribNames = AttributeInfo.GetAllAttributeNames(nodes, ignoreCase);
+			string[] attribNames = AttributeInfo.GetAllAttributeNames(nodes);
 
 			// Determine the attributes.
 			Attributes = new AttributeInfo[attribNames.Length];
 			for (int i = 0; i < attribNames.Length; i++)
-				Attributes[i] = new AttributeInfo(attribNames[i], nodes, ignoreCase);
+				Attributes[i] = new AttributeInfo(attribNames[i], nodes);
 
 			// Verify that none of the attribute property names match the element class name.
 			foreach(AttributeInfo attrib in Attributes)
@@ -124,7 +122,7 @@ namespace XMLToDataClass.Data
 			}
 
 			// CDATA
-			CDATA = new CDataInfo(nodes, ignoreCase);
+			CDATA = new CDataInfo(nodes);
 
 			// Verify that none of the attribute names match the CDATA property.
 			if (CDATA.Include)
@@ -138,7 +136,7 @@ namespace XMLToDataClass.Data
 			}
 
 			// Text
-			Text = new TextInfo(nodes, ignoreCase);
+			Text = new TextInfo(nodes);
 
 			if(Text.Include)
 			{
@@ -162,7 +160,7 @@ namespace XMLToDataClass.Data
 			return string.Format("{0}s", className);
 		}
 
-		public ClassInfo GenerateDataClass(bool preserveHierarchy, bool ignoreCase)
+		public ClassInfo GenerateDataClass(bool preserveHierarchy)
 		{
 			ClassInfo info = new ClassInfo("public partial", ClassName, null, string.Format("In memory representation of the XML element \"{0}\".", Name));
 			info.AddUsing("System.Xml");
@@ -220,7 +218,7 @@ namespace XMLToDataClass.Data
 
 			// Create the constructors.
 			info.Constructors.Add(GenerateDataClassConstructor());
-			info.Constructors.Add(GenerateDataClassXmlNodeConstructor(ignoreCase));
+			info.Constructors.Add(GenerateDataClassXmlNodeConstructor());
 
 			// Add additional methods.
 			info.Methods.AddRange(GenerateMethods(dataList.ToArray()));
@@ -231,7 +229,7 @@ namespace XMLToDataClass.Data
 				// Add additional sub-classes.
 				foreach (ElementInfo child in Children)
 				{
-					ClassInfo childClass = child.GenerateDataClass(preserveHierarchy, ignoreCase);
+					ClassInfo childClass = child.GenerateDataClass(preserveHierarchy);
 					info.AddChildClass(childClass);
 				}
 			}
@@ -596,7 +594,7 @@ namespace XMLToDataClass.Data
 			}
 		}
 
-		private ConstructorInfo GenerateDataClassXmlNodeConstructor(bool ignoreCase)
+		private ConstructorInfo GenerateDataClassXmlNodeConstructor()
 		{
 			string summary = string.Format("Instantiates a new <see cref=\"{0}\"/> object from an <see=cref=\"XmlNode\"/> object.", ClassName);
 			ConstructorInfo cInfo = new ConstructorInfo("public", ClassName, summary);
@@ -607,7 +605,7 @@ namespace XMLToDataClass.Data
 
 			cInfo.CodeLines.Add("if (node.NodeType != XmlNodeType.Element)");
 			cInfo.CodeLines.Add("	throw new ArgumentException(\"node is not of type 'Element'.\");");
-			cInfo.CodeLines.Add(string.Format("if(string.Compare(node.Name, \"{0}\", {1}) != 0)", Name, ignoreCase.ToString().ToLower()));
+			cInfo.CodeLines.Add(string.Format("if(string.Compare(node.Name, \"{0}\", false) != 0)", Name));
 			cInfo.CodeLines.Add(string.Format("	throw new ArgumentException(\"node does not correspond to a {0} node.\");", Name));
 
 			string textName = StringUtility.GetLowerCamelCase(Text.Info.PropertyName, true);
@@ -733,11 +731,11 @@ namespace XMLToDataClass.Data
 			parent.AppendChild(element);
 		}
 
-		public void Load(XmlNode parent, bool ignoreCase)
+		public void Load(XmlNode parent)
 		{
 			foreach(XmlNode node in parent.ChildNodes)
 			{
-				if(node.NodeType == XmlNodeType.Element && string.Compare(node.Name, Name, ignoreCase) == 0)
+				if(node.NodeType == XmlNodeType.Element && string.Compare(node.Name, Name, false) == 0)
 				{
 					XmlAttribute attrib = node.Attributes["ClassName"];
 					if(attrib != null)
@@ -746,14 +744,14 @@ namespace XMLToDataClass.Data
 					if (Attributes != null && Attributes.Length > 0)
 					{
 						foreach (AttributeInfo info in Attributes)
-							info.Load(node, ignoreCase);
+							info.Load(node);
 					}
 
 					if (CDATA != null)
-						CDATA.Load(node, ignoreCase);
+						CDATA.Load(node);
 
 					if (Text != null)
-						Text.Load(node, ignoreCase);
+						Text.Load(node);
 				}
 			}
 		}

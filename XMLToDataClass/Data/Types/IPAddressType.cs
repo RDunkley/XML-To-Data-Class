@@ -22,7 +22,7 @@ namespace XMLToDataClass.Data.Types
 	{
 		#region Methods
 
-		public IPAddressType(DataInfo info, string[] possibleValues, bool ignoreCase) : base(info, possibleValues, ignoreCase)
+		public IPAddressType(DataInfo info, string[] possibleValues) : base(info, possibleValues)
 		{
 			Type = DataType.IPAddress;
 			IsNullable = false;

@@ -32,7 +32,7 @@ namespace XMLToDataClass.Data
 
 		#region Methods
 
-		public TextInfo(XmlNode[] nodes, bool ignoreCase)
+		public TextInfo(XmlNode[] nodes)
 		{
 			if (nodes == null)
 				throw new ArgumentNullException("nodes");
@@ -42,7 +42,7 @@ namespace XMLToDataClass.Data
 			string[] possibleValues = FindAllPossibleValues(nodes);
 			bool isOptional = IsOptional(nodes);
 			bool canBeEmpty = CanBeEmpty(nodes);
-			Info = new DataInfo("Text", possibleValues, isOptional, canBeEmpty, ignoreCase);
+			Info = new DataInfo("Text", possibleValues, isOptional, canBeEmpty);
 			if (possibleValues.Length == 0)
 				Include = false;
 			else
@@ -145,9 +145,9 @@ namespace XMLToDataClass.Data
 			attrib.Value = Include.ToString();
 		}
 
-		public void Load(XmlNode parent, bool ignoreCase)
+		public void Load(XmlNode parent)
 		{
-			XmlElement element = Info.Load(parent, ignoreCase);
+			XmlElement element = Info.Load(parent);
 
 			if(element != null)
 			{

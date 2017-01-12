@@ -40,7 +40,7 @@ namespace XMLToDataClass.Data.Types
 			DefaultAllowRevision = true;
 		}
 
-		public VersionType(DataInfo info, string[] possibleValues, bool ignoreCase) : base(info, possibleValues, ignoreCase)
+		public VersionType(DataInfo info, string[] possibleValues) : base(info, possibleValues)
 		{
 			AllowBuild = DefaultAllowBuild;
 			AllowRevision = DefaultAllowRevision;

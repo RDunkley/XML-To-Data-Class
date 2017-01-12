@@ -65,11 +65,10 @@ namespace XMLToDataClass.Data.Types
 		/// </summary>
 		/// <param name="info"><see cref="DataInfo"/> object associated with this type.</param>
 		/// <param name="possibleValues">Possible values the data type will have to parse. Can be empty.</param>
-		/// <param name="ignoreCase">True if the case of values should be ignored, false if they shouldn't.</param>
 		/// <remarks>This is an abstract class, the inheritor must set the Type property of the base class.</remarks>
 		/// <exception cref="ArgumentNullException"><paramref name="possibleValues"/> or <paramref name="info"/> is a null reference.</exception>
 		/// <exception cref="ArgumentException">The type <i>T</i> specified is not a valid enumerated type.</exception>
-		public FixedEnumType(DataInfo info, string[] possibleValues, bool ignoreCase) : base(info, possibleValues, ignoreCase)
+		public FixedEnumType(DataInfo info, string[] possibleValues) : base(info, possibleValues)
 		{
 			if (!typeof(T).IsEnum)
 				throw new ArgumentException("T must be an enumerated type");

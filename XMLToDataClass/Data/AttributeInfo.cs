@@ -30,7 +30,7 @@ namespace XMLToDataClass.Data
 
 		#region Methods
 
-		public AttributeInfo(string attributeName, XmlNode[] nodes, bool ignoreCase)
+		public AttributeInfo(string attributeName, XmlNode[] nodes)
 		{
 			if (attributeName == null)
 				throw new ArgumentNullException("attributeName");
@@ -41,10 +41,10 @@ namespace XMLToDataClass.Data
 			if (nodes.Length == 0)
 				throw new ArgumentException("nodes is an empty array");
 
-			string[] possibleValues = FindAllPossibleValues(attributeName, nodes, ignoreCase);
-			bool isOptional = IsOptional(attributeName, nodes, ignoreCase);
-			bool canBeEmpty = CanBeEmpty(attributeName, nodes, ignoreCase);
-			Info = new DataInfo(attributeName, possibleValues, isOptional, canBeEmpty, ignoreCase);
+			string[] possibleValues = FindAllPossibleValues(attributeName, nodes);
+			bool isOptional = IsOptional(attributeName, nodes);
+			bool canBeEmpty = CanBeEmpty(attributeName, nodes);
+			Info = new DataInfo(attributeName, possibleValues, isOptional, canBeEmpty);
 		}
 
 		/// <summary>
@@ -54,14 +54,14 @@ namespace XMLToDataClass.Data
 		/// <param name="nodes"></param>
 		/// <param name="ignoreCase"></param>
 		/// <returns></returns>
-		private string[] FindAllPossibleValues(string attribName, XmlNode[] nodes, bool ignoreCase)
+		private string[] FindAllPossibleValues(string attribName, XmlNode[] nodes)
 		{
 			List<string> valueList = new List<string>();
 			foreach (XmlNode node in nodes)
 			{
 				foreach (XmlAttribute attrib in node.Attributes)
 				{
-					if (string.Compare(attribName, attrib.Name, ignoreCase) == 0 && attrib.Value.Length > 0)
+					if (string.Compare(attribName, attrib.Name, false) == 0 && attrib.Value.Length > 0)
 						valueList.Add(attrib.Value);
 				}
 			}
@@ -75,13 +75,13 @@ namespace XMLToDataClass.Data
 		/// <param name="nodes">Array of <see cref="XmlNode"/>s to check to determine if attribute is optional.</param>
 		/// <returns>True if the attribute can be empty, false otherwise.</returns>
 		/// <remarks>The attribute can be empty if one of the nodes contains an empty string. If all of the nodes contain a non-empty string then it can not be empty..</remarks>
-		private bool CanBeEmpty(string attribName, XmlNode[] nodes, bool ignoreCase)
+		private bool CanBeEmpty(string attribName, XmlNode[] nodes)
 		{
 			foreach (XmlNode node in nodes)
 			{
 				foreach (XmlAttribute attrib in node.Attributes)
 				{
-					if (string.Compare(attribName, attrib.Name, ignoreCase) == 0)
+					if (string.Compare(attribName, attrib.Name, false) == 0)
 					{
 						if (attrib.Value.Length == 0)
 							return true;
@@ -98,14 +98,14 @@ namespace XMLToDataClass.Data
 		/// <param name="nodes">Array of <see cref="XmlNode"/>s to check to determine if attribute is optional.</param>
 		/// <returns>True if the attribute is optional, false otherwise.</returns>
 		/// <remarks>The attribute is not optional if all the nodes contain the attribute, if one node does not contain the attribute then it is considered optional.</remarks>
-		private bool IsOptional(string attribName, XmlNode[] nodes, bool ignoreCase)
+		private bool IsOptional(string attribName, XmlNode[] nodes)
 		{
 			foreach (XmlNode node in nodes)
 			{
 				bool found = false;
 				foreach (XmlAttribute attrib in node.Attributes)
 				{
-					if (string.Compare(attribName, attrib.Name, ignoreCase) == 0)
+					if (string.Compare(attribName, attrib.Name, false) == 0)
 						found = true;
 				}
 
@@ -120,7 +120,7 @@ namespace XMLToDataClass.Data
 		/// </summary>
 		/// <param name="nodes">Array of <see cref="XmlNode"/>s to be parsed.</param>
 		/// <returns>Array of all possible attributes found in the nodes.  The array is sorted by alphabetical order.</returns>
-		public static string[] GetAllAttributeNames(XmlNode[] nodes, bool ignoreCase)
+		public static string[] GetAllAttributeNames(XmlNode[] nodes)
 		{
 			List<string> names = new List<string>();
 			foreach (XmlNode node in nodes)
@@ -132,23 +132,8 @@ namespace XMLToDataClass.Data
 				}
 			}
 
-			if (!ignoreCase)
-			{
-				names.Sort();
-				return names.ToArray();
-			}
-
-			// Remove any duplicates and return lower case values(duplicates because of case insensitivity).
-			List<string> lowerCaseList = new List<string>();
-			foreach (string name in names)
-			{
-				string lowerName = name.ToLower();
-				if (!lowerCaseList.Contains(lowerName))
-					lowerCaseList.Add(lowerName);
-			}
-
-			lowerCaseList.Sort();
-			return lowerCaseList.ToArray();
+			names.Sort();
+			return names.ToArray();
 		}
 
 		public void Save(XmlDocument doc, XmlNode parent)
@@ -156,9 +141,9 @@ namespace XMLToDataClass.Data
 			Info.Save(doc, parent);
 		}
 
-		public void Load(XmlNode parent, bool ignoreCase)
+		public void Load(XmlNode parent)
 		{
-			Info.Load(parent, ignoreCase);
+			Info.Load(parent);
 		}
 
 		#endregion Methods

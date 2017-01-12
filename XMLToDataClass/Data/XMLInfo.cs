@@ -33,8 +33,6 @@ namespace XMLToDataClass.Data
 
 		public bool HierarchyMaintained { get; private set; }
 
-		public bool CaseSensitive { get; private set; }
-
 		public string FilePath { get; private set; }
 
 		public string MainClassName { get; set; }
@@ -51,9 +49,10 @@ namespace XMLToDataClass.Data
 		///   Instantiates a new <see cref="XMLInfo"/> object using the specified <see cref="XmlDocument"/>.
 		/// </summary>
 		/// <param name="doc"><see cref="XmlDocument"/> object to be parsed.</param>
+		/// <param name="maintainHierarchy">True if the heirarchy of the XMl shoudl be maintained, false otherwise.</param>
 		/// <exception cref="ArgumentNullException"><paramref name="doc"/> is a null reference.</exception>
 		/// <exception cref="InvalidDataException">The XML file could not be loaded.</exception>
-		public XMLInfo(string filePath, bool maintainHierarchy, bool ignoreCase)
+		public XMLInfo(string filePath, bool maintainHierarchy)
 		{
 			if (filePath == null)
 				throw new ArgumentNullException("filePath");
@@ -105,24 +104,23 @@ namespace XMLToDataClass.Data
 			GetHeaderInformation(doc);
 			Dictionary<string, XmlNode[]> xmlNodesByName;
 			if (maintainHierarchy)
-				xmlNodesByName = BuildUniqueHierarchicalElementTable(doc, ignoreCase);
+				xmlNodesByName = BuildUniqueHierarchicalElementTable(doc);
 			else
-				xmlNodesByName = BuildUniqueElementTable(doc, ignoreCase);
+				xmlNodesByName = BuildUniqueElementTable(doc);
 
 			// Generate the element objects.
 			Dictionary<string, ElementInfo> xmlElements = new Dictionary<string, ElementInfo>();
 			foreach(string key in xmlNodesByName.Keys)
-				xmlElements.Add(key, new ElementInfo(xmlNodesByName[key], ignoreCase));
-			AddChildElements(xmlNodesByName, xmlElements, ignoreCase, maintainHierarchy);
-			RootNode = GetRootNode(doc, xmlElements, ignoreCase);
+				xmlElements.Add(key, new ElementInfo(xmlNodesByName[key]));
+			AddChildElements(xmlNodesByName, xmlElements, maintainHierarchy);
+			RootNode = GetRootNode(doc, xmlElements);
 			Elements = xmlElements;
 			MainClassName = StringUtility.GetUpperCamelCase(Path.GetFileNameWithoutExtension(filePath));
 			FilePath = filePath;
 			HierarchyMaintained = maintainHierarchy;
-			CaseSensitive = !ignoreCase;
 		}
 
-		private ElementInfo GetRootNode(XmlDocument doc, Dictionary<string, ElementInfo> xmlElements, bool ignoreCase)
+		private ElementInfo GetRootNode(XmlDocument doc, Dictionary<string, ElementInfo> xmlElements)
 		{
 			foreach(XmlNode child in doc.ChildNodes)
 			{
@@ -130,7 +128,7 @@ namespace XMLToDataClass.Data
 				{
 					foreach(ElementInfo element in xmlElements.Values)
 					{
-						if (string.Compare(child.Name, element.Name, ignoreCase) == 0)
+						if (string.Compare(child.Name, element.Name, false) == 0)
 							return element;
 					}
 				}
@@ -154,7 +152,7 @@ namespace XMLToDataClass.Data
 		/// </summary>
 		/// <param name="nodesByName">Lookup table of each <see cref="XmlNode"/> by it's name.</param>
 		/// <param name="elementsByName">Lookup table of each <see cref="ElementInfo"/> by it's <see cref="XmlNode"/> name.</param>
-		private void AddChildElements(Dictionary<string, XmlNode[]> nodesByName, Dictionary<string, ElementInfo> elementsByName, bool ignoreCase, bool maintainHierarchy)
+		private void AddChildElements(Dictionary<string, XmlNode[]> nodesByName, Dictionary<string, ElementInfo> elementsByName, bool maintainHierarchy)
 		{
 			foreach (string name in nodesByName.Keys)
 			{
@@ -165,8 +163,6 @@ namespace XMLToDataClass.Data
 					foreach (XmlNode child in node.ChildNodes)
 					{
 						string childName = child.Name;
-						if (ignoreCase)
-							childName = child.Name.ToLower();
 						if (child.NodeType == XmlNodeType.Element && !childNames.Contains(childName))
 							childNames.Add(childName);
 					}
@@ -196,15 +192,13 @@ namespace XMLToDataClass.Data
 		/// <param name="node"><see cref="XmlNode"/> to pull the names from.</param>
 		/// <param name="lookup">Lookup table to add the information to.</param>
 		/// <remarks>This method is called recursively to cover all decendant nodes.</remarks>
-		private void AddToNodeLookupByName(XmlNode node, Dictionary<string, List<XmlNode>> lookup, bool ignoreCase)
+		private void AddToNodeLookupByName(XmlNode node, Dictionary<string, List<XmlNode>> lookup)
 		{
 			foreach (XmlNode child in node.ChildNodes)
 			{
 				if (child.NodeType == XmlNodeType.Element)
 				{
 					string childName = child.Name;
-					if (ignoreCase)
-						childName = child.Name.ToLower();
 
 					// Add the child to the lookup table.
 					if (!lookup.ContainsKey(childName))
@@ -212,20 +206,18 @@ namespace XMLToDataClass.Data
 					lookup[childName].Add(child);
 
 					// Add any children of the child to the node as well.
-					AddToNodeLookupByName(child, lookup, ignoreCase);
+					AddToNodeLookupByName(child, lookup);
 				}
 			}
 		}
 
-		private void AddtoNodeLookupByHeirarchicalName(string heirarchicalName, XmlNode node, Dictionary<string, List<XmlNode>> lookup, bool ignoreCase)
+		private void AddtoNodeLookupByHeirarchicalName(string heirarchicalName, XmlNode node, Dictionary<string, List<XmlNode>> lookup)
 		{
 			foreach(XmlNode child in node.ChildNodes)
 			{
 				if(child.NodeType == XmlNodeType.Element)
 				{
 					string childName = child.Name;
-					if (ignoreCase)
-						childName = child.Name.ToLower();
 
 					// Add the child to the lookup table.
 					string name;
@@ -238,7 +230,7 @@ namespace XMLToDataClass.Data
 					lookup[name].Add(child);
 
 					// Add any children of the child to the node as well.
-					AddtoNodeLookupByHeirarchicalName(name, child, lookup, ignoreCase);
+					AddtoNodeLookupByHeirarchicalName(name, child, lookup);
 				}
 			}
 		}
@@ -248,10 +240,10 @@ namespace XMLToDataClass.Data
 		/// </summary>
 		/// <param name="doc"><see cref="XmlDocument"/> to be parsed.</param>
 		/// <returns>Lookup table used to find all the <see cref="XmlNode"/>s with a specified name.</returns>
-		private Dictionary<string, XmlNode[]> BuildUniqueElementTable(XmlDocument doc, bool ignoreCase)
+		private Dictionary<string, XmlNode[]> BuildUniqueElementTable(XmlDocument doc)
 		{
 			Dictionary<string, List<XmlNode>> lookup = new Dictionary<string, List<XmlNode>>();
-			AddToNodeLookupByName(doc, lookup, ignoreCase);
+			AddToNodeLookupByName(doc, lookup);
 
 			// Sort the names.
 			List<string> sortList = new List<string>(lookup.Count);
@@ -264,10 +256,10 @@ namespace XMLToDataClass.Data
 			return returnLookup;
 		}
 
-		private Dictionary<string, XmlNode[]> BuildUniqueHierarchicalElementTable(XmlDocument doc, bool ignoreCase)
+		private Dictionary<string, XmlNode[]> BuildUniqueHierarchicalElementTable(XmlDocument doc)
 		{
 			Dictionary<string, List<XmlNode>> lookup = new Dictionary<string, List<XmlNode>>();
-			AddtoNodeLookupByHeirarchicalName(null, doc, lookup, ignoreCase);
+			AddtoNodeLookupByHeirarchicalName(null, doc, lookup);
 
 			// Sort the names.
 			List<string> sortList = new List<string>(lookup.Count);
@@ -299,13 +291,13 @@ namespace XMLToDataClass.Data
 
 			if (HierarchyMaintained)
 			{
-				main.AddChildClass(RootNode.GenerateDataClass(HierarchyMaintained, !CaseSensitive));
+				main.AddChildClass(RootNode.GenerateDataClass(HierarchyMaintained));
 			}
 			else
 			{
 				ElementInfo[] nodes = GetAllNodes();
 				foreach (ElementInfo info in nodes)
-					fileList.Add(new CSCodeGen.FileInfo(nameSpace, info.GenerateDataClass(HierarchyMaintained, !CaseSensitive)));
+					fileList.Add(new CSCodeGen.FileInfo(nameSpace, info.GenerateDataClass(HierarchyMaintained)));
 			}
 
 			return fileList.ToArray();
@@ -384,7 +376,7 @@ namespace XMLToDataClass.Data
 			method.CodeLines.Add("XmlElement root = doc.DocumentElement;");
 			method.CodeLines.Add("if(root.NodeType != XmlNodeType.Element)");
 			method.CodeLines.Add("	throw new InvalidDataException(\"The root node is not an element node.\");");
-			method.CodeLines.Add(string.Format("if(string.Compare(root.Name, \"{0}\", {1}) != 0)", RootNode.Name, (!CaseSensitive).ToString().ToLower()));
+			method.CodeLines.Add(string.Format("if(string.Compare(root.Name, \"{0}\", false) != 0)", RootNode.Name));
 			method.CodeLines.Add(string.Format("	throw new InvalidDataException(\"The root node is not a '{0}' named node.\");", RootNode.Name));
 			method.CodeLines.Add(string.Format("Root = new {0}(root);", RootNode.ClassName));
 			return method;
@@ -504,7 +496,7 @@ namespace XMLToDataClass.Data
 
 					// Load all the element configurations.
 					foreach (ElementInfo element in Elements.Values)
-						element.Load(node, CaseSensitive);
+						element.Load(node);
 					break;
 				}
 			}
