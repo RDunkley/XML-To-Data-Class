@@ -49,7 +49,7 @@ namespace XMLToDataClass.Data
 		///   Instantiates a new <see cref="XMLInfo"/> object using the specified <see cref="XmlDocument"/>.
 		/// </summary>
 		/// <param name="doc"><see cref="XmlDocument"/> object to be parsed.</param>
-		/// <param name="maintainHierarchy">True if the heirarchy of the XMl shoudl be maintained, false otherwise.</param>
+		/// <param name="maintainHierarchy">True if the hierarchy of the XMl should be maintained, false otherwise.</param>
 		/// <exception cref="ArgumentNullException"><paramref name="doc"/> is a null reference.</exception>
 		/// <exception cref="InvalidDataException">The XML file could not be loaded.</exception>
 		public XMLInfo(string filePath, bool maintainHierarchy)
@@ -191,7 +191,7 @@ namespace XMLToDataClass.Data
 		/// </summary>
 		/// <param name="node"><see cref="XmlNode"/> to pull the names from.</param>
 		/// <param name="lookup">Lookup table to add the information to.</param>
-		/// <remarks>This method is called recursively to cover all decendant nodes.</remarks>
+		/// <remarks>This method is called recursively to cover all descendant nodes.</remarks>
 		private void AddToNodeLookupByName(XmlNode node, Dictionary<string, List<XmlNode>> lookup)
 		{
 			foreach (XmlNode child in node.ChildNodes)

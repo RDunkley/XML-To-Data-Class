@@ -134,7 +134,7 @@ namespace XMLToDataClass.Data.Types
 		}
 
 		/// <summary>
-		///   String of the C# representive data type.
+		///   String of the C# representative data type.
 		/// </summary>
 		/// <returns>String containing the C# data type.</returns>
 		public override string GetDataTypeString()
@@ -251,7 +251,7 @@ namespace XMLToDataClass.Data.Types
 		/// <summary>
 		///   Generates additional enumerations used by the import or export methods.
 		/// </summary>
-		/// <returns><see cref="EnumInfo"/> array represnenting additional fields needed by the import/export methods. Can be empty.</returns>
+		/// <returns><see cref="EnumInfo"/> array representing additional fields needed by the import/export methods. Can be empty.</returns>
 		/// <exception cref="InvalidOperationException">An attempt was made to generate the enums, but either none of the parsing mechanisms are selected or the maximum allowed value is less than the minimum allowed.</exception>
 		public override EnumInfo[] GenerateAdditionalEnums()
 		{
@@ -632,7 +632,7 @@ namespace XMLToDataClass.Data.Types
 			codeLines.Add(string.Empty);
 			if (MaximumValue.CompareTo(GetMaxValue()) < 0)
 			{
-				codeLines.Add(string.Format("// Verify that the {0} value has not excedded the maximum size.", dataTypeString));
+				codeLines.Add(string.Format("// Verify that the {0} value has not exceeded the maximum size.", dataTypeString));
 				codeLines.Add(string.Format("if(returnValue > {0})", MaximumValue.ToString()));
 				codeLines.Add(string.Format("	throw new InvalidDataException(string.Format(\"The {0} value specified ({{0}}) was larger than the maximum value allowed for this type ({1}).\", value));", dataTypeString, MaximumValue.ToString()));
 			}
@@ -989,7 +989,7 @@ namespace XMLToDataClass.Data.Types
 
 			if (maxValue.CompareTo(GetMaxValue()) < 0)
 			{
-				// Verify that the value has not excedded the specified maximum size.
+				// Verify that the value has not exceeded the specified maximum size.
 				if (returnValue.CompareTo(maxValue) > 0)
 					return false;
 			}
@@ -1005,7 +1005,7 @@ namespace XMLToDataClass.Data.Types
 		/// <summary>
 		///   Attempts to parse the bit string.
 		/// </summary>
-		/// <param name="bitString">String of '1's and '0's making up the bitstream.</param>
+		/// <param name="bitString">String of '1's and '0's making up the bit stream.</param>
 		/// <param name="value">Parsed integral type or zero if method returns false.</param>
 		/// <returns>True if the binary string was successfully parsed, false otherwise.</returns>
 		private static bool TryParseBitString(string bitString, out T value)
@@ -1159,7 +1159,7 @@ namespace XMLToDataClass.Data.Types
 
 			if (maxValue.CompareTo(GetMaxValue()) < 0)
 			{
-				// Verify that the value has not excedded the specified maximum size.
+				// Verify that the value has not exceeded the specified maximum size.
 				if (returnValue.CompareTo(maxValue) > 0)
 					throw new ArgumentException(string.Format("The integral value specified ({0}) is larger than the maximum value allowed ({1}).", value, GetMaxValue().ToString()));
 			}
@@ -1175,7 +1175,7 @@ namespace XMLToDataClass.Data.Types
 		/// <summary>
 		///   Parses the bit string to the integral type.
 		/// </summary>
-		/// <param name="bitString">String of '1's and '0's making up the bitstream.</param>
+		/// <param name="bitString">String of '1's and '0's making up the bit stream.</param>
 		/// <returns>Parsed integral type.</returns>
 		/// <exception cref="ArgumentException"><paramref name="bitString"/> length is longer than the number of bits allowed in the integral type or one of the characters is not a '1' or '0'.</exception>
 		private static T ParseBitString(string bitString)

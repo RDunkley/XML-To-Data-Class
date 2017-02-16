@@ -138,7 +138,7 @@ namespace XMLToDataClass.Data
 		/// <summary>
 		///   Returns the data type string of the currently selected DataType object.
 		/// </summary>
-		/// <returns>Data type string. May return nullable data type if the selected DataType object is nullable and this object is optional or can be empty.</returns>
+		/// <returns>Data type string. May return null-able data type if the selected DataType object is null-able and this object is optional or can be empty.</returns>
 		public string GetDataTypeString()
 		{
 			if (SelectedDataTypeObject.IsNullable && (IsOptional || CanBeEmpty))

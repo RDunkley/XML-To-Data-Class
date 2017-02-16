@@ -51,7 +51,7 @@ namespace XMLToDataClass.Data.Types
 		}
 
 		/// <summary>
-		///   String of the C# representive data type.
+		///   String of the C# representative data type.
 		/// </summary>
 		/// <returns>String containing the C# data type.</returns>
 		public override string GetDataTypeString()

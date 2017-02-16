@@ -27,7 +27,7 @@ namespace XMLToDataClass.Data.Types
 		string DisplayName { get; }
 
 		/// <summary>
-		///   True if the data type is nullable, false otherwise.
+		///   True if the data type is null-able, false otherwise.
 		/// </summary>
 		bool IsNullable { get; }
 
@@ -51,14 +51,14 @@ namespace XMLToDataClass.Data.Types
 		#region Methods
 
 		/// <summary>
-		///   String of the C# representive data type.
+		///   String of the C# representative data type.
 		/// </summary>
 		string GetDataTypeString();
 
 		/// <summary>
 		///   Generates additional enumerations used by the import or export methods.
 		/// </summary>
-		/// <returns><see cref="EnumInfo"/> array represnenting additional fields needed by the import/export methods. Can be empty.</returns>
+		/// <returns><see cref="EnumInfo"/> array representing additional fields needed by the import/export methods. Can be empty.</returns>
 		/// <exception cref="InvalidOperationException">An attempt was made to generate the enumerations, but the current objects settings are not in a state in which this is possible.</exception>
 		EnumInfo[] GenerateAdditionalEnums();
 

@@ -76,7 +76,7 @@ namespace XMLToDataClass.Data.Types
 		}
 
 		/// <summary>
-		///   String of the C# representive data type.
+		///   String of the C# representative data type.
 		/// </summary>
 		/// <returns>String containing the C# data type.</returns>
 		public override string GetDataTypeString()
@@ -87,7 +87,7 @@ namespace XMLToDataClass.Data.Types
 		/// <summary>
 		///   Generates additional enumerations used by the import or export methods.
 		/// </summary>
-		/// <returns><see cref="EnumInfo"/> array represnenting additional fields needed by the import/export methods. Can be empty.</returns>
+		/// <returns><see cref="EnumInfo"/> array representing additional fields needed by the import/export methods. Can be empty.</returns>
 		public override EnumInfo[] GenerateAdditionalEnums()
 		{
 			return new EnumInfo[0];

@@ -1,7 +1,7 @@
 ﻿//********************************************************************************************************************************
 // Filename:    FixedEnumSettings.cs
 // Owner:       Richard Dunkley
-// Description: Partial class containing the fixed (C# builting or library referenced) Enumeration Type Settings GUI.
+// Description: Partial class containing the fixed (C# built or library referenced) Enumeration Type Settings GUI.
 //********************************************************************************************************************************
 // Copyright © Richard Dunkley 2016
 //

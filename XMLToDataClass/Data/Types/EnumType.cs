@@ -67,7 +67,7 @@ namespace XMLToDataClass.Data.Types
 		}
 
 		/// <summary>
-		///   String of the C# representive data type.
+		///   String of the C# representative data type.
 		/// </summary>
 		/// <returns>String containing the C# data type.</returns>
 		public override string GetDataTypeString()
@@ -90,7 +90,7 @@ namespace XMLToDataClass.Data.Types
 		/// <summary>
 		///   Generates additional enumerations used by the import or export methods.
 		/// </summary>
-		/// <returns><see cref="EnumInfo"/> array represnenting additional fields needed by the import/export methods. Can be empty.</returns>
+		/// <returns><see cref="EnumInfo"/> array representing additional fields needed by the import/export methods. Can be empty.</returns>
 		/// <exception cref="InvalidOperationException">An attempt was made to generate a boolean parsing method, but none of the valid boolean string pairs were allowed. At least one boolean string pair (Ex: 'true/false', 'yes/no', or '0/1') must be allowed.</exception>
 		public override EnumInfo[] GenerateAdditionalEnums()
 		{

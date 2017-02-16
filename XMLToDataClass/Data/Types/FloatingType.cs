@@ -108,7 +108,7 @@ namespace XMLToDataClass.Data.Types
 		}
 
 		/// <summary>
-		///   String of the C# representive data type.
+		///   String of the C# representative data type.
 		/// </summary>
 		/// <returns>String containing the C# data type.</returns>
 		public override string GetDataTypeString()
@@ -516,7 +516,7 @@ namespace XMLToDataClass.Data.Types
 			codeLines.Add(string.Empty);
 			if (MaximumValue.CompareTo(GetMaxValue()) < 0)
 			{
-				codeLines.Add(string.Format("// Verify that the {0} value has not excedded the maximum size.", dataTypeString));
+				codeLines.Add(string.Format("// Verify that the {0} value has not exceeded the maximum size.", dataTypeString));
 				codeLines.Add(string.Format("if(returnValue > {0})", MaximumValue.ToString()));
 				codeLines.Add(string.Format("	throw new InvalidDataException(string.Format(\"The {0} value specified ({{0}}) was larger than the maximum value allowed for this type ({1}).\", value));", dataTypeString, MaximumValue.ToString()));
 			}
@@ -799,7 +799,7 @@ namespace XMLToDataClass.Data.Types
 
 			if (maxValue.CompareTo(GetMaxValue()) < 0)
 			{
-				// Verify that the value has not excedded the specified maximum size.
+				// Verify that the value has not exceeded the specified maximum size.
 				if (returnValue.CompareTo(maxValue) > 0)
 					return false;
 			}
@@ -929,7 +929,7 @@ namespace XMLToDataClass.Data.Types
 
 			if (maxValue.CompareTo(GetMaxValue()) < 0)
 			{
-				// Verify that the value has not excedded the specified maximum size.
+				// Verify that the value has not exceeded the specified maximum size.
 				if (returnValue.CompareTo(maxValue) > 0)
 					throw new ArgumentException(string.Format("The floating point value specified ({0}) is larger than the maximum value allowed ({1}).", value, GetMaxValue().ToString()));
 			}
