@@ -217,7 +217,9 @@ namespace XMLToDataClass.Data
 			}
 
 			// Create the constructors.
-			info.Constructors.Add(GenerateDataClassConstructor());
+			ConstructorInfo first = GenerateDataClassConstructor();
+			first.OverloadedSummary = string.Format("Instantiates a new <see cref=\"{0}\"/> object.", ClassName);
+			info.Constructors.Add(first);
 			info.Constructors.Add(GenerateDataClassXmlNodeConstructor());
 
 			// Add additional methods.
