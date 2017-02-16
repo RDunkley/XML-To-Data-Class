@@ -635,12 +635,14 @@ namespace XMLToDataClass.Data.Types
 				codeLines.Add(string.Format("// Verify that the {0} value has not exceeded the maximum size.", dataTypeString));
 				codeLines.Add(string.Format("if(returnValue > {0})", MaximumValue.ToString()));
 				codeLines.Add(string.Format("	throw new InvalidDataException(string.Format(\"The {0} value specified ({{0}}) was larger than the maximum value allowed for this type ({1}).\", value));", dataTypeString, MaximumValue.ToString()));
+				codeLines.Add(string.Empty);
 			}
 			if (MinimumValue.CompareTo(GetMinValue()) > 0)
 			{
 				codeLines.Add(string.Format("// Verify that the {0} value is not lower than the minimum size.", dataTypeString));
 				codeLines.Add(string.Format("if(returnValue < {0})", MinimumValue.ToString()));
 				codeLines.Add(string.Format("	throw new InvalidDataException(string.Format(\"The {0} value specified ({{0}}) was less than the minimum value allowed for this type ({1}).\", value));", dataTypeString, MinimumValue.ToString()));
+				codeLines.Add(string.Empty);
 			}
 			codeLines.Add(string.Format("{0} = returnValue;", mInfo.PropertyName));
 			return codeLines.ToArray();
