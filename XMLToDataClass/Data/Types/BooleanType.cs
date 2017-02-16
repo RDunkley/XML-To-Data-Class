@@ -347,7 +347,7 @@ namespace XMLToDataClass.Data.Types
 				throw new InvalidOperationException("An attempt was made to generate a boolean parsing method, but none of the valid boolean string pairs were allowed. At least one boolean string pair (Ex: 'true/false', 'yes/no', or '0/1') must be allowed.");
 
 			List<string> codeLines = new List<string>();
-			codeLines.Add("if (value == null)");
+			codeLines.Add("if(value == null)");
 			if (mInfo.IsOptional)
 			{
 				codeLines.Add("{");
@@ -390,7 +390,7 @@ namespace XMLToDataClass.Data.Types
 
 			if (AllowTrueFalseStrings)
 			{
-				codeLines.Add("if (string.Compare(value, \"true\", true) == 0)");
+				codeLines.Add("if(string.Compare(value, \"true\", true) == 0)");
 				codeLines.Add("{");
 				codeLines.Add(string.Format("	{0} = true;", mInfo.PropertyName));
 				if(count > 1)
@@ -398,7 +398,7 @@ namespace XMLToDataClass.Data.Types
 				codeLines.Add("	return;");
 				codeLines.Add("}");
 
-				codeLines.Add("if (string.Compare(value, \"false\", true) == 0)");
+				codeLines.Add("if(string.Compare(value, \"false\", true) == 0)");
 				codeLines.Add("{");
 				codeLines.Add(string.Format("	{0} = false;", mInfo.PropertyName));
 				if (count > 1)
@@ -409,7 +409,7 @@ namespace XMLToDataClass.Data.Types
 
 			if (AllowZeroOneStrings)
 			{
-				codeLines.Add("if (string.Compare(value, \"1\") == 0)");
+				codeLines.Add("if(string.Compare(value, \"1\") == 0)");
 				codeLines.Add("{");
 				codeLines.Add(string.Format("	{0} = true;", mInfo.PropertyName));
 				if (count > 1)
@@ -417,7 +417,7 @@ namespace XMLToDataClass.Data.Types
 				codeLines.Add("	return;");
 				codeLines.Add("}");
 
-				codeLines.Add("if (string.Compare(value, \"0\") == 0)");
+				codeLines.Add("if(string.Compare(value, \"0\") == 0)");
 				codeLines.Add("{");
 				codeLines.Add(string.Format("	{0} = false;", mInfo.PropertyName));
 				if (count > 1)
@@ -428,7 +428,7 @@ namespace XMLToDataClass.Data.Types
 
 			if(AllowYesNoStrings)
 			{
-				codeLines.Add("if (string.Compare(value, \"yes\", true) == 0)");
+				codeLines.Add("if(string.Compare(value, \"yes\", true) == 0)");
 				codeLines.Add("{");
 				codeLines.Add(string.Format("	{0} = true;", mInfo.PropertyName));
 				if (count > 1)
@@ -436,7 +436,7 @@ namespace XMLToDataClass.Data.Types
 				codeLines.Add("	return;");
 				codeLines.Add("}");
 
-				codeLines.Add("if (string.Compare(value, \"no\", true) == 0)");
+				codeLines.Add("if(string.Compare(value, \"no\", true) == 0)");
 				codeLines.Add("{");
 				codeLines.Add(string.Format("	{0} = false;", mInfo.PropertyName));
 				if (count > 1)

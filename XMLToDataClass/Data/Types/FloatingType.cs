@@ -380,7 +380,7 @@ namespace XMLToDataClass.Data.Types
 				throw new InvalidOperationException("An attempt was made to generate a floating number parsing method, but the maximum value specified is less than or equal to the minimum value specified.");
 
 			List<string> codeLines = new List<string>();
-			codeLines.Add("if (value == null)");
+			codeLines.Add("if(value == null)");
 			if (mInfo.IsOptional)
 			{
 				codeLines.Add("{");
@@ -432,7 +432,7 @@ namespace XMLToDataClass.Data.Types
 			if (AllowCurrency)
 			{
 				codeLines.Add(string.Empty);
-				codeLines.Add("	if (value.Contains(NumberFormatInfo.CurrentInfo.CurrencySymbol))");
+				codeLines.Add("	if(value.Contains(NumberFormatInfo.CurrentInfo.CurrencySymbol))");
 				codeLines.Add("	{");
 				codeLines.Add("		// Number is represented as currency ($123.45).");
 				codeLines.Add(string.Format("		returnValue = {0}.Parse(value, NumberStyles.Currency);", dataTypeString));
@@ -446,9 +446,9 @@ namespace XMLToDataClass.Data.Types
 			{
 				codeLines.Add(string.Empty);
 				if (first)
-					codeLines.Add("	if (value.Length > 1 && value[value.Length-1] == '%')");
+					codeLines.Add("	if(value.Length > 1 && value[value.Length-1] == '%')");
 				else
-					codeLines.Add("	else if (value.Length > 1 && value[value.Length-1] == '%')");
+					codeLines.Add("	else if(value.Length > 1 && value[value.Length-1] == '%')");
 				codeLines.Add("	{");
 				codeLines.Add("		// Number is a percentage.");
 				codeLines.Add(string.Format("		returnValue = {0}.Parse(value.Substring(0, value.Length-1), NumberStyles.Number) / 100;", dataTypeString));
@@ -461,9 +461,9 @@ namespace XMLToDataClass.Data.Types
 			{
 				codeLines.Add(string.Empty);
 				if (first)
-					codeLines.Add("	if (value.Contains(\"(\") && value.Contains(\")\"))");
+					codeLines.Add("	if(value.Contains(\"(\") && value.Contains(\")\"))");
 				else
-					codeLines.Add("	else if (value.Contains(\"(\") && value.Contains(\")\"))");
+					codeLines.Add("	else if(value.Contains(\"(\") && value.Contains(\")\"))");
 				codeLines.Add("	{");
 				codeLines.Add("		// Number is specified negative by parentheses.");
 				codeLines.Add(string.Format("		returnValue = {0}.Parse(value, NumberStyles.Number|NumberStyles.AllowParentheses);", dataTypeString));
@@ -477,9 +477,9 @@ namespace XMLToDataClass.Data.Types
 			{
 				codeLines.Add(string.Empty);
 				if (first)
-					codeLines.Add("	if (value.Contains(\"E\") || value.Contains(\"e\"))");
+					codeLines.Add("	if(value.Contains(\"E\") || value.Contains(\"e\"))");
 				else
-					codeLines.Add("	else if (value.Contains(\"E\") || value.Contains(\"e\"))");
+					codeLines.Add("	else if(value.Contains(\"E\") || value.Contains(\"e\"))");
 				codeLines.Add("	{");
 				codeLines.Add("		// Number is an exponent.");
 				codeLines.Add(string.Format("		returnValue = {0}.Parse(value, NumberStyles.Float);", dataTypeString));
@@ -505,11 +505,11 @@ namespace XMLToDataClass.Data.Types
 				codeLines.Add("	}");
 
 			codeLines.Add("}");
-			codeLines.Add("catch (FormatException e)");
+			codeLines.Add("catch(FormatException e)");
 			codeLines.Add("{");
 			codeLines.Add(string.Format("	throw new InvalidDataException(string.Format(\"The {0} value specified ({{0}}) is not in a valid {0} string format: {{1}}.\", value, e.Message), e);", dataTypeString));
 			codeLines.Add("}");
-			codeLines.Add("catch (OverflowException e)");
+			codeLines.Add("catch(OverflowException e)");
 			codeLines.Add("{");
 			codeLines.Add(string.Format("	throw new InvalidDataException(string.Format(\"The {0} value specified ({{0}}) was larger or smaller than a {0} value (Min: {{1}}, Max: {{2}}).\", value, {0}.MinValue.ToString(), {0}.MaxValue.ToString()), e);", dataTypeString));
 			codeLines.Add("}");

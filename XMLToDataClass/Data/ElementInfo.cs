@@ -603,7 +603,7 @@ namespace XMLToDataClass.Data
 			cInfo.Exceptions.Add(new ExceptionInfo("ArgumentException", string.Format("<paramref name=\"node\"/> does not correspond to a {0} node or is not an 'Element' type node.", Name)));
 			cInfo.Exceptions.Add(new ExceptionInfo("InvalidDataException", "An error occurred while reading the data into the node, or one of it's child nodes."));
 
-			cInfo.CodeLines.Add("if (node.NodeType != XmlNodeType.Element)");
+			cInfo.CodeLines.Add("if(node.NodeType != XmlNodeType.Element)");
 			cInfo.CodeLines.Add("	throw new ArgumentException(\"node is not of type 'Element'.\");");
 			cInfo.CodeLines.Add(string.Format("if(string.Compare(node.Name, \"{0}\", false) != 0)", Name));
 			cInfo.CodeLines.Add(string.Format("	throw new ArgumentException(\"node does not correspond to a {0} node.\");", Name));

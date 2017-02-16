@@ -503,7 +503,7 @@ namespace XMLToDataClass.Data.Types
 				throw new InvalidOperationException("An attempt was made to generate a integral type parsing method, but none of the valid parsing methods were allowed. At least one parsing method (Ex: 'binary', 'hexadecimal', or 'integer') must be allowed.");
 
 			List<string> codeLines = new List<string>();
-			codeLines.Add("if (value == null)");
+			codeLines.Add("if(value == null)");
 			if (mInfo.IsOptional)
 			{
 				codeLines.Add("{");
@@ -555,7 +555,7 @@ namespace XMLToDataClass.Data.Types
 			if (AllowHexType1Values)
 			{
 				codeLines.Add(string.Empty);
-				codeLines.Add("	if (value.Length > 1 && char.ToLower(value[value.Length - 1]) == 'h')");
+				codeLines.Add("	if(value.Length > 1 && char.ToLower(value[value.Length - 1]) == 'h')");
 				codeLines.Add("	{");
 				codeLines.Add("		// Number is a hexadecimal type 1 number (FFh).");
 				codeLines.Add(string.Format("		returnValue = {0}.Parse(value.Substring(0, value.Length - 1), NumberStyles.AllowHexSpecifier);", dataTypeString));
@@ -570,9 +570,9 @@ namespace XMLToDataClass.Data.Types
 			{
 				codeLines.Add(string.Empty);
 				if(first)
-					codeLines.Add("	if (value.Length > 2 && value[0] == '0' && char.ToLower(value[1]) == 'x')");
+					codeLines.Add("	if(value.Length > 2 && value[0] == '0' && char.ToLower(value[1]) == 'x')");
 				else
-					codeLines.Add("	else if (value.Length > 2 && value[0] == '0' && char.ToLower(value[1]) == 'x')");
+					codeLines.Add("	else if(value.Length > 2 && value[0] == '0' && char.ToLower(value[1]) == 'x')");
 				codeLines.Add("	{");
 				codeLines.Add("		// Number is specified as a hexadecimal type 2 number (0xFF).");
 				codeLines.Add(string.Format("		returnValue = {0}.Parse(value.Substring(2), NumberStyles.AllowHexSpecifier);", dataTypeString));
@@ -587,9 +587,9 @@ namespace XMLToDataClass.Data.Types
 			{
 				codeLines.Add(string.Empty);
 				if(first)
-					codeLines.Add("	if (value.Length > 1 && char.ToLower(value[value.Length - 1]) == 'b')");
+					codeLines.Add("	if(value.Length > 1 && char.ToLower(value[value.Length - 1]) == 'b')");
 				else
-					codeLines.Add("	else if (value.Length > 1 && char.ToLower(value[value.Length - 1]) == 'b')");
+					codeLines.Add("	else if(value.Length > 1 && char.ToLower(value[value.Length - 1]) == 'b')");
 				codeLines.Add("	{");
 				codeLines.Add("		// Number is a binary number.");
 				codeLines.Add(string.Format("		returnValue = Convert.To{0}(value.Substring(0, value.Length - 1), 2);", GetConvertMethodName()));
@@ -618,11 +618,11 @@ namespace XMLToDataClass.Data.Types
 					codeLines.Add("	}");
 			}
 			codeLines.Add("}");
-			codeLines.Add("catch (FormatException e)");
+			codeLines.Add("catch(FormatException e)");
 			codeLines.Add("{");
 			codeLines.Add(string.Format("	throw new InvalidDataException(string.Format(\"The {0} value specified ({{0}}) is not in a valid {0} string format: {{1}}.\", value, e.Message), e);", dataTypeString));
 			codeLines.Add("}");
-			codeLines.Add("catch (OverflowException e)");
+			codeLines.Add("catch(OverflowException e)");
 			codeLines.Add("{");
 			codeLines.Add(string.Format("	throw new InvalidDataException(string.Format(\"The {0} value specified ({{0}}) was larger or smaller than a {0} value (Min: {{1}}, Max: {{2}}).\", value, {0}.MinValue.ToString(), {0}.MaxValue.ToString()), e);", dataTypeString));
 			codeLines.Add("}");

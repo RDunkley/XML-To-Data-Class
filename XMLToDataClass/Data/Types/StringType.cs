@@ -135,7 +135,7 @@ namespace XMLToDataClass.Data.Types
 				throw new InvalidOperationException("An attempt was made to generate a string attribute parsing method, but the minimum number of characters in the string is set to more than or equal to the maximum number of characters.");
 
 			List<string> codeLines = new List<string>();
-			codeLines.Add("if (value == null)");
+			codeLines.Add("if(value == null)");
 			if (mInfo.IsOptional)
 			{
 				codeLines.Add("{");
@@ -150,18 +150,18 @@ namespace XMLToDataClass.Data.Types
 
 			if(!mInfo.CanBeEmpty)
 			{
-				codeLines.Add("if (value.Length == 0)");
+				codeLines.Add("if(value.Length == 0)");
 				codeLines.Add(string.Format("	throw new InvalidDataException(\"The string value for '{0}' is an empty string.\");", mInfo.Name));
 			}
 
 			if (MinimumLength > 0)
 			{
-				codeLines.Add(string.Format("if (value.Length < {0})", MinimumLength.ToString()));
+				codeLines.Add(string.Format("if(value.Length < {0})", MinimumLength.ToString()));
 				codeLines.Add(string.Format("	throw new InvalidDataException(string.Format(\"The '{0}' attribute provided ({{0}}) does not meet the minimum length requirement ({1}).\", value));", mInfo.Name, MinimumLength.ToString()));
 			}
 			if(MaximumLength > 0)
 			{
-				codeLines.Add(string.Format("if (value.Length > {0})", MaximumLength.ToString()));
+				codeLines.Add(string.Format("if(value.Length > {0})", MaximumLength.ToString()));
 				codeLines.Add(string.Format("	throw new InvalidDataException(string.Format(\"The '{0}' attribute provided ({{0}}) exceeds the maximum length requirement ({1}).\", value));", mInfo.Name, MaximumLength.ToString()));
 			}
 

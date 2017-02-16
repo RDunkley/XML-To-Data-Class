@@ -113,7 +113,7 @@ namespace XMLToDataClass.Data.Types
 		public override string[] GenerateImportMethodCode()
 		{
 			List<string> codeLines = new List<string>();
-			codeLines.Add("if (value == null)");
+			codeLines.Add("if(value == null)");
 			if (mInfo.IsOptional)
 			{
 				codeLines.Add("{");

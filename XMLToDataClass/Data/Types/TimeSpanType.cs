@@ -154,7 +154,7 @@ namespace XMLToDataClass.Data.Types
 				throw new InvalidOperationException("Culture is a null reference");
 
 			List<string> codeLines = new List<string>();
-			codeLines.Add("if (value == null)");
+			codeLines.Add("if(value == null)");
 			if (mInfo.IsOptional)
 			{
 				codeLines.Add("{");

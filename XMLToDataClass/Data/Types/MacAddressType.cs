@@ -252,7 +252,7 @@ namespace XMLToDataClass.Data.Types
 		public override string[] GenerateImportMethodCode()
 		{
 			List<string> codeLines = new List<string>();
-			codeLines.Add("if (value == null)");
+			codeLines.Add("if(value == null)");
 			if (mInfo.IsOptional)
 			{
 				codeLines.Add("{");
@@ -288,7 +288,7 @@ namespace XMLToDataClass.Data.Types
 			codeLines.Add("value = value.ToUpper();");
 			if (AllowColonSeparator)
 			{
-				codeLines.Add("if (Regex.IsMatch(value, @\"^([0-9A-F]{2}[:]){5}([0-9A-F]{2})$\"))");
+				codeLines.Add("if(Regex.IsMatch(value, @\"^([0-9A-F]{2}[:]){5}([0-9A-F]{2})$\"))");
 				codeLines.Add("{");
 				codeLines.Add("	// IP address is formatted with colons (Ex: 00:00:00:00:00:00).");
 				codeLines.Add(string.Format("	{0} = {1}.Colon;", enumPropertyName, enumTypeName));
@@ -300,7 +300,7 @@ namespace XMLToDataClass.Data.Types
 
 			if (AllowDashSeparator)
 			{
-				codeLines.Add("if (Regex.IsMatch(value, @\"^([0-9A-F]{2}[-]){5}([0-9A-F]{2})$\"))");
+				codeLines.Add("if(Regex.IsMatch(value, @\"^([0-9A-F]{2}[-]){5}([0-9A-F]{2})$\"))");
 				codeLines.Add("{");
 				codeLines.Add("	// IP address is formatted with dashes (Ex: 00-00-00-00-00-00).");
 				codeLines.Add(string.Format("	{0} = {1}.Dash;", enumPropertyName, enumTypeName));
@@ -311,7 +311,7 @@ namespace XMLToDataClass.Data.Types
 
 			if (AllowDotSeparator)
 			{
-				codeLines.Add("if (Regex.IsMatch(value, @\"^([0-9A-F]{3}[.]){3}([0-9A-F]{3})$\"))");
+				codeLines.Add("if(Regex.IsMatch(value, @\"^([0-9A-F]{3}[.]){3}([0-9A-F]{3})$\"))");
 				codeLines.Add("{");
 				codeLines.Add("	// IP address is formatted with dashes (Ex: 000.000.000.000).");
 				codeLines.Add(string.Format("	{0} = {1}.Period;", enumPropertyName, enumTypeName));
@@ -324,7 +324,7 @@ namespace XMLToDataClass.Data.Types
 			}
 
 			codeLines.Add("// IP address is formatted with only hexadecimal bytes (Ex: 000000000000).");
-			codeLines.Add("if (!Regex.IsMatch(value, @\"^([0-9A-F]{12})$\"))");
+			codeLines.Add("if(!Regex.IsMatch(value, @\"^([0-9A-F]{12})$\"))");
 			codeLines.Add(string.Format("	throw new InvalidDataException(string.Format(\"The MAC Address value ({{0}}) for '{0}' does not contain a valid representation of a MAC address\", value));", mInfo.Name));
 			if(AllowColonSeparator || AllowDashSeparator || AllowDotSeparator)
 				codeLines.Add(string.Format("	{0} = {1}.NoSeparator;", enumPropertyName, enumTypeName));

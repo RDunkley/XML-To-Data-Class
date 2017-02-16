@@ -327,7 +327,7 @@ namespace XMLToDataClass.Data.Types
 
 			List<string> codeLines = new List<string>();
 
-			codeLines.Add("if (value == null)");
+			codeLines.Add("if(value == null)");
 			if (mInfo.IsOptional)
 			{
 				codeLines.Add("{");
@@ -363,7 +363,7 @@ namespace XMLToDataClass.Data.Types
 			{
 				for (int i = 0; i < lookup[key].Length; i++)
 				{
-					codeLines.Add(string.Format("if (string.Compare(value, \"{0}\", false) == 0)", lookup[key][i]));
+					codeLines.Add(string.Format("if(string.Compare(value, \"{0}\", false) == 0)", lookup[key][i]));
 					codeLines.Add("{");
 					codeLines.Add(string.Format("	{0} = {1}.{2};", mInfo.PropertyName, enumTypeName, key));
 					if (lookup[key].Length > 1)
