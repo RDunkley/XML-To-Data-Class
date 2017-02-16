@@ -432,7 +432,7 @@ namespace XMLToDataClass.Data
 		}
 
 		/// <summary>
-		///   Generates a class constructor from the element information. <see cref=""/>
+		///   Generates a class constructor from the element information.
 		/// </summary>
 		/// <returns></returns>
 		private ConstructorInfo GenerateDataClassConstructor()
