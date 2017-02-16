@@ -246,16 +246,16 @@ namespace XMLToDataClass.Data
 				"public",
 				"XmlElement",
 				"CreateElement",
-				"Creates an XML element for this object using the provided <see cref=\"XmlDocument\"> object.",
+				"Creates an XML element for this object using the provided <see cref=\"XmlDocument\"/> object.",
 				null,
-				"<see cref=\"XmlElement\"> object containing this classes data."
+				"<see cref=\"XmlElement\"/> object containing this classes data."
 			);
 
 			method.Parameters.Add(new ParameterInfo
 			(
 				"XmlDocument",
 				"doc",
-				"<see cref=\"XmlDocument\"> object to generate the element from.",
+				"<see cref=\"XmlDocument\"/> object to generate the element from.",
 				false,
 				null
 			));
@@ -598,7 +598,7 @@ namespace XMLToDataClass.Data
 
 		private ConstructorInfo GenerateDataClassXmlNodeConstructor()
 		{
-			string summary = string.Format("Instantiates a new <see cref=\"{0}\"/> object from an <see=cref=\"XmlNode\"/> object.", ClassName);
+			string summary = string.Format("Instantiates a new <see cref=\"{0}\"/> object from an <see cref=\"XmlNode\"/> object.", ClassName);
 			ConstructorInfo cInfo = new ConstructorInfo("public", ClassName, summary);
 
 			cInfo.Parameters.Add(new ParameterInfo("XmlNode", "node", "<see cref=\"XmlNode\"/> containing the data to extract.", false));
