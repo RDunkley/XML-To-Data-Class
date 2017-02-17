@@ -69,6 +69,16 @@ namespace XMLToDataClass.Data
 		/// </summary>
 		public string PropertyName { get; set; }
 
+		/// <summary>
+		///   Gets or sets the summary documentation section of the property.
+		/// </summary>
+		public string Summary { get; set; }
+
+		/// <summary>
+		///   Gets or sets the remarks documentation section of the property.
+		/// </summary>
+		public string Remarks { get; set; }
+
 		#endregion Properties
 
 		#region Methods
@@ -86,6 +96,8 @@ namespace XMLToDataClass.Data
 
 			Name = name;
 			PropertyName = StringUtility.GetUpperCamelCase(name);
+			Summary = string.Format("Gets or sets the value of the child {0} component.", Name);
+			Remarks = null;
 			CanBeEmpty = canBeEmpty;
 			IsOptional = optional;
 
@@ -184,6 +196,30 @@ namespace XMLToDataClass.Data
 			return typeList.ToArray();
 		}
 
+		public PropertyInfo GetProperty()
+		{
+			StringBuilder sb = new StringBuilder();
+			sb.Append(Summary);
+			if (SelectedDataType == DataType.String)
+			{
+				if (IsOptional)
+					sb.Append(" Can be null.");
+				if (CanBeEmpty)
+					sb.Append(" Can be empty.");
+			}
+			else
+			{
+				if (IsOptional || CanBeEmpty)
+					sb.Append(" Can be null.");
+			}
+
+			if (string.IsNullOrWhiteSpace(Remarks))
+				Remarks = null;
+
+			return new PropertyInfo("public", GetDataTypeString(), PropertyName, sb.ToString(), Remarks);
+
+		}
+
 		public XmlElement Save(XmlDocument doc, XmlNode parent)
 		{
 			XmlElement element = doc.CreateElement(Name);
@@ -198,6 +234,12 @@ namespace XMLToDataClass.Data
 
 			attrib = element.Attributes.Append(doc.CreateAttribute("PropertyName"));
 			attrib.Value = PropertyName;
+
+			attrib = element.Attributes.Append(doc.CreateAttribute("Summary"));
+			attrib.Value = Summary;
+
+			attrib = element.Attributes.Append(doc.CreateAttribute("Remarks"));
+			attrib.Value = Remarks;
 
 			foreach(DataType key in mTypeLookup.Keys)
 			{
@@ -247,8 +289,16 @@ namespace XMLToDataClass.Data
 						PropertyName = attrib.Value;
 					}
 
+					attrib = node.Attributes["Summary"];
+					if (attrib != null)
+						Summary = attrib.Value;
+
+					attrib = node.Attributes["Remarks"];
+					if (attrib != null)
+						Remarks = attrib.Value;
+
 					// Parse the data type settings.
-					foreach(XmlNode child in node.ChildNodes)
+					foreach (XmlNode child in node.ChildNodes)
 					{
 						if(child.NodeType == XmlNodeType.Element)
 						{

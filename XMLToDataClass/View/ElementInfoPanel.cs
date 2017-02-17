@@ -35,6 +35,8 @@ namespace XMLToDataClass.View
 
 			mInfo = info;
 			classNameTextBox.Text = info.ClassName;
+			classDescriptionTextBox.Text = info.Summary;
+			classRemarksTextBox.Text = info.Remarks;
 			textCheckBox.Checked = info.Text.Include;
 			CDATACheckBox.Checked = info.CDATA.Include;
 
@@ -63,6 +65,19 @@ namespace XMLToDataClass.View
 		private void textCheckBox_CheckedChanged(object sender, EventArgs e)
 		{
 			mInfo.Text.Include = textCheckBox.Checked;
+		}
+
+		private void classDescriptionTextBox_TextChanged(object sender, EventArgs e)
+		{
+			mInfo.Summary = classDescriptionTextBox.Text;
+		}
+
+		private void classRemarksTextBox_TextChanged(object sender, EventArgs e)
+		{
+			if (string.IsNullOrWhiteSpace(classRemarksTextBox.Text))
+				mInfo.Remarks = null;
+			else
+				mInfo.Remarks = classRemarksTextBox.Text;
 		}
 	}
 }

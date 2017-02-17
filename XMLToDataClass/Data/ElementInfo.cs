@@ -52,6 +52,16 @@ namespace XMLToDataClass.Data
 		public string ClassName { get; set; }
 
 		/// <summary>
+		///   Gets or sets the summary documentation section of the class.
+		/// </summary>
+		public string Summary { get; set; }
+
+		/// <summary>
+		///   Gets or sets the remarks documentation section of the class.
+		/// </summary>
+		public string Remarks { get; set; }
+
+		/// <summary>
 		///   Gets the XML node name.
 		/// </summary>
 		public string Name { get; private set; }
@@ -86,6 +96,8 @@ namespace XMLToDataClass.Data
 
 			Name = elementName;
 			ClassName = StringUtility.GetUpperCamelCase(elementName);
+			Summary = string.Format("In memory representation of the XML element \"{0}\".", Name);
+			Remarks = null;
 
 			// Parse all the attribute names in the nodes.
 			string[] attribNames = AttributeInfo.GetAllAttributeNames(nodes);
@@ -162,7 +174,10 @@ namespace XMLToDataClass.Data
 
 		public ClassInfo GenerateDataClass(bool preserveHierarchy)
 		{
-			ClassInfo info = new ClassInfo("public partial", ClassName, null, string.Format("In memory representation of the XML element \"{0}\".", Name));
+			if (string.IsNullOrWhiteSpace(Remarks))
+				Remarks = null;
+
+			ClassInfo info = new ClassInfo("public partial", ClassName, null, Summary, Remarks);
 			info.AddUsing("System.Xml");
 			info.AddUsing("System.IO");
 
@@ -182,22 +197,8 @@ namespace XMLToDataClass.Data
 
 			foreach(DataInfo data in dataList)
 			{
-				StringBuilder sb = new StringBuilder();
-				sb.Append(string.Format("Gets or sets the value of the child {0} element.", data.Name));
-				if(data.SelectedDataType == DataType.String)
-				{
-					if (data.IsOptional)
-						sb.Append(" Can be null.");
-					if (data.CanBeEmpty)
-						sb.Append(" Can be empty.");
-				}
-				else
-				{
-					if (data.IsOptional || data.CanBeEmpty)
-						sb.Append(" Can be null.");
-				}
-				
-				info.Properties.Add(new PropertyInfo("public", data.GetDataTypeString(), data.PropertyName, sb.ToString()));
+				// Add data property.
+				info.Properties.Add(data.GetProperty());
 
 				// Add any additional properties.
 				info.Properties.AddRange(data.SelectedDataTypeObject.GenerateAdditionalProperties());
@@ -717,6 +718,12 @@ namespace XMLToDataClass.Data
 			XmlAttribute attrib = element.Attributes.Append(doc.CreateAttribute("ClassName"));
 			attrib.Value = ClassName;
 
+			attrib = element.Attributes.Append(doc.CreateAttribute("Summary"));
+			attrib.Value = Summary;
+
+			attrib = element.Attributes.Append(doc.CreateAttribute("Remarks"));
+			attrib.Value = Remarks;
+
 			// Save the attributes.
 			if (Attributes != null && Attributes.Length > 0)
 			{
@@ -742,6 +749,14 @@ namespace XMLToDataClass.Data
 					XmlAttribute attrib = node.Attributes["ClassName"];
 					if(attrib != null)
 						ClassName = attrib.Value;
+
+					attrib = node.Attributes["Summary"];
+					if (attrib != null)
+						Summary = attrib.Value;
+
+					attrib = node.Attributes["Remarks"];
+					if (attrib != null)
+						Remarks = attrib.Value;
 
 					if (Attributes != null && Attributes.Length > 0)
 					{

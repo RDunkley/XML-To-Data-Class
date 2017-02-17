@@ -48,6 +48,8 @@ namespace XMLToDataClass.View
 
 			nameLabel.Text = Info.Name;
 			propertyNameTextBox.Text = Info.PropertyName;
+			summaryTextBox.Text = info.Summary;
+			remarksTextBox.Text = info.Remarks;
 			optionalCheckBox.Checked = Info.IsOptional;
 			emptyCheckBox.Checked = Info.CanBeEmpty;
 			errorLabel.Text = string.Empty;
@@ -209,6 +211,19 @@ namespace XMLToDataClass.View
 		private void allTypesCheckBox_CheckedChanged(object sender, EventArgs e)
 		{
 			UpdateComboBox();
+		}
+
+		private void summaryTextBox_TextChanged(object sender, EventArgs e)
+		{
+			Info.Summary = summaryTextBox.Text;
+		}
+
+		private void remarksTextBox_TextChanged(object sender, EventArgs e)
+		{
+			if (string.IsNullOrWhiteSpace(remarksTextBox.Text))
+				Info.Remarks = null;
+			else
+				Info.Remarks = remarksTextBox.Text;
 		}
 	}
 }
