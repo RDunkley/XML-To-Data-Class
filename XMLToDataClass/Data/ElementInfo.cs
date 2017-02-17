@@ -24,6 +24,30 @@ namespace XMLToDataClass.Data
 	/// </summary>
 	public class ElementInfo
 	{
+		#region Enumerations
+
+		/// <summary>
+		///   Specifies the possible access of the class that is created.
+		/// </summary>
+		public enum Access
+		{
+			#region Names
+
+			/// <summary>
+			///   Element is created as an internal class.
+			/// </summary>
+			Internal,
+
+			/// <summary>
+			///   Element is created as a public class.
+			/// </summary>
+			Public,
+
+			#endregion Names
+		}
+
+		#endregion Enumerations
+
 		#region Properties
 
 		/// <summary>
@@ -66,6 +90,11 @@ namespace XMLToDataClass.Data
 		/// </summary>
 		public string Name { get; private set; }
 
+		/// <summary>
+		///   Gets or sets the accessibility of the class.
+		/// </summary>
+		public Access Accessibility { get; set; }
+
 		#endregion Properties
 
 		#region Methods
@@ -98,6 +127,7 @@ namespace XMLToDataClass.Data
 			ClassName = StringUtility.GetUpperCamelCase(elementName);
 			Summary = string.Format("In memory representation of the XML element \"{0}\".", Name);
 			Remarks = null;
+			Accessibility = Access.Public;
 
 			// Parse all the attribute names in the nodes.
 			string[] attribNames = AttributeInfo.GetAllAttributeNames(nodes);
@@ -177,7 +207,11 @@ namespace XMLToDataClass.Data
 			if (string.IsNullOrWhiteSpace(Remarks))
 				Remarks = null;
 
-			ClassInfo info = new ClassInfo("public partial", ClassName, null, Summary, Remarks);
+			string accessibility = "public partial";
+			if (Accessibility == Access.Internal)
+				accessibility = "internal partial";
+
+			ClassInfo info = new ClassInfo(accessibility, ClassName, null, Summary, Remarks);
 			info.AddUsing("System.Xml");
 			info.AddUsing("System.IO");
 
@@ -214,7 +248,7 @@ namespace XMLToDataClass.Data
 			foreach (ElementInfo child in Children)
 			{
 				string summary = "Gets or sets the child XML elements.";
-				info.Properties.Add(new PropertyInfo("public", string.Format("{0}[]", child.ClassName), GenerateChildArrayNameProperty(child.ClassName), summary, null, null, "private"));
+				info.Properties.Add(new PropertyInfo(Enum.GetName(typeof(Access), child.Accessibility).ToLower(), string.Format("{0}[]", child.ClassName), GenerateChildArrayNameProperty(child.ClassName), summary, null, null, "private"));
 			}
 
 			// Create the constructors.
@@ -440,8 +474,19 @@ namespace XMLToDataClass.Data
 		/// <returns></returns>
 		private ConstructorInfo GenerateDataClassConstructor()
 		{
+			// Determine if method is internal or public.
+			string accessibility = "public";
+			foreach (ElementInfo eInfo in Children)
+			{
+				if (eInfo.Accessibility != Access.Public)
+				{
+					accessibility = "internal";
+					break;
+				}
+			}
+
 			string summary = string.Format("Instantiates a new <see cref=\"{0}\"/> object using the provided information.", ClassName);
-			ConstructorInfo cInfo = new ConstructorInfo("public", ClassName, summary);
+			ConstructorInfo cInfo = new ConstructorInfo(accessibility, ClassName, summary);
 
 			// Add parameters for each property.
 			if (Text.Include)
@@ -724,6 +769,9 @@ namespace XMLToDataClass.Data
 			attrib = element.Attributes.Append(doc.CreateAttribute("Remarks"));
 			attrib.Value = Remarks;
 
+			attrib = element.Attributes.Append(doc.CreateAttribute("Accessibility"));
+			attrib.Value = Enum.GetName(typeof(Access), Accessibility);
+
 			// Save the attributes.
 			if (Attributes != null && Attributes.Length > 0)
 			{
@@ -757,6 +805,10 @@ namespace XMLToDataClass.Data
 					attrib = node.Attributes["Remarks"];
 					if (attrib != null)
 						Remarks = attrib.Value;
+
+					attrib = node.Attributes["Accessibility"];
+					if (attrib != null)
+						Accessibility = (Access)Enum.Parse(typeof(Access), attrib.Value);
 
 					if (Attributes != null && Attributes.Length > 0)
 					{

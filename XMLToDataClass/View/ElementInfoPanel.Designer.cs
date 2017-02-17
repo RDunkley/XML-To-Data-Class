@@ -29,18 +29,20 @@
 		private void InitializeComponent()
 		{
 			this.dataTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-			this.label2 = new System.Windows.Forms.Label();
+			this.label1 = new System.Windows.Forms.Label();
 			this.classNameTextBox = new System.Windows.Forms.TextBox();
+			this.label2 = new System.Windows.Forms.Label();
 			this.textCheckBox = new System.Windows.Forms.CheckBox();
 			this.CDATACheckBox = new System.Windows.Forms.CheckBox();
 			this.attributeGroupBox = new System.Windows.Forms.GroupBox();
 			this.attributeListBox = new System.Windows.Forms.ListBox();
 			this.elementsGroupBox = new System.Windows.Forms.GroupBox();
 			this.elementListBox = new System.Windows.Forms.ListBox();
-			this.label1 = new System.Windows.Forms.Label();
 			this.classDescriptionTextBox = new System.Windows.Forms.TextBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.classRemarksTextBox = new System.Windows.Forms.TextBox();
+			this.accessibilityComboBox = new System.Windows.Forms.ComboBox();
+			this.label4 = new System.Windows.Forms.Label();
 			this.dataTableLayoutPanel.SuspendLayout();
 			this.attributeGroupBox.SuspendLayout();
 			this.elementsGroupBox.SuspendLayout();
@@ -51,20 +53,23 @@
 			this.dataTableLayoutPanel.ColumnCount = 2;
 			this.dataTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 75F));
 			this.dataTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.dataTableLayoutPanel.Controls.Add(this.label1, 0, 1);
+			this.dataTableLayoutPanel.Controls.Add(this.label1, 0, 2);
 			this.dataTableLayoutPanel.Controls.Add(this.classNameTextBox, 1, 0);
 			this.dataTableLayoutPanel.Controls.Add(this.label2, 0, 0);
-			this.dataTableLayoutPanel.Controls.Add(this.textCheckBox, 0, 4);
-			this.dataTableLayoutPanel.Controls.Add(this.CDATACheckBox, 0, 5);
-			this.dataTableLayoutPanel.Controls.Add(this.attributeGroupBox, 0, 6);
-			this.dataTableLayoutPanel.Controls.Add(this.elementsGroupBox, 0, 7);
-			this.dataTableLayoutPanel.Controls.Add(this.classDescriptionTextBox, 1, 1);
-			this.dataTableLayoutPanel.Controls.Add(this.label3, 0, 2);
-			this.dataTableLayoutPanel.Controls.Add(this.classRemarksTextBox, 1, 2);
+			this.dataTableLayoutPanel.Controls.Add(this.textCheckBox, 0, 5);
+			this.dataTableLayoutPanel.Controls.Add(this.CDATACheckBox, 0, 6);
+			this.dataTableLayoutPanel.Controls.Add(this.attributeGroupBox, 0, 7);
+			this.dataTableLayoutPanel.Controls.Add(this.elementsGroupBox, 0, 8);
+			this.dataTableLayoutPanel.Controls.Add(this.classDescriptionTextBox, 1, 2);
+			this.dataTableLayoutPanel.Controls.Add(this.label3, 0, 3);
+			this.dataTableLayoutPanel.Controls.Add(this.classRemarksTextBox, 1, 3);
+			this.dataTableLayoutPanel.Controls.Add(this.accessibilityComboBox, 1, 1);
+			this.dataTableLayoutPanel.Controls.Add(this.label4, 0, 1);
 			this.dataTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.dataTableLayoutPanel.Location = new System.Drawing.Point(0, 0);
 			this.dataTableLayoutPanel.Name = "dataTableLayoutPanel";
-			this.dataTableLayoutPanel.RowCount = 8;
+			this.dataTableLayoutPanel.RowCount = 9;
+			this.dataTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.dataTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.dataTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.dataTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -75,6 +80,26 @@
 			this.dataTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.dataTableLayoutPanel.Size = new System.Drawing.Size(294, 250);
 			this.dataTableLayoutPanel.TabIndex = 2;
+			// 
+			// label1
+			// 
+			this.label1.AutoSize = true;
+			this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.label1.Location = new System.Drawing.Point(3, 53);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(69, 26);
+			this.label1.TabIndex = 2;
+			this.label1.Text = "Summary:";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// classNameTextBox
+			// 
+			this.classNameTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.classNameTextBox.Location = new System.Drawing.Point(78, 3);
+			this.classNameTextBox.Name = "classNameTextBox";
+			this.classNameTextBox.Size = new System.Drawing.Size(213, 20);
+			this.classNameTextBox.TabIndex = 1;
+			this.classNameTextBox.TextChanged += new System.EventHandler(this.classNameTextBox_TextChanged);
 			// 
 			// label2
 			// 
@@ -87,21 +112,12 @@
 			this.label2.Text = "Class Name:";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// classNameTextBox
-			// 
-			this.classNameTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.classNameTextBox.Location = new System.Drawing.Point(78, 3);
-			this.classNameTextBox.Name = "classNameTextBox";
-			this.classNameTextBox.Size = new System.Drawing.Size(213, 20);
-			this.classNameTextBox.TabIndex = 1;
-			this.classNameTextBox.TextChanged += new System.EventHandler(this.classNameTextBox_TextChanged);
-			// 
 			// textCheckBox
 			// 
 			this.textCheckBox.AutoSize = true;
 			this.dataTableLayoutPanel.SetColumnSpan(this.textCheckBox, 2);
 			this.textCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.textCheckBox.Location = new System.Drawing.Point(3, 81);
+			this.textCheckBox.Location = new System.Drawing.Point(3, 108);
 			this.textCheckBox.Name = "textCheckBox";
 			this.textCheckBox.Size = new System.Drawing.Size(288, 17);
 			this.textCheckBox.TabIndex = 5;
@@ -114,7 +130,7 @@
 			this.CDATACheckBox.AutoSize = true;
 			this.dataTableLayoutPanel.SetColumnSpan(this.CDATACheckBox, 2);
 			this.CDATACheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.CDATACheckBox.Location = new System.Drawing.Point(3, 104);
+			this.CDATACheckBox.Location = new System.Drawing.Point(3, 131);
 			this.CDATACheckBox.Name = "CDATACheckBox";
 			this.CDATACheckBox.Size = new System.Drawing.Size(288, 17);
 			this.CDATACheckBox.TabIndex = 4;
@@ -127,9 +143,9 @@
 			this.dataTableLayoutPanel.SetColumnSpan(this.attributeGroupBox, 2);
 			this.attributeGroupBox.Controls.Add(this.attributeListBox);
 			this.attributeGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.attributeGroupBox.Location = new System.Drawing.Point(3, 127);
+			this.attributeGroupBox.Location = new System.Drawing.Point(3, 154);
 			this.attributeGroupBox.Name = "attributeGroupBox";
-			this.attributeGroupBox.Size = new System.Drawing.Size(288, 57);
+			this.attributeGroupBox.Size = new System.Drawing.Size(288, 43);
 			this.attributeGroupBox.TabIndex = 7;
 			this.attributeGroupBox.TabStop = false;
 			this.attributeGroupBox.Text = "Attributes";
@@ -140,7 +156,7 @@
 			this.attributeListBox.FormattingEnabled = true;
 			this.attributeListBox.Location = new System.Drawing.Point(3, 16);
 			this.attributeListBox.Name = "attributeListBox";
-			this.attributeListBox.Size = new System.Drawing.Size(282, 38);
+			this.attributeListBox.Size = new System.Drawing.Size(282, 24);
 			this.attributeListBox.TabIndex = 0;
 			// 
 			// elementsGroupBox
@@ -148,9 +164,9 @@
 			this.dataTableLayoutPanel.SetColumnSpan(this.elementsGroupBox, 2);
 			this.elementsGroupBox.Controls.Add(this.elementListBox);
 			this.elementsGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.elementsGroupBox.Location = new System.Drawing.Point(3, 190);
+			this.elementsGroupBox.Location = new System.Drawing.Point(3, 203);
 			this.elementsGroupBox.Name = "elementsGroupBox";
-			this.elementsGroupBox.Size = new System.Drawing.Size(288, 57);
+			this.elementsGroupBox.Size = new System.Drawing.Size(288, 44);
 			this.elementsGroupBox.TabIndex = 8;
 			this.elementsGroupBox.TabStop = false;
 			this.elementsGroupBox.Text = "Child Elements:";
@@ -161,24 +177,13 @@
 			this.elementListBox.FormattingEnabled = true;
 			this.elementListBox.Location = new System.Drawing.Point(3, 16);
 			this.elementListBox.Name = "elementListBox";
-			this.elementListBox.Size = new System.Drawing.Size(282, 38);
+			this.elementListBox.Size = new System.Drawing.Size(282, 25);
 			this.elementListBox.TabIndex = 0;
-			// 
-			// label1
-			// 
-			this.label1.AutoSize = true;
-			this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label1.Location = new System.Drawing.Point(3, 26);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(69, 26);
-			this.label1.TabIndex = 2;
-			this.label1.Text = "Summary:";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// classDescriptionTextBox
 			// 
 			this.classDescriptionTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.classDescriptionTextBox.Location = new System.Drawing.Point(78, 29);
+			this.classDescriptionTextBox.Location = new System.Drawing.Point(78, 56);
 			this.classDescriptionTextBox.Name = "classDescriptionTextBox";
 			this.classDescriptionTextBox.Size = new System.Drawing.Size(213, 20);
 			this.classDescriptionTextBox.TabIndex = 9;
@@ -189,7 +194,7 @@
 			// 
 			this.label3.AutoSize = true;
 			this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label3.Location = new System.Drawing.Point(3, 52);
+			this.label3.Location = new System.Drawing.Point(3, 79);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(69, 26);
 			this.label3.TabIndex = 10;
@@ -199,11 +204,32 @@
 			// classRemarksTextBox
 			// 
 			this.classRemarksTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.classRemarksTextBox.Location = new System.Drawing.Point(78, 55);
+			this.classRemarksTextBox.Location = new System.Drawing.Point(78, 82);
 			this.classRemarksTextBox.Name = "classRemarksTextBox";
 			this.classRemarksTextBox.Size = new System.Drawing.Size(213, 20);
 			this.classRemarksTextBox.TabIndex = 11;
 			this.classRemarksTextBox.TextChanged += new System.EventHandler(this.classRemarksTextBox_TextChanged);
+			// 
+			// accessibilityComboBox
+			// 
+			this.accessibilityComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.accessibilityComboBox.FormattingEnabled = true;
+			this.accessibilityComboBox.Location = new System.Drawing.Point(78, 29);
+			this.accessibilityComboBox.Name = "accessibilityComboBox";
+			this.accessibilityComboBox.Size = new System.Drawing.Size(213, 21);
+			this.accessibilityComboBox.TabIndex = 12;
+			this.accessibilityComboBox.SelectedIndexChanged += new System.EventHandler(this.accessibilityComboBox_SelectedIndexChanged);
+			// 
+			// label4
+			// 
+			this.label4.AutoSize = true;
+			this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.label4.Location = new System.Drawing.Point(3, 26);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(69, 27);
+			this.label4.TabIndex = 13;
+			this.label4.Text = "Accessibility:";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// ElementInfoPanel
 			// 
@@ -236,5 +262,7 @@
 		private System.Windows.Forms.TextBox classDescriptionTextBox;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.TextBox classRemarksTextBox;
+		private System.Windows.Forms.ComboBox accessibilityComboBox;
+		private System.Windows.Forms.Label label4;
 	}
 }

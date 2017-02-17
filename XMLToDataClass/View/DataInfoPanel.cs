@@ -36,6 +36,8 @@ namespace XMLToDataClass.View
 
 			InitializeComponent();
 
+			accessibilityComboBox.Items.AddRange(Enum.GetNames(typeof(DataInfo.Access)));
+
 			Info = info;
 			List<DataType> supportedTypes = new List<DataType>();
 			supportedTypes.AddRange(info.GetSupportedTypes());
@@ -50,6 +52,7 @@ namespace XMLToDataClass.View
 			propertyNameTextBox.Text = Info.PropertyName;
 			summaryTextBox.Text = info.Summary;
 			remarksTextBox.Text = info.Remarks;
+			accessibilityComboBox.SelectedIndex = accessibilityComboBox.FindString(Enum.GetName(typeof(DataInfo.Access), info.Accessibility));
 			optionalCheckBox.Checked = Info.IsOptional;
 			emptyCheckBox.Checked = Info.CanBeEmpty;
 			errorLabel.Text = string.Empty;
@@ -224,6 +227,12 @@ namespace XMLToDataClass.View
 				Info.Remarks = null;
 			else
 				Info.Remarks = remarksTextBox.Text;
+		}
+
+		private void accessibilityComboBox_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (accessibilityComboBox.SelectedIndex > -1)
+				Info.Accessibility = (DataInfo.Access)Enum.Parse(typeof(DataInfo.Access), (string)accessibilityComboBox.Items[accessibilityComboBox.SelectedIndex]);
 		}
 	}
 }

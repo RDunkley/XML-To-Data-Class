@@ -33,10 +33,13 @@ namespace XMLToDataClass.View
 
 			InitializeComponent();
 
+			accessibilityComboBox.Items.AddRange(Enum.GetNames(typeof(ElementInfo.Access)));
+
 			mInfo = info;
 			classNameTextBox.Text = info.ClassName;
 			classDescriptionTextBox.Text = info.Summary;
 			classRemarksTextBox.Text = info.Remarks;
+			accessibilityComboBox.SelectedIndex = accessibilityComboBox.FindString(Enum.GetName(typeof(ElementInfo.Access), info.Accessibility));
 			textCheckBox.Checked = info.Text.Include;
 			CDATACheckBox.Checked = info.CDATA.Include;
 
@@ -78,6 +81,12 @@ namespace XMLToDataClass.View
 				mInfo.Remarks = null;
 			else
 				mInfo.Remarks = classRemarksTextBox.Text;
+		}
+
+		private void accessibilityComboBox_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if(accessibilityComboBox.SelectedIndex > -1)
+				mInfo.Accessibility = (ElementInfo.Access)Enum.Parse(typeof(ElementInfo.Access), (string)accessibilityComboBox.Items[accessibilityComboBox.SelectedIndex]);
 		}
 	}
 }

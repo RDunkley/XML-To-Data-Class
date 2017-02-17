@@ -25,6 +25,35 @@ namespace XMLToDataClass.Data
 	/// </summary>
 	public class DataInfo
 	{
+		#region Enumerations
+
+		/// <summary>
+		///   Specifies the possible access of the property that is created.
+		/// </summary>
+		public enum Access
+		{
+			#region Names
+
+			/// <summary>
+			///   Component is created as an internal property.
+			/// </summary>
+			Internal,
+
+			/// <summary>
+			///   Component is created as a protected property.
+			/// </summary>
+			Protected,
+
+			/// <summary>
+			///   Component is created as a public property.
+			/// </summary>
+			Public,
+
+			#endregion Names
+		}
+
+		#endregion Enumerations
+
 		#region Fields
 
 		private Dictionary<DataType, IDataType> mTypeLookup;
@@ -79,6 +108,11 @@ namespace XMLToDataClass.Data
 		/// </summary>
 		public string Remarks { get; set; }
 
+		/// <summary>
+		///   Gets or sets the accessibility of the class.
+		/// </summary>
+		public Access Accessibility { get; set; }
+
 		#endregion Properties
 
 		#region Methods
@@ -98,6 +132,7 @@ namespace XMLToDataClass.Data
 			PropertyName = StringUtility.GetUpperCamelCase(name);
 			Summary = string.Format("Gets or sets the value of the child {0} component.", Name);
 			Remarks = null;
+			Accessibility = Access.Public;
 			CanBeEmpty = canBeEmpty;
 			IsOptional = optional;
 
@@ -216,8 +251,8 @@ namespace XMLToDataClass.Data
 			if (string.IsNullOrWhiteSpace(Remarks))
 				Remarks = null;
 
-			return new PropertyInfo("public", GetDataTypeString(), PropertyName, sb.ToString(), Remarks);
-
+			string accessibility = Enum.GetName(typeof(Access), Accessibility).ToLower();
+			return new PropertyInfo(accessibility, GetDataTypeString(), PropertyName, sb.ToString(), Remarks);
 		}
 
 		public XmlElement Save(XmlDocument doc, XmlNode parent)
@@ -241,7 +276,10 @@ namespace XMLToDataClass.Data
 			attrib = element.Attributes.Append(doc.CreateAttribute("Remarks"));
 			attrib.Value = Remarks;
 
-			foreach(DataType key in mTypeLookup.Keys)
+			attrib = element.Attributes.Append(doc.CreateAttribute("Accessibility"));
+			attrib.Value = Enum.GetName(typeof(Access), Accessibility);
+
+			foreach (DataType key in mTypeLookup.Keys)
 			{
 				// Save each child data type as a separate child element.
 				XmlElement child = doc.CreateElement(Enum.GetName(typeof(DataType), key));
@@ -296,6 +334,10 @@ namespace XMLToDataClass.Data
 					attrib = node.Attributes["Remarks"];
 					if (attrib != null)
 						Remarks = attrib.Value;
+
+					attrib = node.Attributes["Accessibility"];
+					if (attrib != null)
+						Accessibility = (Access)Enum.Parse(typeof(Access), attrib.Value);
 
 					// Parse the data type settings.
 					foreach (XmlNode child in node.ChildNodes)
