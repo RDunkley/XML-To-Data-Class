@@ -283,17 +283,17 @@ namespace XMLToDataClass
 			string solutionName;
 			mInfo.Load(dialog.FileName, out outputFolder, out nameSpace, out genProject, out projectName, out genSolution, out solutionName);
 
-			if (string.IsNullOrEmpty(outputFolder))
+			if (!string.IsNullOrEmpty(outputFolder))
 				codeTextBox.Text = outputFolder;
-			if (string.IsNullOrEmpty(nameSpace))
+			if (!string.IsNullOrEmpty(nameSpace))
 				namespaceTextBox.Text = nameSpace;
 			if (genProject.HasValue)
 				projectCheckBox.Checked = genProject.Value;
-			if (string.IsNullOrEmpty(projectName))
+			if (!string.IsNullOrEmpty(projectName))
 				projectTextBox.Text = projectName;
 			if (genSolution.HasValue)
 				solutionCheckBox.Checked = genSolution.Value;
-			if (string.IsNullOrEmpty(solutionName))
+			if (!string.IsNullOrEmpty(solutionName))
 				solutionTextBox.Text = solutionName;
 
 			Properties.Settings.Default.ConfigFileLocation = dialog.FileName;
