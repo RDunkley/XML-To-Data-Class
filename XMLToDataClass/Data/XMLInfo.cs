@@ -465,7 +465,7 @@ namespace XMLToDataClass.Data
 			}
 		}
 
-		public void Save(string filePath)
+		public void Save(string filePath, string outputFolder, string nameSpace, bool genProject, string projectName, bool genSolution, string solutionName)
 		{
 			XmlDocument doc = new XmlDocument();
 			XmlElement root = doc.CreateElement("save_data");
@@ -474,6 +474,21 @@ namespace XMLToDataClass.Data
 			XmlAttribute attrib = root.Attributes.Append(doc.CreateAttribute("MainClassName"));
 			attrib.Value = MainClassName;
 
+			// Store the additional settings from the caller.
+			attrib = root.Attributes.Append(doc.CreateAttribute("OutputFolder"));
+			attrib.Value = outputFolder;
+			attrib = root.Attributes.Append(doc.CreateAttribute("NameSpace"));
+			attrib.Value = nameSpace;
+			attrib = root.Attributes.Append(doc.CreateAttribute("GenerateProject"));
+			attrib.Value = genProject.ToString();
+			attrib = root.Attributes.Append(doc.CreateAttribute("ProjectName"));
+			attrib.Value = projectName;
+			attrib = root.Attributes.Append(doc.CreateAttribute("GenerateSolution"));
+			attrib.Value = genSolution.ToString();
+			attrib = root.Attributes.Append(doc.CreateAttribute("SolutionName"));
+			attrib.Value = solutionName;
+
+
 			// Save all the element configuration.
 			foreach (ElementInfo element in Elements.Values)
 				element.Save(doc, root);
@@ -481,10 +496,17 @@ namespace XMLToDataClass.Data
 			doc.Save(filePath);
 		}
 
-		public void Load(string filePath)
+		public void Load(string filePath, out string outputFolder, out string nameSpace, out bool? genProject, out string projectName, out bool? genSolution, out string solutionName)
 		{
 			XmlDocument doc = new XmlDocument();
 			doc.Load(filePath);
+
+			outputFolder = null;
+			nameSpace = null;
+			genProject = null;
+			projectName = null;
+			genSolution = null;
+			solutionName = null;
 
 			foreach(XmlNode node in doc.ChildNodes)
 			{
@@ -493,6 +515,32 @@ namespace XMLToDataClass.Data
 					XmlAttribute attrib = node.Attributes["MainClassName"];
 					if (attrib != null)
 						MainClassName = attrib.Value;
+					attrib = node.Attributes["OutputFolder"];
+					if (attrib != null)
+						outputFolder = attrib.Value;
+					attrib = node.Attributes["NameSpace"];
+					if (attrib != null)
+						nameSpace = attrib.Value;
+					attrib = node.Attributes["GenerateProject"];
+					if (attrib != null)
+					{
+						bool temp;
+						if (bool.TryParse(attrib.Value, out temp))
+							genProject = temp;
+					}
+					attrib = node.Attributes["ProjectName"];
+					if (attrib != null)
+						projectName = attrib.Value;
+					attrib = node.Attributes["GenerateSolution"];
+					if (attrib != null)
+					{
+						bool temp;
+						if (bool.TryParse(attrib.Value, out temp))
+							genSolution = temp;
+					}
+					attrib = node.Attributes["SolutionName"];
+					if (attrib != null)
+						solutionName = attrib.Value;
 
 					// Load all the element configurations.
 					foreach (ElementInfo element in Elements.Values)

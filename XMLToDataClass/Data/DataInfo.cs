@@ -161,6 +161,7 @@ namespace XMLToDataClass.Data
 			mTypeLookup.Add(DataType.TimeSpan, new TimeSpanType(this, possibleValues));
 			mTypeLookup.Add(DataType.MACAddress, new MacAddressType(this, possibleValues));
 			mTypeLookup.Add(DataType.IPAddress, new IPAddressType(this, possibleValues));
+			mTypeLookup.Add(DataType.GUID, new GUIDType(this, possibleValues));
 			DetermineDefaultSelectedType();
 		}
 

@@ -12,6 +12,7 @@
 // limitations under the License.
 //********************************************************************************************************************************
 using System;
+using System.IO;
 using System.Windows.Forms;
 
 namespace XMLToDataClass.View
@@ -53,7 +54,8 @@ namespace XMLToDataClass.View
 			dialog.Filter = "XML files (*.xml)|*.xml|All files (*.*)|*.*";
 			dialog.Multiselect = false;
 			dialog.Title = "Select XML file to Generate Code For";
-			dialog.FileName = filePathTextBox.Text;
+			dialog.InitialDirectory = Path.GetDirectoryName(filePathTextBox.Text);
+			dialog.FileName = Path.GetFileName(filePathTextBox.Text);
 
 			if (dialog.ShowDialog() != DialogResult.OK)
 				return;

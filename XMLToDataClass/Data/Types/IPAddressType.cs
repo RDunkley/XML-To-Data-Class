@@ -50,7 +50,6 @@ namespace XMLToDataClass.Data.Types
 		/// </summary>
 		/// <returns><see cref="PropertyInfo"/> array representing additional properties needed by the import/export methods. Can be empty.</returns>
 		/// <remarks>These properties are typically used to persist state from import to export.</remarks>
-		/// <exception cref="InvalidOperationException">An attempt was made to generate a boolean parsing method, but none of the valid boolean string pairs were allowed. At least one boolean string pair (Ex: 'true/false', 'yes/no', or '0/1') must be allowed.</exception>
 		public override PropertyInfo[] GenerateAdditionalProperties()
 		{
 			List<PropertyInfo> propList = new List<PropertyInfo>();

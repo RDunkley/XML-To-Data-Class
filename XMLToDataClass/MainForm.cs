@@ -13,6 +13,7 @@
 //********************************************************************************************************************************
 using System;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using XMLToDataClass.Data;
@@ -47,6 +48,8 @@ namespace XMLToDataClass
 		public MainForm()
 		{
 			InitializeComponent();
+
+			this.Text = string.Format("{0} Version: {1}", this.Text, Assembly.GetExecutingAssembly().GetName().Version.ToString());
 
 			mLoadForm.FilePath = Properties.Settings.Default.XMLFileLocation;
 			xmlFilePathLabel.Text = "";
@@ -232,12 +235,20 @@ namespace XMLToDataClass
 			dialog.Title = "Specify the file and path to save the configuration data to";
 			dialog.Filter = "Config files (*.x2dconf)|*.x2dconf|All files (*.*)|*.*";
 			dialog.DefaultExt = "x2dconf";
-			dialog.FileName = Properties.Settings.Default.ConfigFileLocation;
+			try
+			{
+				dialog.InitialDirectory = Path.GetDirectoryName(Properties.Settings.Default.ConfigFileLocation);
+				dialog.FileName = Path.GetFileName(Properties.Settings.Default.ConfigFileLocation);
+			}
+			catch(Exception)
+			{
+				// Do nothing and just let it open the default location.
+			}
 
 			if (dialog.ShowDialog() != DialogResult.OK)
 				return;
 
-			mInfo.Save(dialog.FileName);
+			mInfo.Save(dialog.FileName, codeTextBox.Text, namespaceTextBox.Text, projectCheckBox.Checked, projectTextBox.Text, solutionCheckBox.Checked, solutionTextBox.Text);
 			Properties.Settings.Default.ConfigFileLocation = dialog.FileName;
 			Properties.Settings.Default.Save();
 		}
@@ -264,7 +275,27 @@ namespace XMLToDataClass
 			if (dialog.ShowDialog() != DialogResult.OK)
 				return;
 
-			mInfo.Load(dialog.FileName);
+			string outputFolder;
+			string nameSpace;
+			bool? genProject;
+			string projectName;
+			bool? genSolution;
+			string solutionName;
+			mInfo.Load(dialog.FileName, out outputFolder, out nameSpace, out genProject, out projectName, out genSolution, out solutionName);
+
+			if (string.IsNullOrEmpty(outputFolder))
+				codeTextBox.Text = outputFolder;
+			if (string.IsNullOrEmpty(nameSpace))
+				namespaceTextBox.Text = nameSpace;
+			if (genProject.HasValue)
+				projectCheckBox.Checked = genProject.Value;
+			if (string.IsNullOrEmpty(projectName))
+				projectTextBox.Text = projectName;
+			if (genSolution.HasValue)
+				solutionCheckBox.Checked = genSolution.Value;
+			if (string.IsNullOrEmpty(solutionName))
+				solutionTextBox.Text = solutionName;
+
 			Properties.Settings.Default.ConfigFileLocation = dialog.FileName;
 			Properties.Settings.Default.Save();
 			UpdateDetailView();
@@ -557,12 +588,12 @@ namespace XMLToDataClass
 			Properties.Settings.Default.Save();
 		}
 
-		#endregion Methods
-
 		private void mainClassTextBox_TextChanged(object sender, EventArgs e)
 		{
 			if (mInfo != null)
 				mInfo.MainClassName = mainClassTextBox.Text;
 		}
+
+		#endregion Methods
 	}
 }

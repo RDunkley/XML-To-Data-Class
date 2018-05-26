@@ -22,101 +22,106 @@ namespace XMLToDataClass.Data
 		/// <summary>
 		///   Represents a boolean value type.
 		/// </summary>
-		Boolean = 9,
+		Boolean = 10,
 
 		/// <summary>
 		///   Represents a 8-bit unsigned integer.
 		/// </summary>
-		Byte = 12,
+		Byte = 13,
 
 		/// <summary>
 		///   Represents a 64-bit unsigned integer.
 		/// </summary>
-		Int = 10,
+		Int = 11,
 
 		/// <summary>
 		///   Represents a 64-bit integer.
 		/// </summary>
-		Long = 16,
+		Long = 17,
 
 		/// <summary>
 		///   Represents a 8-bit integer.
 		/// </summary>
-		SByte = 11,
+		SByte = 12,
 
 		/// <summary>
 		///   Represents a 16-bit integer.
 		/// </summary>
-		Short = 13,
+		Short = 14,
 
 		/// <summary>
 		///   Represents a string type.
 		/// </summary>
-		String = 18,
+		String = 19,
 
 		/// <summary>
 		///   Represents a 32-bit unsigned integer.
 		/// </summary>
-		UInt = 15,
+		UInt = 16,
 
 		/// <summary>
 		///   Represents a 64-bit unsigned integer.
 		/// </summary>
-		ULong = 17,
+		ULong = 18,
 
 		/// <summary>
 		///   Represents a 16-bit unsigned integer.
 		/// </summary>
-		UShort = 14,
+		UShort = 15,
 
 		/// <summary>
 		///   Represents a 32-bit floating point value.
 		/// </summary>
-		Float = 8,
+		Float = 9,
 
 		/// <summary>
 		///   Represents a 64-bit floating point value.
 		/// </summary>
-		Double = 7,
+		Double = 8,
 
 		/// <summary>
 		///   Represents a date time value.
 		/// </summary>
-		DateTime = 6,
+		DateTime = 7,
 
 		/// <summary>
 		///  Represents an enumerated type.
 		/// </summary>
-		Enum = 19,
+		Enum = 20,
 
 		/// <summary>
 		///   Represents a serial port parity enumeration.
 		/// </summary>
-		SerialPortParity = 1,
+		SerialPortParity = 2,
 
 		/// <summary>
 		///   Represents a serial port stop bits enumeration.
 		/// </summary>
-		SerialPortStopBits = 0,
+		SerialPortStopBits = 1,
 
 		/// <summary>
 		///   Represents a version.
 		/// </summary>
-		Version = 4,
+		Version = 5,
 
 		/// <summary>
 		///   Represents a duration of time.
 		/// </summary>
-		TimeSpan = 5,
+		TimeSpan = 6,
 
 		/// <summary>
 		///   Represents a network physical address (MAC address).
 		/// </summary>
-		MACAddress = 2,
+		MACAddress = 3,
 
 		/// <summary>
 		///   Represents a network IP address.
 		/// </summary>
-		IPAddress = 3,
+		IPAddress = 4,
+
+		/// <summary>
+		///   Represents a GUID.
+		/// </summary>
+		GUID = 0,
 	}
 }

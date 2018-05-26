@@ -71,6 +71,7 @@
     <Compile Include="Data\Types\EnumType.cs" />
     <Compile Include="Data\Types\FixedEnumType.cs" />
     <Compile Include="Data\Types\FloatingType.cs" />
+    <Compile Include="Data\Types\GUIDType.cs" />
     <Compile Include="Data\Types\IDataType.cs" />
     <Compile Include="Data\Types\IFloatingPointType.cs" />
     <Compile Include="Data\Types\IIntegralType.cs" />
@@ -96,6 +97,12 @@
     </Compile>
     <Compile Include="SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\GUIDTypeSettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="View\GUIDTypeSettings.Designer.cs">
+      <DependentUpon>GUIDTypeSettings.cs</DependentUpon>
     </Compile>
     <Compile Include="View\IPAddressTypeSettings.cs">
       <SubType>UserControl</SubType>
@@ -202,6 +209,9 @@
     </Compile>
     <EmbeddedResource Include="SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\GUIDTypeSettings.resx">
+      <DependentUpon>GUIDTypeSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\IPAddressTypeSettings.resx">
       <DependentUpon>IPAddressTypeSettings.cs</DependentUpon>

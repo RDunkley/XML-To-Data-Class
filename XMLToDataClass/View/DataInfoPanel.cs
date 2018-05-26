@@ -178,6 +178,10 @@ namespace XMLToDataClass.View
 					control = new IPAddressTypeSettings(Info.SelectedDataTypeObject as IPAddressType);
 					((IPAddressTypeSettings)control).SettingsChanged += DataInfoPanel_SettingsChanged;
 					break;
+				case DataType.GUID:
+					control = new GUIDTypeSettings(Info.SelectedDataTypeObject as GUIDType);
+					((GUIDTypeSettings)control).SettingsChanged += DataInfoPanel_SettingsChanged;
+					break;
 				default:
 					throw new NotImplementedException("The data type specified is not recognized as a valid type");
 			}
