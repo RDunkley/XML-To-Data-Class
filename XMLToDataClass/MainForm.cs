@@ -568,6 +568,7 @@ namespace XMLToDataClass
 			form.FlowerBoxCharacter = Properties.Settings.Default.CSCodeGenFlowerBoxCharacter;
 			form.NumberOfCharsPerLine = Properties.Settings.Default.CSCodeGenNumCharsPerLine;
 			form.IndentSize = Properties.Settings.Default.CSCodeGenIndentSize;
+			form.FileExtensionAddition = Properties.Settings.Default.FileExtensionAddition;
 			form.FileHeaderTemplate = ParseTemplate(Properties.Settings.Default.CSCodeGenFileHeaderTemplate);
 			form.CopyrightTemplate = ParseTemplate(Properties.Settings.Default.CSCodeGenCopyrightTemplate);
 			form.LicenseTemplate = ParseTemplate(Properties.Settings.Default.CSCodeGenLicenseTemplate);
@@ -582,6 +583,7 @@ namespace XMLToDataClass
 			Properties.Settings.Default.CSCodeGenFlowerBoxCharacter = form.FlowerBoxCharacter;
 			Properties.Settings.Default.CSCodeGenNumCharsPerLine = form.NumberOfCharsPerLine;
 			Properties.Settings.Default.CSCodeGenIndentSize = form.IndentSize;
+			Properties.Settings.Default.FileExtensionAddition = form.FileExtensionAddition;
 			Properties.Settings.Default.CSCodeGenFileHeaderTemplate = MergeTemplate(form.FileHeaderTemplate);
 			Properties.Settings.Default.CSCodeGenCopyrightTemplate = MergeTemplate(form.CopyrightTemplate);
 			Properties.Settings.Default.CSCodeGenLicenseTemplate = MergeTemplate(form.LicenseTemplate);

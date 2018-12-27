@@ -68,6 +68,21 @@ namespace XMLToDataClass
 		}
 
 		/// <summary>
+		///   Extension to add to the filenames of the auto-generated files.
+		/// </summary>
+		public string FileExtensionAddition
+		{
+			get
+			{
+				return fileExtenstionTextBox.Text;
+			}
+			set
+			{
+				fileExtenstionTextBox.Text = value;
+			}
+		}
+
+		/// <summary>
 		///   File header template (as specified by CSCodeGen library).
 		/// </summary>
 		public string[] FileHeaderTemplate

@@ -287,7 +287,10 @@ namespace XMLToDataClass.Data
 			main.AddUsing("System.Xml");
 			main.AddUsing("System.IO");
 			main.AddUsing("System.Security");
-			fileList.Add(new CSCodeGen.FileInfo(nameSpace, main));
+			string fileExtension = null;
+			if (!string.IsNullOrEmpty(Properties.Settings.Default.FileExtensionAddition))
+				fileExtension = Properties.Settings.Default.FileExtensionAddition;
+			fileList.Add(new CSCodeGen.FileInfo(nameSpace, main, null, null, fileExtension));
 
 			if (HierarchyMaintained)
 			{
@@ -297,7 +300,7 @@ namespace XMLToDataClass.Data
 			{
 				ElementInfo[] nodes = GetAllNodes();
 				foreach (ElementInfo info in nodes)
-					fileList.Add(new CSCodeGen.FileInfo(nameSpace, info.GenerateDataClass(HierarchyMaintained)));
+					fileList.Add(new CSCodeGen.FileInfo(nameSpace, info.GenerateDataClass(HierarchyMaintained), null, null, fileExtension));
 			}
 
 			return fileList.ToArray();
