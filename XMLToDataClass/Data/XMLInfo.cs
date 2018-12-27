@@ -311,10 +311,51 @@ namespace XMLToDataClass.Data
 			// Add properties for each root element.
 			summary = string.Format("Contains the root {0} element in the XML file.", RootNode.Name);
 			info.Properties.Add(new PropertyInfo("public", string.Format("{0}", RootNode.ClassName), "Root", summary, null, null, "private"));
+			info.Properties.Add(new PropertyInfo("public", "string", "Encoding", "Encoding of the XML file."));
+			info.Properties.Add(new PropertyInfo("public", "string", "Version", "XML specification version of the XML file."));
+
+			info.Constructors.Add(GenerateRootConstructorMethod());
+			info.Constructors.Add(GenerateXmlConstructorMethod());
 
 			info.Methods.Add(GenerateImporterMethod());
 			info.Methods.Add(GenerateExporterMethod());
 			return info;
+		}
+
+		private ConstructorInfo GenerateXmlConstructorMethod()
+		{
+			string summary = string.Format("Instantiates a new {0} object using the provided XML file.", MainClassName);
+			ConstructorInfo method = new ConstructorInfo("public", MainClassName, summary);
+			method.OverloadedSummary = string.Format("Instantiates a new {0} object.", MainClassName);
+
+			method.Parameters.Add(new ParameterInfo("string", "filePath", "Path to the XML file to be parsed.", false, false));
+
+			method.CodeLines.Add(string.Empty);
+			method.CodeLines.Add("ImportFromXML(filePath);");
+			return method;
+		}
+
+		private ConstructorInfo GenerateRootConstructorMethod()
+		{
+			string summary = string.Format("Instantiates a new {0} object using the provided root object and XML parameters.", MainClassName);
+			ConstructorInfo method = new ConstructorInfo("public", MainClassName, summary);
+			method.OverloadedSummary = string.Format("Instantiates a new {0} object.", MainClassName);
+
+			method.Parameters.Add(new ParameterInfo(RootNode.ClassName, "root", "Root object of the XML file.", false));
+			method.Parameters.Add(new ParameterInfo("string", "xmlEncoding", "Encoding of the XML file.", true));
+			method.Parameters.Add(new ParameterInfo("string", "xmlVersion", "XML specification version of the XML file.", true));
+
+			method.CodeLines.Add(string.Empty);
+			method.CodeLines.Add("if(string.IsNullOrEmpty(xmlEncoding))");
+			method.CodeLines.Add("	Encoding = \"UTF-8\";");
+			method.CodeLines.Add("else");
+			method.CodeLines.Add("	Encoding = xmlEncoding;");
+			method.CodeLines.Add("if(string.IsNullOrEmpty(xmlVersion))");
+			method.CodeLines.Add("	Version = \"1.0\";");
+			method.CodeLines.Add("else");
+			method.CodeLines.Add("	Version = xmlVersion;");
+			method.CodeLines.Add("Root = root;");
+			return method;
 		}
 
 		private MethodInfo GenerateImporterMethod()
@@ -371,6 +412,19 @@ namespace XMLToDataClass.Data
 			method.CodeLines.Add("	throw new InvalidOperationException(\"filePath referenced a file that does not contain valid XML.\", e);");
 			method.CodeLines.Add("}");
 			method.CodeLines.Add(string.Empty);
+			method.CodeLines.Add("// Pull the version and encoding");
+			method.CodeLines.Add("XmlDeclaration dec = doc.FirstChild as XmlDeclaration;");
+			method.CodeLines.Add("if(dec != null)");
+			method.CodeLines.Add("{");
+			method.CodeLines.Add("	Version = dec.Version;");
+			method.CodeLines.Add("	Encoding = dec.Encoding;");
+			method.CodeLines.Add("}");
+			method.CodeLines.Add("else");
+			method.CodeLines.Add("{");
+			method.CodeLines.Add("	Version = \"1.0\";");
+			method.CodeLines.Add("	Encoding = \"UTF-8\";");
+			method.CodeLines.Add("}");
+			method.CodeLines.Add(string.Empty);
 
 			// Add the list objects.
 			method.CodeLines.Add("XmlElement root = doc.DocumentElement;");
@@ -392,17 +446,9 @@ namespace XMLToDataClass.Data
 			method.Exceptions.Add(new ExceptionInfo("InvalidOperationException", "<paramref name=\"filePath\"/> could not be opened."));
 
 			method.CodeLines.Add("XmlDocument doc = new XmlDocument();");
-			if (Version != null || Encoding != null)
-			{
-				string versionString = Version;
-				if (versionString == null)
-					versionString = string.Empty;
-				string encodingString = Encoding;
-				if (encodingString == null)
-					encodingString = string.Empty;
-				method.CodeLines.Add(string.Format("XmlDeclaration dec = doc.CreateXmlDeclaration(\"{0}\", \"{1}\", null);", versionString, encodingString));
-				method.CodeLines.Add("doc.InsertBefore(dec, doc.DocumentElement);");
-			}
+			method.CodeLines.Add("XmlDeclaration dec = doc.CreateXmlDeclaration(Version, Encoding, null);");
+			method.CodeLines.Add("doc.InsertBefore(dec, doc.DocumentElement);");
+			method.CodeLines.Add(string.Empty);
 
 			method.CodeLines.Add("XmlElement root = Root.CreateElement(doc);");
 			method.CodeLines.Add("doc.AppendChild(root);");
