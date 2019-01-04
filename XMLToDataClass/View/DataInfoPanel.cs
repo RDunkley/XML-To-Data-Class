@@ -81,6 +81,12 @@ namespace XMLToDataClass.View
 				propertyNameTextBox.Text = Info.PropertyName;
 				return;
 			}
+			if(propertyNameTextBox.Text == "Ordinal")
+			{
+				MessageBox.Show(string.Format("The property name cannot be set to 'Ordinal'. The generated code has this property reserved for the order of the XML elements."), "Incorrect Identifier", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				propertyNameTextBox.Text = Info.PropertyName;
+				return;
+			}
 			Info.PropertyName = propertyNameTextBox.Text;
 		}
 

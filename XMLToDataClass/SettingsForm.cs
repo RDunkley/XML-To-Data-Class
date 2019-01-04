@@ -11,7 +11,11 @@
 // CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and
 // limitations under the License.
 //********************************************************************************************************************************
+using System;
+using System.Collections.Generic;
+using System.Reflection;
 using System.Windows.Forms;
+using XMLToDataClass.Parse;
 
 namespace XMLToDataClass
 {
@@ -200,5 +204,167 @@ namespace XMLToDataClass
 		}
 
 		#endregion Methods
+
+		private void exportButton_Click(object sender, System.EventArgs e)
+		{
+			SaveFileDialog dialog = new SaveFileDialog();
+			dialog.CheckPathExists = true;
+			dialog.OverwritePrompt = true;
+			dialog.Title = "Specify the file and path to save the settings to";
+			dialog.Filter = "Config files (*.x2dsettings)|*.x2dsettings|All files (*.*)|*.*";
+			dialog.DefaultExt = "x2dsettings";
+
+			if (dialog.ShowDialog() != DialogResult.OK)
+				return;
+
+			List<SettingInfo> settingList = new List<SettingInfo>();
+			settingList.Add(new SettingInfo("Company", Company));
+			settingList.AddRange(GenerateSettingsFromStringArray("CopyrightTemplate", CopyrightTemplate));
+			settingList.Add(new SettingInfo("Developer", Developer));
+			settingList.Add(new SettingInfo("FileExtensionAddition", FileExtensionAddition));
+			settingList.AddRange(GenerateSettingsFromStringArray("FileHeaderTemplate", FileHeaderTemplate));
+			settingList.Add(new SettingInfo("FlowerBoxCharacter", FlowerBoxCharacter.ToString()));
+			settingList.Add(new SettingInfo("IncludeSubHeader", IncludeSubHeader.ToString()));
+			settingList.Add(new SettingInfo("IndentSize", IndentSize.ToString()));
+			settingList.AddRange(GenerateSettingsFromStringArray("LicenseTemplate", LicenseTemplate));
+			settingList.Add(new SettingInfo("NumberOfCharsPerLine", NumberOfCharsPerLine.ToString()));
+			settingList.Add(new SettingInfo("UseTabs", UseTabs.ToString()));
+			Settings settings = new Settings(DateTime.Now, Assembly.GetExecutingAssembly().GetName().Version, settingList.ToArray());
+
+
+			SettingsFile file = new SettingsFile(settings, "UTF-8", "1.0");
+			try
+			{
+				file.ExportToXML(dialog.FileName);
+			}
+			catch(InvalidOperationException ex)
+			{
+				MessageBox.Show("Unable to save the settings information. " + ex.Message, "Error Saving Settings", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
+		}
+
+		private SettingInfo[] GenerateSettingsFromStringArray(string name, string[] array)
+		{
+			List<SettingInfo> settingList = new List<SettingInfo>();
+			settingList.Add(new SettingInfo(string.Format("{0}_size", name), array.Length.ToString()));
+			for(int i = 0; i < array.Length; i++)
+				settingList.Add(new SettingInfo(string.Format("{0}_{1}", name, i), array[i]));
+			return settingList.ToArray();
+		}
+
+		private bool? GetBoolFromSetting(string name, SettingInfo[] settings)
+		{
+			SettingInfo setting = FindSetting(name, settings);
+			if (setting == null)
+				return null;
+			bool result;
+			if (!bool.TryParse(setting.Value, out result))
+				return null;
+			return result;
+		}
+
+		private int GetIntegerFromSetting(string name, SettingInfo[] settings)
+		{
+			SettingInfo setting = FindSetting(name, settings);
+			if (setting == null)
+				return -1;
+			int result;
+			if (!int.TryParse(setting.Value, out result))
+				return -1;
+			return result;
+		}
+
+		private string GetStringFromSetting(string name, SettingInfo[] settings)
+		{
+			SettingInfo setting = FindSetting(name, settings);
+			if (setting == null)
+				return null;
+			return setting.Value;
+		}
+
+		private string[] GenerateStringArrayFromSettings(string name, SettingInfo[] settings)
+		{
+			int result = GetIntegerFromSetting(string.Format("{0}_size", name), settings);
+			if (result == -1)
+				return null;
+			string[] array = new string[result];
+			for(int i = 0; i < result; i++)
+			{
+				SettingInfo setting = FindSetting(string.Format("{0}_{1}", name, i), settings);
+				if (setting == null)
+					return null;
+				array[i] = setting.Value;
+			}
+			return array;
+		}
+
+		private SettingInfo FindSetting(string name, SettingInfo[] settings)
+		{
+			foreach(SettingInfo setting in settings)
+			{
+				if (setting.Name == name)
+					return setting;
+			}
+			return null;
+		}
+
+		private void importButton_Click(object sender, EventArgs e)
+		{
+			OpenFileDialog dialog = new OpenFileDialog();
+			dialog.CheckFileExists = true;
+			dialog.CheckPathExists = true;
+			dialog.Filter = "Setting files (*.x2dsettings)|*.x2dsettings|All files (*.*)|*.*";
+			dialog.DefaultExt = "x2dsettings";
+			dialog.Multiselect = false;
+			dialog.Title = "Specify the file and path to load the settings from";
+
+			if (dialog.ShowDialog() != DialogResult.OK)
+				return;
+
+			SettingsFile file;
+			try
+			{
+				file = new SettingsFile(dialog.FileName);
+			}
+			catch(ArgumentException ex)
+			{
+				MessageBox.Show("Unable to load the settings information. " + ex.Message, "Error Loading Settings", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return;
+			}
+
+			string input = GetStringFromSetting("Company", file.Root.SettingInfos);
+			if (input != null)
+				Company = input;
+			string[] inputArray = GenerateStringArrayFromSettings("CopyrightTemplate", file.Root.SettingInfos);
+			if (inputArray != null)
+				CopyrightTemplate = inputArray;
+			input = GetStringFromSetting("Developer", file.Root.SettingInfos);
+			if (input != null)
+				Developer = input;
+			input = GetStringFromSetting("FileExtensionAddition", file.Root.SettingInfos);
+			if (input != null)
+				FileExtensionAddition = input;
+			inputArray = GenerateStringArrayFromSettings("FileHeaderTemplate", file.Root.SettingInfos);
+			if (inputArray != null)
+				FileHeaderTemplate = inputArray;
+			input = GetStringFromSetting("FlowerBoxCharacter", file.Root.SettingInfos);
+			if (input != null)
+				FlowerBoxCharacter = input[0];
+			bool? boolValue = GetBoolFromSetting("IncludeSubHeader", file.Root.SettingInfos);
+			if (boolValue.HasValue)
+				IncludeSubHeader = boolValue.Value;
+			int intValue = GetIntegerFromSetting("IndentSize", file.Root.SettingInfos);
+			if (intValue != -1)
+				IndentSize = intValue;
+			inputArray = GenerateStringArrayFromSettings("LicenseTemplate", file.Root.SettingInfos);
+			if (inputArray != null)
+				LicenseTemplate = inputArray;
+			intValue = GetIntegerFromSetting("NumberOfCharsPerLine", file.Root.SettingInfos);
+			if (intValue != -1)
+				NumberOfCharsPerLine = intValue;
+			boolValue = GetBoolFromSetting("UseTabs", file.Root.SettingInfos);
+			if (boolValue.HasValue)
+				UseTabs = boolValue.Value;
+		}
 	}
 }

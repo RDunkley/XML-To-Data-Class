@@ -358,6 +358,7 @@ namespace XMLToDataClass.Data
 			method.CodeLines.Add("else");
 			method.CodeLines.Add("	Version = xmlVersion;");
 			method.CodeLines.Add("Root = root;");
+			method.CodeLines.Add("Root.Ordinal = 0;");
 			return method;
 		}
 
@@ -435,7 +436,7 @@ namespace XMLToDataClass.Data
 			method.CodeLines.Add("	throw new InvalidDataException(\"The root node is not an element node.\");");
 			method.CodeLines.Add(string.Format("if(string.Compare(root.Name, \"{0}\", false) != 0)", RootNode.Name));
 			method.CodeLines.Add(string.Format("	throw new InvalidDataException(\"The root node is not a '{0}' named node.\");", RootNode.Name));
-			method.CodeLines.Add(string.Format("Root = new {0}(root);", RootNode.ClassName));
+			method.CodeLines.Add(string.Format("Root = new {0}(root, 0);", RootNode.ClassName));
 			return method;
 		}
 

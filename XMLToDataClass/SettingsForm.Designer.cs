@@ -48,17 +48,21 @@
 			this.copyrightRichTextBox = new System.Windows.Forms.RichTextBox();
 			this.licenseTabPage = new System.Windows.Forms.TabPage();
 			this.licenseRichTextBox = new System.Windows.Forms.RichTextBox();
-			this.okButton = new System.Windows.Forms.Button();
-			this.cancelButton = new System.Windows.Forms.Button();
 			this.subHeaderCheckBox = new System.Windows.Forms.CheckBox();
 			this.fileExtenstionTextBox = new System.Windows.Forms.TextBox();
 			this.label6 = new System.Windows.Forms.Label();
+			this.buttonFlowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
+			this.okButton = new System.Windows.Forms.Button();
+			this.cancelButton = new System.Windows.Forms.Button();
+			this.exportButton = new System.Windows.Forms.Button();
+			this.importButton = new System.Windows.Forms.Button();
 			this.mainTableLayoutPanel.SuspendLayout();
 			this.templateGroupBox.SuspendLayout();
 			this.mainTabControl.SuspendLayout();
 			this.fileHeaderTabPage.SuspendLayout();
 			this.copyrightTabPage.SuspendLayout();
 			this.licenseTabPage.SuspendLayout();
+			this.buttonFlowLayoutPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// mainTableLayoutPanel
@@ -80,11 +84,10 @@
 			this.mainTableLayoutPanel.Controls.Add(this.label4, 2, 2);
 			this.mainTableLayoutPanel.Controls.Add(this.indentTextBox, 3, 2);
 			this.mainTableLayoutPanel.Controls.Add(this.templateGroupBox, 0, 4);
-			this.mainTableLayoutPanel.Controls.Add(this.okButton, 1, 5);
-			this.mainTableLayoutPanel.Controls.Add(this.cancelButton, 2, 5);
 			this.mainTableLayoutPanel.Controls.Add(this.subHeaderCheckBox, 1, 2);
 			this.mainTableLayoutPanel.Controls.Add(this.fileExtenstionTextBox, 2, 3);
 			this.mainTableLayoutPanel.Controls.Add(this.label6, 1, 3);
+			this.mainTableLayoutPanel.Controls.Add(this.buttonFlowLayoutPanel, 0, 5);
 			this.mainTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.mainTableLayoutPanel.Location = new System.Drawing.Point(0, 0);
 			this.mainTableLayoutPanel.Name = "mainTableLayoutPanel";
@@ -212,7 +215,7 @@
 			this.templateGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.templateGroupBox.Location = new System.Drawing.Point(3, 107);
 			this.templateGroupBox.Name = "templateGroupBox";
-			this.templateGroupBox.Size = new System.Drawing.Size(435, 137);
+			this.templateGroupBox.Size = new System.Drawing.Size(435, 130);
 			this.templateGroupBox.TabIndex = 12;
 			this.templateGroupBox.TabStop = false;
 			this.templateGroupBox.Text = "Templates";
@@ -226,7 +229,7 @@
 			this.mainTabControl.Location = new System.Drawing.Point(3, 16);
 			this.mainTabControl.Name = "mainTabControl";
 			this.mainTabControl.SelectedIndex = 0;
-			this.mainTabControl.Size = new System.Drawing.Size(429, 118);
+			this.mainTabControl.Size = new System.Drawing.Size(429, 111);
 			this.mainTabControl.TabIndex = 11;
 			// 
 			// fileHeaderTabPage
@@ -235,7 +238,7 @@
 			this.fileHeaderTabPage.Location = new System.Drawing.Point(4, 22);
 			this.fileHeaderTabPage.Name = "fileHeaderTabPage";
 			this.fileHeaderTabPage.Padding = new System.Windows.Forms.Padding(3);
-			this.fileHeaderTabPage.Size = new System.Drawing.Size(421, 92);
+			this.fileHeaderTabPage.Size = new System.Drawing.Size(421, 85);
 			this.fileHeaderTabPage.TabIndex = 0;
 			this.fileHeaderTabPage.Text = "File Header";
 			this.fileHeaderTabPage.UseVisualStyleBackColor = true;
@@ -247,7 +250,7 @@
 			this.fileRichTextBox.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.fileRichTextBox.Location = new System.Drawing.Point(3, 3);
 			this.fileRichTextBox.Name = "fileRichTextBox";
-			this.fileRichTextBox.Size = new System.Drawing.Size(415, 86);
+			this.fileRichTextBox.Size = new System.Drawing.Size(415, 79);
 			this.fileRichTextBox.TabIndex = 0;
 			this.fileRichTextBox.Text = "";
 			this.fileRichTextBox.WordWrap = false;
@@ -258,7 +261,7 @@
 			this.copyrightTabPage.Location = new System.Drawing.Point(4, 22);
 			this.copyrightTabPage.Name = "copyrightTabPage";
 			this.copyrightTabPage.Padding = new System.Windows.Forms.Padding(3);
-			this.copyrightTabPage.Size = new System.Drawing.Size(421, 99);
+			this.copyrightTabPage.Size = new System.Drawing.Size(421, 85);
 			this.copyrightTabPage.TabIndex = 1;
 			this.copyrightTabPage.Text = "Copyright";
 			this.copyrightTabPage.UseVisualStyleBackColor = true;
@@ -270,7 +273,7 @@
 			this.copyrightRichTextBox.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.copyrightRichTextBox.Location = new System.Drawing.Point(3, 3);
 			this.copyrightRichTextBox.Name = "copyrightRichTextBox";
-			this.copyrightRichTextBox.Size = new System.Drawing.Size(415, 93);
+			this.copyrightRichTextBox.Size = new System.Drawing.Size(415, 79);
 			this.copyrightRichTextBox.TabIndex = 1;
 			this.copyrightRichTextBox.Text = "";
 			this.copyrightRichTextBox.WordWrap = false;
@@ -281,7 +284,7 @@
 			this.licenseTabPage.Location = new System.Drawing.Point(4, 22);
 			this.licenseTabPage.Name = "licenseTabPage";
 			this.licenseTabPage.Padding = new System.Windows.Forms.Padding(3);
-			this.licenseTabPage.Size = new System.Drawing.Size(421, 99);
+			this.licenseTabPage.Size = new System.Drawing.Size(421, 85);
 			this.licenseTabPage.TabIndex = 2;
 			this.licenseTabPage.Text = "License";
 			this.licenseTabPage.UseVisualStyleBackColor = true;
@@ -293,32 +296,10 @@
 			this.licenseRichTextBox.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.licenseRichTextBox.Location = new System.Drawing.Point(3, 3);
 			this.licenseRichTextBox.Name = "licenseRichTextBox";
-			this.licenseRichTextBox.Size = new System.Drawing.Size(415, 93);
+			this.licenseRichTextBox.Size = new System.Drawing.Size(415, 79);
 			this.licenseRichTextBox.TabIndex = 1;
 			this.licenseRichTextBox.Text = "";
 			this.licenseRichTextBox.WordWrap = false;
-			// 
-			// okButton
-			// 
-			this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.okButton.Location = new System.Drawing.Point(152, 250);
-			this.okButton.Name = "okButton";
-			this.okButton.Size = new System.Drawing.Size(75, 23);
-			this.okButton.TabIndex = 13;
-			this.okButton.Text = "Ok";
-			this.okButton.UseVisualStyleBackColor = true;
-			// 
-			// cancelButton
-			// 
-			this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.cancelButton.Location = new System.Drawing.Point(233, 250);
-			this.cancelButton.Name = "cancelButton";
-			this.cancelButton.Size = new System.Drawing.Size(75, 23);
-			this.cancelButton.TabIndex = 14;
-			this.cancelButton.Text = "Cancel";
-			this.cancelButton.UseVisualStyleBackColor = true;
 			// 
 			// subHeaderCheckBox
 			// 
@@ -350,6 +331,61 @@
 			this.label6.Text = "File Extension Addition:";
 			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// buttonFlowLayoutPanel
+			// 
+			this.mainTableLayoutPanel.SetColumnSpan(this.buttonFlowLayoutPanel, 4);
+			this.buttonFlowLayoutPanel.Controls.Add(this.okButton);
+			this.buttonFlowLayoutPanel.Controls.Add(this.cancelButton);
+			this.buttonFlowLayoutPanel.Controls.Add(this.exportButton);
+			this.buttonFlowLayoutPanel.Controls.Add(this.importButton);
+			this.buttonFlowLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.buttonFlowLayoutPanel.Location = new System.Drawing.Point(3, 243);
+			this.buttonFlowLayoutPanel.Name = "buttonFlowLayoutPanel";
+			this.buttonFlowLayoutPanel.Size = new System.Drawing.Size(435, 30);
+			this.buttonFlowLayoutPanel.TabIndex = 18;
+			// 
+			// okButton
+			// 
+			this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
+			this.okButton.Location = new System.Drawing.Point(3, 3);
+			this.okButton.Name = "okButton";
+			this.okButton.Size = new System.Drawing.Size(75, 23);
+			this.okButton.TabIndex = 13;
+			this.okButton.Text = "Ok";
+			this.okButton.UseVisualStyleBackColor = true;
+			// 
+			// cancelButton
+			// 
+			this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.cancelButton.Location = new System.Drawing.Point(84, 3);
+			this.cancelButton.Name = "cancelButton";
+			this.cancelButton.Size = new System.Drawing.Size(75, 23);
+			this.cancelButton.TabIndex = 14;
+			this.cancelButton.Text = "Cancel";
+			this.cancelButton.UseVisualStyleBackColor = true;
+			// 
+			// exportButton
+			// 
+			this.exportButton.Location = new System.Drawing.Point(165, 3);
+			this.exportButton.Name = "exportButton";
+			this.exportButton.Size = new System.Drawing.Size(75, 23);
+			this.exportButton.TabIndex = 15;
+			this.exportButton.Text = "Export";
+			this.exportButton.UseVisualStyleBackColor = true;
+			this.exportButton.Click += new System.EventHandler(this.exportButton_Click);
+			// 
+			// importButton
+			// 
+			this.importButton.Location = new System.Drawing.Point(246, 3);
+			this.importButton.Name = "importButton";
+			this.importButton.Size = new System.Drawing.Size(75, 23);
+			this.importButton.TabIndex = 16;
+			this.importButton.Text = "Import";
+			this.importButton.UseVisualStyleBackColor = true;
+			this.importButton.Click += new System.EventHandler(this.importButton_Click);
+			// 
 			// SettingsForm
 			// 
 			this.AcceptButton = this.okButton;
@@ -369,6 +405,7 @@
 			this.fileHeaderTabPage.ResumeLayout(false);
 			this.copyrightTabPage.ResumeLayout(false);
 			this.licenseTabPage.ResumeLayout(false);
+			this.buttonFlowLayoutPanel.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -400,5 +437,8 @@
 		private System.Windows.Forms.CheckBox subHeaderCheckBox;
 		private System.Windows.Forms.TextBox fileExtenstionTextBox;
 		private System.Windows.Forms.Label label6;
+		private System.Windows.Forms.FlowLayoutPanel buttonFlowLayoutPanel;
+		private System.Windows.Forms.Button exportButton;
+		private System.Windows.Forms.Button importButton;
 	}
 }
