@@ -569,8 +569,8 @@ namespace XMLToDataClass
 			form.NumberOfCharsPerLine = Properties.Settings.Default.CSCodeGenNumCharsPerLine;
 			form.IndentSize = Properties.Settings.Default.CSCodeGenIndentSize;
 			form.FileExtensionAddition = Properties.Settings.Default.FileExtensionAddition;
+			form.CopyrightTemplate = Properties.Settings.Default.CSCodeGenCopyrightTemplate;
 			form.FileHeaderTemplate = ParseTemplate(Properties.Settings.Default.CSCodeGenFileHeaderTemplate);
-			form.CopyrightTemplate = ParseTemplate(Properties.Settings.Default.CSCodeGenCopyrightTemplate);
 			form.LicenseTemplate = ParseTemplate(Properties.Settings.Default.CSCodeGenLicenseTemplate);
 
 			if (form.ShowDialog() != DialogResult.OK)
@@ -585,7 +585,7 @@ namespace XMLToDataClass
 			Properties.Settings.Default.CSCodeGenIndentSize = form.IndentSize;
 			Properties.Settings.Default.FileExtensionAddition = form.FileExtensionAddition;
 			Properties.Settings.Default.CSCodeGenFileHeaderTemplate = MergeTemplate(form.FileHeaderTemplate);
-			Properties.Settings.Default.CSCodeGenCopyrightTemplate = MergeTemplate(form.CopyrightTemplate);
+			Properties.Settings.Default.CSCodeGenCopyrightTemplate = form.CopyrightTemplate;
 			Properties.Settings.Default.CSCodeGenLicenseTemplate = MergeTemplate(form.LicenseTemplate);
 			Properties.Settings.Default.Save();
 		}

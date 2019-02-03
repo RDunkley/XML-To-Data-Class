@@ -90,9 +90,6 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Parse\SettingInfo.AutoGen.cs" />
-    <Compile Include="Parse\Settings.AutoGen.cs" />
-    <Compile Include="Parse\SettingsFile.AutoGen.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SettingsForm.cs">

@@ -44,8 +44,6 @@
 			this.mainTabControl = new System.Windows.Forms.TabControl();
 			this.fileHeaderTabPage = new System.Windows.Forms.TabPage();
 			this.fileRichTextBox = new System.Windows.Forms.RichTextBox();
-			this.copyrightTabPage = new System.Windows.Forms.TabPage();
-			this.copyrightRichTextBox = new System.Windows.Forms.RichTextBox();
 			this.licenseTabPage = new System.Windows.Forms.TabPage();
 			this.licenseRichTextBox = new System.Windows.Forms.RichTextBox();
 			this.subHeaderCheckBox = new System.Windows.Forms.CheckBox();
@@ -56,11 +54,12 @@
 			this.cancelButton = new System.Windows.Forms.Button();
 			this.exportButton = new System.Windows.Forms.Button();
 			this.importButton = new System.Windows.Forms.Button();
+			this.label7 = new System.Windows.Forms.Label();
+			this.copyrightTextBox = new System.Windows.Forms.TextBox();
 			this.mainTableLayoutPanel.SuspendLayout();
 			this.templateGroupBox.SuspendLayout();
 			this.mainTabControl.SuspendLayout();
 			this.fileHeaderTabPage.SuspendLayout();
-			this.copyrightTabPage.SuspendLayout();
 			this.licenseTabPage.SuspendLayout();
 			this.buttonFlowLayoutPanel.SuspendLayout();
 			this.SuspendLayout();
@@ -83,22 +82,25 @@
 			this.mainTableLayoutPanel.Controls.Add(this.tabCheckBox, 0, 2);
 			this.mainTableLayoutPanel.Controls.Add(this.label4, 2, 2);
 			this.mainTableLayoutPanel.Controls.Add(this.indentTextBox, 3, 2);
-			this.mainTableLayoutPanel.Controls.Add(this.templateGroupBox, 0, 4);
+			this.mainTableLayoutPanel.Controls.Add(this.templateGroupBox, 0, 5);
 			this.mainTableLayoutPanel.Controls.Add(this.subHeaderCheckBox, 1, 2);
-			this.mainTableLayoutPanel.Controls.Add(this.fileExtenstionTextBox, 2, 3);
-			this.mainTableLayoutPanel.Controls.Add(this.label6, 1, 3);
-			this.mainTableLayoutPanel.Controls.Add(this.buttonFlowLayoutPanel, 0, 5);
+			this.mainTableLayoutPanel.Controls.Add(this.fileExtenstionTextBox, 2, 4);
+			this.mainTableLayoutPanel.Controls.Add(this.label6, 1, 4);
+			this.mainTableLayoutPanel.Controls.Add(this.buttonFlowLayoutPanel, 0, 6);
+			this.mainTableLayoutPanel.Controls.Add(this.label7, 0, 3);
+			this.mainTableLayoutPanel.Controls.Add(this.copyrightTextBox, 1, 3);
 			this.mainTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.mainTableLayoutPanel.Location = new System.Drawing.Point(0, 0);
 			this.mainTableLayoutPanel.Name = "mainTableLayoutPanel";
-			this.mainTableLayoutPanel.RowCount = 6;
+			this.mainTableLayoutPanel.RowCount = 7;
+			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.mainTableLayoutPanel.Size = new System.Drawing.Size(441, 276);
+			this.mainTableLayoutPanel.Size = new System.Drawing.Size(441, 303);
 			this.mainTableLayoutPanel.TabIndex = 0;
 			// 
 			// label1
@@ -213,9 +215,9 @@
 			this.mainTableLayoutPanel.SetColumnSpan(this.templateGroupBox, 4);
 			this.templateGroupBox.Controls.Add(this.mainTabControl);
 			this.templateGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.templateGroupBox.Location = new System.Drawing.Point(3, 107);
+			this.templateGroupBox.Location = new System.Drawing.Point(3, 133);
 			this.templateGroupBox.Name = "templateGroupBox";
-			this.templateGroupBox.Size = new System.Drawing.Size(435, 130);
+			this.templateGroupBox.Size = new System.Drawing.Size(435, 131);
 			this.templateGroupBox.TabIndex = 12;
 			this.templateGroupBox.TabStop = false;
 			this.templateGroupBox.Text = "Templates";
@@ -223,13 +225,12 @@
 			// mainTabControl
 			// 
 			this.mainTabControl.Controls.Add(this.fileHeaderTabPage);
-			this.mainTabControl.Controls.Add(this.copyrightTabPage);
 			this.mainTabControl.Controls.Add(this.licenseTabPage);
 			this.mainTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.mainTabControl.Location = new System.Drawing.Point(3, 16);
 			this.mainTabControl.Name = "mainTabControl";
 			this.mainTabControl.SelectedIndex = 0;
-			this.mainTabControl.Size = new System.Drawing.Size(429, 111);
+			this.mainTabControl.Size = new System.Drawing.Size(429, 112);
 			this.mainTabControl.TabIndex = 11;
 			// 
 			// fileHeaderTabPage
@@ -238,7 +239,7 @@
 			this.fileHeaderTabPage.Location = new System.Drawing.Point(4, 22);
 			this.fileHeaderTabPage.Name = "fileHeaderTabPage";
 			this.fileHeaderTabPage.Padding = new System.Windows.Forms.Padding(3);
-			this.fileHeaderTabPage.Size = new System.Drawing.Size(421, 85);
+			this.fileHeaderTabPage.Size = new System.Drawing.Size(421, 86);
 			this.fileHeaderTabPage.TabIndex = 0;
 			this.fileHeaderTabPage.Text = "File Header";
 			this.fileHeaderTabPage.UseVisualStyleBackColor = true;
@@ -250,33 +251,10 @@
 			this.fileRichTextBox.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.fileRichTextBox.Location = new System.Drawing.Point(3, 3);
 			this.fileRichTextBox.Name = "fileRichTextBox";
-			this.fileRichTextBox.Size = new System.Drawing.Size(415, 79);
+			this.fileRichTextBox.Size = new System.Drawing.Size(415, 80);
 			this.fileRichTextBox.TabIndex = 0;
 			this.fileRichTextBox.Text = "";
 			this.fileRichTextBox.WordWrap = false;
-			// 
-			// copyrightTabPage
-			// 
-			this.copyrightTabPage.Controls.Add(this.copyrightRichTextBox);
-			this.copyrightTabPage.Location = new System.Drawing.Point(4, 22);
-			this.copyrightTabPage.Name = "copyrightTabPage";
-			this.copyrightTabPage.Padding = new System.Windows.Forms.Padding(3);
-			this.copyrightTabPage.Size = new System.Drawing.Size(421, 85);
-			this.copyrightTabPage.TabIndex = 1;
-			this.copyrightTabPage.Text = "Copyright";
-			this.copyrightTabPage.UseVisualStyleBackColor = true;
-			// 
-			// copyrightRichTextBox
-			// 
-			this.copyrightRichTextBox.AcceptsTab = true;
-			this.copyrightRichTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.copyrightRichTextBox.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.copyrightRichTextBox.Location = new System.Drawing.Point(3, 3);
-			this.copyrightRichTextBox.Name = "copyrightRichTextBox";
-			this.copyrightRichTextBox.Size = new System.Drawing.Size(415, 79);
-			this.copyrightRichTextBox.TabIndex = 1;
-			this.copyrightRichTextBox.Text = "";
-			this.copyrightRichTextBox.WordWrap = false;
 			// 
 			// licenseTabPage
 			// 
@@ -315,7 +293,7 @@
 			// fileExtenstionTextBox
 			// 
 			this.fileExtenstionTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.fileExtenstionTextBox.Location = new System.Drawing.Point(233, 81);
+			this.fileExtenstionTextBox.Location = new System.Drawing.Point(233, 107);
 			this.fileExtenstionTextBox.Name = "fileExtenstionTextBox";
 			this.fileExtenstionTextBox.Size = new System.Drawing.Size(155, 20);
 			this.fileExtenstionTextBox.TabIndex = 16;
@@ -324,7 +302,7 @@
 			// 
 			this.label6.AutoSize = true;
 			this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label6.Location = new System.Drawing.Point(81, 78);
+			this.label6.Location = new System.Drawing.Point(81, 104);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(146, 26);
 			this.label6.TabIndex = 17;
@@ -339,7 +317,7 @@
 			this.buttonFlowLayoutPanel.Controls.Add(this.exportButton);
 			this.buttonFlowLayoutPanel.Controls.Add(this.importButton);
 			this.buttonFlowLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.buttonFlowLayoutPanel.Location = new System.Drawing.Point(3, 243);
+			this.buttonFlowLayoutPanel.Location = new System.Drawing.Point(3, 270);
 			this.buttonFlowLayoutPanel.Name = "buttonFlowLayoutPanel";
 			this.buttonFlowLayoutPanel.Size = new System.Drawing.Size(435, 30);
 			this.buttonFlowLayoutPanel.TabIndex = 18;
@@ -386,13 +364,34 @@
 			this.importButton.UseVisualStyleBackColor = true;
 			this.importButton.Click += new System.EventHandler(this.importButton_Click);
 			// 
+			// label7
+			// 
+			this.label7.AutoSize = true;
+			this.label7.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.label7.Location = new System.Drawing.Point(3, 78);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(72, 26);
+			this.label7.TabIndex = 19;
+			this.label7.Text = "Copyright:";
+			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// copyrightTextBox
+			// 
+			this.mainTableLayoutPanel.SetColumnSpan(this.copyrightTextBox, 3);
+			this.copyrightTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.copyrightTextBox.Location = new System.Drawing.Point(81, 81);
+			this.copyrightTextBox.Name = "copyrightTextBox";
+			this.copyrightTextBox.Size = new System.Drawing.Size(357, 20);
+			this.copyrightTextBox.TabIndex = 20;
+			this.copyrightTextBox.Text = "Copyright © <%developer%> <%year%>";
+			// 
 			// SettingsForm
 			// 
 			this.AcceptButton = this.okButton;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.cancelButton;
-			this.ClientSize = new System.Drawing.Size(441, 276);
+			this.ClientSize = new System.Drawing.Size(441, 303);
 			this.Controls.Add(this.mainTableLayoutPanel);
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
@@ -403,7 +402,6 @@
 			this.templateGroupBox.ResumeLayout(false);
 			this.mainTabControl.ResumeLayout(false);
 			this.fileHeaderTabPage.ResumeLayout(false);
-			this.copyrightTabPage.ResumeLayout(false);
 			this.licenseTabPage.ResumeLayout(false);
 			this.buttonFlowLayoutPanel.ResumeLayout(false);
 			this.ResumeLayout(false);
@@ -428,8 +426,6 @@
 		private System.Windows.Forms.TabControl mainTabControl;
 		private System.Windows.Forms.TabPage fileHeaderTabPage;
 		private System.Windows.Forms.RichTextBox fileRichTextBox;
-		private System.Windows.Forms.TabPage copyrightTabPage;
-		private System.Windows.Forms.RichTextBox copyrightRichTextBox;
 		private System.Windows.Forms.TabPage licenseTabPage;
 		private System.Windows.Forms.RichTextBox licenseRichTextBox;
 		private System.Windows.Forms.Button okButton;
@@ -440,5 +436,7 @@
 		private System.Windows.Forms.FlowLayoutPanel buttonFlowLayoutPanel;
 		private System.Windows.Forms.Button exportButton;
 		private System.Windows.Forms.Button importButton;
+		private System.Windows.Forms.Label label7;
+		private System.Windows.Forms.TextBox copyrightTextBox;
 	}
 }
