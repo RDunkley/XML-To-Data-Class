@@ -11,6 +11,10 @@
 // CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and
 // limitations under the License.
 //********************************************************************************************************************************
+using CSCodeGen.Parse;
+using System;
+using System.Collections.Generic;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace XMLToDataClass
@@ -40,15 +44,15 @@ namespace XMLToDataClass
 		/// <summary>
 		///   Copyright template (as specified by CSCodeGen library).
 		/// </summary>
-		public string[] CopyrightTemplate
+		public string CopyrightTemplate
 		{
 			get
 			{
-				return copyrightRichTextBox.Lines;
+				return copyrightTextBox.Text;
 			}
 			set
 			{
-				copyrightRichTextBox.Lines = value;
+				copyrightTextBox.Text = value;
 			}
 		}
 
@@ -200,5 +204,98 @@ namespace XMLToDataClass
 		}
 
 		#endregion Methods
+
+		private void exportButton_Click(object sender, System.EventArgs e)
+		{
+			SaveFileDialog dialog = new SaveFileDialog
+			{
+				CheckPathExists = true,
+				OverwritePrompt = true,
+				Title = "Specify the file and path to save the settings to",
+				Filter = "Config files (*.x2dsettings)|*.x2dsettings|All files (*.*)|*.*",
+				DefaultExt = "x2dsettings",
+			};
+
+			if (dialog.ShowDialog() != DialogResult.OK)
+				return;
+
+			List<SettingInfo> settingList = new List<SettingInfo>
+			{
+				new SettingInfo("Company", Company),
+				new SettingInfo("Developer", Developer),
+				new SettingInfo("FileExtensionAddition", FileExtensionAddition),
+				Settings.GetSettingFromType<char>("FlowerBoxCharacter", FlowerBoxCharacter),
+				Settings.GetSettingFromType<bool>("IncludeSubHeader", IncludeSubHeader),
+				Settings.GetSettingFromType<int>("IndentSize", IndentSize),
+				Settings.GetSettingFromType<int>("NumberOfCharsPerLine", NumberOfCharsPerLine),
+				Settings.GetSettingFromType<bool>("UseTabs", UseTabs),
+				new SettingInfo("CopyrightTemplate", CopyrightTemplate),
+			};
+			settingList.AddRange(Settings.GetSettingsFromArray<string>("FileHeaderTemplate", FileHeaderTemplate));
+			settingList.AddRange(Settings.GetSettingsFromArray<string>("LicenseTemplate", LicenseTemplate));
+			Settings settings = new Settings(DateTime.Now, Assembly.GetExecutingAssembly().GetName().Version, settingList.ToArray());
+
+			SettingsFile file = new SettingsFile(settings);
+			try
+			{
+				file.ExportToXML(dialog.FileName);
+			}
+			catch(InvalidOperationException ex)
+			{
+				MessageBox.Show("Unable to save the settings information. " + ex.Message, "Error Saving Settings", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
+		}
+
+		private void importButton_Click(object sender, EventArgs e)
+		{
+			OpenFileDialog dialog = new OpenFileDialog();
+			dialog.CheckFileExists = true;
+			dialog.CheckPathExists = true;
+			dialog.Filter = "Setting files (*.x2dsettings)|*.x2dsettings|All files (*.*)|*.*";
+			dialog.DefaultExt = "x2dsettings";
+			dialog.Multiselect = false;
+			dialog.Title = "Specify the file and path to load the settings from";
+
+			if (dialog.ShowDialog() != DialogResult.OK)
+				return;
+
+			SettingsFile file;
+			try
+			{
+				file = new SettingsFile(dialog.FileName);
+			}
+			catch(ArgumentException ex)
+			{
+				MessageBox.Show("Unable to load the settings information. " + ex.Message, "Error Loading Settings", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return;
+			}
+
+			SettingInfo value = file.Root.FindSetting("Company");
+			if (value != null)
+				Company = value.Value;
+			value = file.Root.FindSetting("CopyrightTemplate");
+			if (value != null)
+				CopyrightTemplate = value.Value;
+			value = file.Root.FindSetting("Developer");
+			if (value != null)
+				Developer = value.Value;
+			value = file.Root.FindSetting("FileExtensionAddition");
+			if (value != null)
+				FileExtensionAddition = value.Value;
+			if (file.Root.TryGetArrayFromSettings<string>("FileHeaderTemplate", out string[] values))
+				FileHeaderTemplate = values;
+			if (file.Root.TryGetTypeFromSetting<char>("FlowerBoxCharacter", out char charValue))
+				FlowerBoxCharacter = charValue;
+			if (file.Root.TryGetTypeFromSetting<bool>("IncludeSubHeader", out bool boolValue))
+				IncludeSubHeader = boolValue;
+			if (file.Root.TryGetTypeFromSetting<int>("IndentSize", out int intValue))
+				IndentSize = intValue;
+			if (file.Root.TryGetArrayFromSettings<string>("LicenseTemplate", out values))
+				LicenseTemplate = values;
+			if (file.Root.TryGetTypeFromSetting<int>("NumberOfCharsPerLine", out intValue))
+				NumberOfCharsPerLine = intValue;
+			if (file.Root.TryGetTypeFromSetting<bool>("UseTabs", out boolValue))
+				UseTabs = boolValue;
+		}
 	}
 }

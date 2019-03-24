@@ -73,6 +73,8 @@ namespace XMLToDataClass.Data.Types
 
 			Type = DataType.DateTime;
 			DisplayName = "Date/Time";
+
+			Usings.Add("System.Globalization");
 		}
 
 		/// <summary>

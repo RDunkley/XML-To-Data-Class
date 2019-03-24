@@ -217,6 +217,18 @@ namespace XMLToDataClass.Data
 
 			List<DataInfo> dataList = new List<DataInfo>();
 
+			// Add Ordinal Property.
+			if ((Text.Include && Text.Info.PropertyName == "Ordinal") || (CDATA.Include && CDATA.Info.PropertyName == "Ordinal"))
+				throw new InvalidOperationException("An attempt was made to create a property names 'Ordinal', but 'Add Ordinal' was specified in the settings which generates a property of this name.");
+			foreach (AttributeInfo attrib in Attributes)
+			{
+				if (attrib.Info.PropertyName == "Ordinal")
+					throw new InvalidOperationException("An attempt was made to create a property names 'Ordinal', but 'Add Ordinal' was specified in the settings which generates a property of this name.");
+			}
+
+			string remarks = "If the value is -1, then this object was not created from an XML node and the property has not been set.";
+			info.Properties.Add(new PropertyInfo("public", "int", "Ordinal", "Gets the index of this object in relation to the other child element of this object's parent.", remarks));
+
 			// Add text property.
 			if (Text.Include)
 				dataList.Add(Text.Info);
@@ -354,11 +366,35 @@ namespace XMLToDataClass.Data
 				method.CodeLines.Add(string.Format("{0}returnElement.SetAttribute(\"{1}\", valueString);", addSpace, attrib.Info.Name));
 			}
 
-			foreach(ElementInfo element in Children)
+			if (Children.Length > 0)
 			{
+				method.CodeLines.Add("// Build up dictionary of indexes and corresponding items.");
+				method.CodeLines.Add("Dictionary<int, object> lookup = new Dictionary<int, object>();");
+				foreach (ElementInfo element in Children)
+				{
+					method.CodeLines.Add(string.Empty);
+					method.CodeLines.Add(string.Format("foreach({0} child in {1})", element.ClassName, GenerateChildArrayNameProperty(element.ClassName)));
+					method.CodeLines.Add("{");
+					method.CodeLines.Add("	if(lookup.ContainsKey(child.Ordinal))");
+					method.CodeLines.Add("		throw new InvalidOperationException(\"An attempt was made to generate the XML element with two child elements with the same ordinal.Ordinals must be unique across all child objects.\");");
+					method.CodeLines.Add("	lookup.Add(child.Ordinal, child); ");
+					method.CodeLines.Add("}");
+				}
+
 				method.CodeLines.Add(string.Empty);
-				method.CodeLines.Add(string.Format("foreach({0} child in {1})", element.ClassName, GenerateChildArrayNameProperty(element.ClassName)));
-				method.CodeLines.Add("	returnElement.AppendChild(child.CreateElement(doc));");
+				method.CodeLines.Add("// Sort the keys.");
+				method.CodeLines.Add("List<int> keys = lookup.Keys.ToList();");
+				method.CodeLines.Add("keys.Sort();");
+
+				method.CodeLines.Add(string.Empty);
+				method.CodeLines.Add("foreach (int key in keys)");
+				method.CodeLines.Add("{");
+				foreach (ElementInfo element in Children)
+				{
+					method.CodeLines.Add(string.Format("	if(lookup[key] is {0})", element.ClassName));
+					method.CodeLines.Add(string.Format("		returnElement.AppendChild((({0})lookup[key]).CreateElement(doc));", element.ClassName));
+				}
+				method.CodeLines.Add("}");
 			}
 			method.CodeLines.Add("return returnElement;");
 
@@ -555,6 +591,35 @@ namespace XMLToDataClass.Data
 				cInfo.CodeLines.Add(string.Format("{0} = {1};", propertyName, variableName));
 			}
 
+			cInfo.CodeLines.Add("Ordinal = -1;");
+			if (Children.Length != 0)
+			{
+				cInfo.CodeLines.Add(string.Empty);
+				cInfo.CodeLines.Add("// Compute the maximum index used on any child items.");
+				cInfo.CodeLines.Add("int maxIndex = 0;");
+				foreach (ElementInfo eInfo in Children)
+				{
+					string propertyName = GenerateChildArrayNameProperty(eInfo.ClassName);
+					cInfo.CodeLines.Add(string.Format("foreach({0} item in {1})", eInfo.ClassName, propertyName));
+					cInfo.CodeLines.Add("{");
+					cInfo.CodeLines.Add("	if(item.Ordinal >= maxIndex)");
+					cInfo.CodeLines.Add("		maxIndex = item.Ordinal + 1; // Set to first index after this index.");
+					cInfo.CodeLines.Add("}");
+				}
+
+				cInfo.CodeLines.Add(string.Empty);
+				cInfo.CodeLines.Add("// Assign ordinal for any child items that don't have it set (-1).");
+				foreach (ElementInfo eInfo in Children)
+				{
+					string propertyName = GenerateChildArrayNameProperty(eInfo.ClassName);
+					cInfo.CodeLines.Add(string.Format("foreach({0} item in {1})", eInfo.ClassName, propertyName));
+					cInfo.CodeLines.Add("{");
+					cInfo.CodeLines.Add("	if(item.Ordinal == -1)");
+					cInfo.CodeLines.Add("		item.Ordinal = maxIndex++;");
+					cInfo.CodeLines.Add("}");
+				}
+			}
+
 			return cInfo;
 		}
 
@@ -648,9 +713,12 @@ namespace XMLToDataClass.Data
 			ConstructorInfo cInfo = new ConstructorInfo("public", ClassName, summary);
 
 			cInfo.Parameters.Add(new ParameterInfo("XmlNode", "node", "<see cref=\"XmlNode\"/> containing the data to extract.", false));
-			cInfo.Exceptions.Add(new ExceptionInfo("ArgumentException", string.Format("<paramref name=\"node\"/> does not correspond to a {0} node or is not an 'Element' type node.", Name)));
+			cInfo.Parameters.Add(new ParameterInfo("int", "ordinal", "Index of the <see cref=\"XmlNode\"/> in it's parent elements."));
+			cInfo.Exceptions.Add(new ExceptionInfo("ArgumentException", string.Format("<paramref name=\"node\"/> does not correspond to a {0} node or is not an 'Element' type node or <paramref name=\"ordinal\"/> is negative.", Name)));
 			cInfo.Exceptions.Add(new ExceptionInfo("InvalidDataException", "An error occurred while reading the data into the node, or one of it's child nodes."));
 
+			cInfo.CodeLines.Add("if(ordinal < 0)");
+			cInfo.CodeLines.Add("	throw new ArgumentException(\"the ordinal specified is negative.\");");
 			cInfo.CodeLines.Add("if(node.NodeType != XmlNodeType.Element)");
 			cInfo.CodeLines.Add("	throw new ArgumentException(\"node is not of type 'Element'.\");");
 			cInfo.CodeLines.Add(string.Format("if(string.Compare(node.Name, \"{0}\", false) != 0)", Name));
@@ -701,12 +769,13 @@ namespace XMLToDataClass.Data
 				if (CDATA.Include)
 					cInfo.CodeLines.Add(string.Format("bool {0}Found = false;", dataName));
 
+				cInfo.CodeLines.Add("int index = 0;");
 				cInfo.CodeLines.Add("foreach(XmlNode child in node.ChildNodes)");
 				cInfo.CodeLines.Add("{");
 				foreach (ElementInfo child in Children)
 				{
 					cInfo.CodeLines.Add(string.Format("	if(child.NodeType == XmlNodeType.Element && child.Name == \"{0}\")", child.Name));
-					cInfo.CodeLines.Add(string.Format("		{0}List.Add(new {1}(child));", StringUtility.GetLowerCamelCase(GenerateChildArrayNameProperty(child.ClassName), true), child.ClassName));
+					cInfo.CodeLines.Add(string.Format("		{0}List.Add(new {1}(child, index++));", StringUtility.GetLowerCamelCase(GenerateChildArrayNameProperty(child.ClassName), true), child.ClassName));
 				}
 
 				if (Text.Include)
@@ -753,6 +822,8 @@ namespace XMLToDataClass.Data
 				}
 				cInfo.CodeLines.Add(string.Empty);
 			}
+
+			cInfo.CodeLines.Add("Ordinal = ordinal;");
 
 			return cInfo;
 		}

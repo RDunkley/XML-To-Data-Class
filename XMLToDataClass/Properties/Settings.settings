@@ -45,7 +45,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="CSCodeGenCopyrightTemplate" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">Copyright © &lt;%developer%&gt; &lt;%year%&gt;</Value>
     </Setting>
     <Setting Name="CSCodeGenLicenseTemplate" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
