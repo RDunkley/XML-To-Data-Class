@@ -54,8 +54,11 @@ namespace XMLToDataClass.View
 			dialog.Filter = "XML files (*.xml)|*.xml|All files (*.*)|*.*";
 			dialog.Multiselect = false;
 			dialog.Title = "Select XML file to Generate Code For";
-			dialog.InitialDirectory = Path.GetDirectoryName(filePathTextBox.Text);
-			dialog.FileName = Path.GetFileName(filePathTextBox.Text);
+			if (!string.IsNullOrEmpty(filePathTextBox.Text))
+			{
+				dialog.InitialDirectory = Path.GetDirectoryName(filePathTextBox.Text);
+				dialog.FileName = Path.GetFileName(filePathTextBox.Text);
+			}
 
 			if (dialog.ShowDialog() != DialogResult.OK)
 				return;
