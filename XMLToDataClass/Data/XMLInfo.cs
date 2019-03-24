@@ -479,7 +479,8 @@ namespace XMLToDataClass.Data
 			}
 
 			if (!Directory.Exists(codeOutputFolder))
-				throw new ArgumentException(string.Format("The directory specified in codeOutputFolder ({0}) does not exist.", codeOutputFolder));
+				Directory.CreateDirectory(codeOutputFolder);
+				//throw new ArgumentException(string.Format("The directory specified in codeOutputFolder ({0}) does not exist.", codeOutputFolder));
 
 			CSCodeGen.FileInfo[] files = GenerateClassFiles(nameSpace);
 
@@ -546,10 +547,10 @@ namespace XMLToDataClass.Data
 			doc.Save(filePath);
 		}
 
-		public void Load(string filePath, out string outputFolder, out string nameSpace, out bool? genProject, out string projectName, out bool? genSolution, out string solutionName)
+		public void Load(Stream fileStream, out string outputFolder, out string nameSpace, out bool? genProject, out string projectName, out bool? genSolution, out string solutionName)
 		{
 			XmlDocument doc = new XmlDocument();
-			doc.Load(filePath);
+			doc.Load(fileStream);
 
 			outputFolder = null;
 			nameSpace = null;
@@ -558,9 +559,9 @@ namespace XMLToDataClass.Data
 			genSolution = null;
 			solutionName = null;
 
-			foreach(XmlNode node in doc.ChildNodes)
+			foreach (XmlNode node in doc.ChildNodes)
 			{
-				if(node.NodeType == XmlNodeType.Element && string.Compare(node.Name, "save_data", true) == 0)
+				if (node.NodeType == XmlNodeType.Element && string.Compare(node.Name, "save_data", true) == 0)
 				{
 					XmlAttribute attrib = node.Attributes["MainClassName"];
 					if (attrib != null)
@@ -597,6 +598,14 @@ namespace XMLToDataClass.Data
 						element.Load(node);
 					break;
 				}
+			}
+		}
+
+		public void Load(string filePath, out string outputFolder, out string nameSpace, out bool? genProject, out string projectName, out bool? genSolution, out string solutionName)
+		{
+			using (FileStream stream = new FileStream(filePath, FileMode.Open))
+			{
+				Load(stream, out outputFolder, out nameSpace, out genProject, out projectName, out genSolution, out solutionName);
 			}
 		}
 

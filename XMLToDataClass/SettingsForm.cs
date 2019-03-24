@@ -12,8 +12,10 @@
 // limitations under the License.
 //********************************************************************************************************************************
 using CSCodeGen.Parse;
+using CSCodeGenSettingsGui;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -26,50 +28,7 @@ namespace XMLToDataClass
 	{
 		#region Properties
 
-		/// <summary>
-		///   Gets or sets the name of the company.
-		/// </summary>
-		public string Company
-		{
-			get
-			{
-				return companyTextBox.Text;
-			}
-			set
-			{
-				companyTextBox.Text = value;
-			}
-		}
-
-		/// <summary>
-		///   Copyright template (as specified by CSCodeGen library).
-		/// </summary>
-		public string CopyrightTemplate
-		{
-			get
-			{
-				return copyrightTextBox.Text;
-			}
-			set
-			{
-				copyrightTextBox.Text = value;
-			}
-		}
-
-		/// <summary>
-		///   Gets or sets the name of the developer.
-		/// </summary>
-		public string Developer
-		{
-			get
-			{
-				return developerTextBox.Text;
-			}
-			set
-			{
-				developerTextBox.Text = value;
-			}
-		}
+		public CSCodeGenSettingsPanel Panel { get; private set; }
 
 		/// <summary>
 		///   Extension to add to the filenames of the auto-generated files.
@@ -86,111 +45,6 @@ namespace XMLToDataClass
 			}
 		}
 
-		/// <summary>
-		///   File header template (as specified by CSCodeGen library).
-		/// </summary>
-		public string[] FileHeaderTemplate
-		{
-			get
-			{
-				return fileRichTextBox.Lines;
-			}
-			set
-			{
-				fileRichTextBox.Lines = value;
-			}
-		}
-
-		/// <summary>
-		///   Gets or sets the flower box character for the flower box documentation.
-		/// </summary>
-		public char FlowerBoxCharacter
-		{
-			get
-			{
-				return flowerTextBox.Text[0];
-			}
-			set
-			{
-				flowerTextBox.Text = value.ToString();
-			}
-		}
-
-		/// <summary>
-		///   Gets or sets whether to include the sub-header in the generated files.
-		/// </summary>
-		public bool IncludeSubHeader
-		{
-			get
-			{
-				return subHeaderCheckBox.Checked;
-			}
-			set
-			{
-				subHeaderCheckBox.Checked = value;
-			}
-		}
-
-		/// <summary>
-		///   Gets or sets the size of the indentations (in spaces).
-		/// </summary>
-		public int IndentSize
-		{
-			get
-			{
-				return int.Parse(indentTextBox.Text);
-			}
-			set
-			{
-				indentTextBox.Text = value.ToString();
-			}
-		}
-
-		/// <summary>
-		///   License template (as specified by CSCodeGen library).
-		/// </summary>
-		public string[] LicenseTemplate
-		{
-			get
-			{
-				return licenseRichTextBox.Lines;
-			}
-			set
-			{
-				licenseRichTextBox.Lines = value;
-			}
-		}
-
-		/// <summary>
-		///   Gets or sets the number of characters to allow on each line.
-		/// </summary>
-		public int NumberOfCharsPerLine
-		{
-			get
-			{
-				return int.Parse(numPerLineTextBox.Text);
-			}
-			set
-			{
-				numPerLineTextBox.Text = value.ToString();
-			}
-		}
-
-		/// <summary>
-		///   Gets or sets whether tabs should be used instead of spaces for indents.
-		/// </summary>
-		public bool UseTabs
-		{
-			get
-			{
-				return tabCheckBox.Checked;
-			}
-			set
-			{
-				tabCheckBox.Checked = value;
-			}
-		}
-
 		#endregion Properties
 
 		#region Methods
@@ -201,12 +55,20 @@ namespace XMLToDataClass
 		public SettingsForm()
 		{
 			InitializeComponent();
+
+			Panel = new CSCodeGenSettingsPanel();
+			mainTableLayoutPanel.Controls.Add(Panel, 1, 2);
+			mainTableLayoutPanel.SetColumnSpan(Panel, 2);
+			Panel.Dock = DockStyle.Fill;
 		}
 
 		#endregion Methods
 
 		private void exportButton_Click(object sender, System.EventArgs e)
 		{
+			if (!ValidateSettings())
+				return;
+
 			SaveFileDialog dialog = new SaveFileDialog
 			{
 				CheckPathExists = true,
@@ -219,21 +81,7 @@ namespace XMLToDataClass
 			if (dialog.ShowDialog() != DialogResult.OK)
 				return;
 
-			List<SettingInfo> settingList = new List<SettingInfo>
-			{
-				new SettingInfo("Company", Company),
-				new SettingInfo("Developer", Developer),
-				new SettingInfo("FileExtensionAddition", FileExtensionAddition),
-				Settings.GetSettingFromType<char>("FlowerBoxCharacter", FlowerBoxCharacter),
-				Settings.GetSettingFromType<bool>("IncludeSubHeader", IncludeSubHeader),
-				Settings.GetSettingFromType<int>("IndentSize", IndentSize),
-				Settings.GetSettingFromType<int>("NumberOfCharsPerLine", NumberOfCharsPerLine),
-				Settings.GetSettingFromType<bool>("UseTabs", UseTabs),
-				new SettingInfo("CopyrightTemplate", CopyrightTemplate),
-			};
-			settingList.AddRange(Settings.GetSettingsFromArray<string>("FileHeaderTemplate", FileHeaderTemplate));
-			settingList.AddRange(Settings.GetSettingsFromArray<string>("LicenseTemplate", LicenseTemplate));
-			Settings settings = new Settings(DateTime.Now, Assembly.GetExecutingAssembly().GetName().Version, settingList.ToArray());
+			Settings settings = new Settings(DateTime.Now, Assembly.GetExecutingAssembly().GetName().Version, ExportSettings());
 
 			SettingsFile file = new SettingsFile(settings);
 			try
@@ -244,6 +92,28 @@ namespace XMLToDataClass
 			{
 				MessageBox.Show("Unable to save the settings information. " + ex.Message, "Error Saving Settings", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
+		}
+
+		public SettingInfo[] ExportSettings()
+		{
+			if (!ValidateSettings())
+				return null;
+
+			List<SettingInfo> setList = new List<SettingInfo>(Panel.ExportSettings());
+			setList.AddRange(Settings.GetSettingInfos(typeof(SettingsForm), this));
+			return setList.ToArray();
+		}
+
+		public void ImportSettings(Settings settings)
+		{
+			if (settings == null)
+				throw new ArgumentNullException("settings");
+
+			// Pull the settings for the CSCodeGen.
+			Panel.ImportSettings(settings);
+
+			// Pull the settings for this form.
+			settings.SetProperties(typeof(SettingsForm), this);
 		}
 
 		private void importButton_Click(object sender, EventArgs e)
@@ -270,32 +140,42 @@ namespace XMLToDataClass
 				return;
 			}
 
-			SettingInfo value = file.Root.FindSetting("Company");
-			if (value != null)
-				Company = value.Value;
-			value = file.Root.FindSetting("CopyrightTemplate");
-			if (value != null)
-				CopyrightTemplate = value.Value;
-			value = file.Root.FindSetting("Developer");
-			if (value != null)
-				Developer = value.Value;
-			value = file.Root.FindSetting("FileExtensionAddition");
-			if (value != null)
-				FileExtensionAddition = value.Value;
-			if (file.Root.TryGetArrayFromSettings<string>("FileHeaderTemplate", out string[] values))
-				FileHeaderTemplate = values;
-			if (file.Root.TryGetTypeFromSetting<char>("FlowerBoxCharacter", out char charValue))
-				FlowerBoxCharacter = charValue;
-			if (file.Root.TryGetTypeFromSetting<bool>("IncludeSubHeader", out bool boolValue))
-				IncludeSubHeader = boolValue;
-			if (file.Root.TryGetTypeFromSetting<int>("IndentSize", out int intValue))
-				IndentSize = intValue;
-			if (file.Root.TryGetArrayFromSettings<string>("LicenseTemplate", out values))
-				LicenseTemplate = values;
-			if (file.Root.TryGetTypeFromSetting<int>("NumberOfCharsPerLine", out intValue))
-				NumberOfCharsPerLine = intValue;
-			if (file.Root.TryGetTypeFromSetting<bool>("UseTabs", out boolValue))
-				UseTabs = boolValue;
+			ImportSettings(file.Root);
+		}
+
+		public bool ValidateSettings()
+		{
+			if (!Panel.ValidateSettings())
+				return false;
+
+			if(!string.IsNullOrWhiteSpace(fileExtenstionTextBox.Text))
+			{
+				if(!fileExtenstionTextBox.Text.All(char.IsLetterOrDigit))
+				{
+					MessageBox.Show
+					(
+						string.Format
+						(
+							"The file extension specified ({0}) has one or more characters that are not alphanumeric.",
+							fileExtenstionTextBox.Text
+						),
+						"Error With Input Values",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Error
+					);
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		private void okButton_Click(object sender, EventArgs e)
+		{
+			if (!ValidateSettings())
+				return;
+
+			this.Close();
 		}
 	}
 }

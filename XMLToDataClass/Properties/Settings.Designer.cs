@@ -109,126 +109,6 @@ namespace XMLToDataClass.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<company_name>")]
-        public string CSCodeGenCompanyName {
-            get {
-                return ((string)(this["CSCodeGenCompanyName"]));
-            }
-            set {
-                this["CSCodeGenCompanyName"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<developer>")]
-        public string CSCodeGenDeveloper {
-            get {
-                return ((string)(this["CSCodeGenDeveloper"]));
-            }
-            set {
-                this["CSCodeGenDeveloper"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("*")]
-        public char CSCodeGenFlowerBoxCharacter {
-            get {
-                return ((char)(this["CSCodeGenFlowerBoxCharacter"]));
-            }
-            set {
-                this["CSCodeGenFlowerBoxCharacter"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool CSCodeGenUseTabs {
-            get {
-                return ((bool)(this["CSCodeGenUseTabs"]));
-            }
-            set {
-                this["CSCodeGenUseTabs"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("130")]
-        public int CSCodeGenNumCharsPerLine {
-            get {
-                return ((int)(this["CSCodeGenNumCharsPerLine"]));
-            }
-            set {
-                this["CSCodeGenNumCharsPerLine"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("4")]
-        public int CSCodeGenIndentSize {
-            get {
-                return ((int)(this["CSCodeGenIndentSize"]));
-            }
-            set {
-                this["CSCodeGenIndentSize"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string CSCodeGenFileHeaderTemplate {
-            get {
-                return ((string)(this["CSCodeGenFileHeaderTemplate"]));
-            }
-            set {
-                this["CSCodeGenFileHeaderTemplate"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Copyright © <%developer%> <%year%>")]
-        public string CSCodeGenCopyrightTemplate {
-            get {
-                return ((string)(this["CSCodeGenCopyrightTemplate"]));
-            }
-            set {
-                this["CSCodeGenCopyrightTemplate"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string CSCodeGenLicenseTemplate {
-            get {
-                return ((string)(this["CSCodeGenLicenseTemplate"]));
-            }
-            set {
-                this["CSCodeGenLicenseTemplate"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool CSCodeGenIncludeSubHeader {
-            get {
-                return ((bool)(this["CSCodeGenIncludeSubHeader"]));
-            }
-            set {
-                this["CSCodeGenIncludeSubHeader"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string ConfigFileLocation {
             get {
@@ -248,6 +128,18 @@ namespace XMLToDataClass.Properties {
             }
             set {
                 this["FileExtensionAddition"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string CSCodeGenSettings {
+            get {
+                return ((string)(this["CSCodeGenSettings"]));
+            }
+            set {
+                this["CSCodeGenSettings"] = value;
             }
         }
     }

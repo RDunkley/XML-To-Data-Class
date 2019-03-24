@@ -83,6 +83,7 @@ namespace XMLToDataClass
 			this.codeTextBox.Name = "codeTextBox";
 			this.codeTextBox.Size = new System.Drawing.Size(398, 20);
 			this.codeTextBox.TabIndex = 2;
+			this.codeTextBox.TextChanged += new System.EventHandler(this.codeTextBox_TextChanged);
 			// 
 			// codeBrowseButton
 			// 
@@ -239,6 +240,7 @@ namespace XMLToDataClass
 			this.namespaceTextBox.TabIndex = 9;
 			this.namespaceTextBox.Text = "XMLToDataClass";
 			this.namespaceTextBox.WordWrap = false;
+			this.namespaceTextBox.TextChanged += new System.EventHandler(this.namespaceTextBox_TextChanged);
 			// 
 			// label3
 			// 
@@ -281,6 +283,7 @@ namespace XMLToDataClass
 			this.projectTextBox.Name = "projectTextBox";
 			this.projectTextBox.Size = new System.Drawing.Size(398, 20);
 			this.projectTextBox.TabIndex = 16;
+			this.projectTextBox.TextChanged += new System.EventHandler(this.projectTextBox_TextChanged);
 			// 
 			// solutionCheckBox
 			// 
@@ -312,6 +315,7 @@ namespace XMLToDataClass
 			this.solutionTextBox.Name = "solutionTextBox";
 			this.solutionTextBox.Size = new System.Drawing.Size(398, 20);
 			this.solutionTextBox.TabIndex = 19;
+			this.solutionTextBox.TextChanged += new System.EventHandler(this.solutionTextBox_TextChanged);
 			// 
 			// settingsButton
 			// 

@@ -21,16 +21,31 @@ namespace XMLToDataClass
 	/// </summary>
 	static class Program
 	{
+		public static CommandSettings Settings = new CommandSettings();
+
 		/// <summary>
 		/// The main entry point for the application.
 		/// </summary>
 		[STAThread]
 		static void Main()
 		{
+			ConsoleArgs<CommandSettings>.PopulateSettings(Settings);
+			Settings.ValidateSettings();
+
+			GenController controller = new GenController(Settings);
+
+			// Check if we should run entirely by command line.
+			if(Settings.XMLFilePath != null && Settings.ConfigPath != null && !Settings.GUI)
+			{
+				controller.Process();
+				Application.Exit();
+				return;
+			}
+
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 
-			Application.Run(new MainForm());
+			Application.Run(new MainForm(controller));
 		}
 	}
 }

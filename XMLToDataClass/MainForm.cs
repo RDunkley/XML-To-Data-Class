@@ -11,11 +11,13 @@
 // CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and
 // limitations under the License.
 //********************************************************************************************************************************
+using CSCodeGen.Parse;
 using System;
 using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml;
 using XMLToDataClass.Data;
 using XMLToDataClass.View;
 
@@ -28,15 +30,12 @@ namespace XMLToDataClass
 	{
 		#region Fields
 
+		private GenController mController;
+
 		/// <summary>
 		///   Form to load the XML file.
 		/// </summary>
 		private LoadForm mLoadForm = new LoadForm();
-
-		/// <summary>
-		///   Information loaded from the XML file.
-		/// </summary>
-		private XMLInfo mInfo;
 
 		#endregion Fields
 
@@ -45,30 +44,35 @@ namespace XMLToDataClass
 		/// <summary>
 		///   Instantiates a new MainForm object.
 		/// </summary>
-		public MainForm()
+		public MainForm(GenController controller)
 		{
+			mController = controller ?? throw new ArgumentNullException("controller");
+
 			InitializeComponent();
 
 			this.Text = string.Format("{0} Version: {1}", this.Text, Assembly.GetExecutingAssembly().GetName().Version.ToString());
-
-			mLoadForm.FilePath = Properties.Settings.Default.XMLFileLocation;
-			xmlFilePathLabel.Text = "";
-			namespaceTextBox.Text = Properties.Settings.Default.Namespace;
-			projectCheckBox.Checked = Properties.Settings.Default.Project;
-			projectTextBox.Text = Properties.Settings.Default.ProjectName;
-			solutionCheckBox.Checked = Properties.Settings.Default.Solution;
-			solutionTextBox.Text = Properties.Settings.Default.SolutionName;
-
-			if (Properties.Settings.Default.OutputFolder.Length != 0)
-				codeTextBox.Text = Properties.Settings.Default.OutputFolder;
-			else
-				codeTextBox.Text = Environment.CurrentDirectory;
-
 			mainSplitContainer.Panel2.AutoScroll = true;
-
 			mainTreeView.AfterSelect += mainTreeView_AfterSelect;
-			UpdateProjectSolutionInfo();
+
+			UpdateGui();
 			UpdateTreeView();
+		}
+
+		private void UpdateGui()
+		{
+			// Load settings from the controller.
+			if (mController.Info != null)
+				xmlFilePathLabel.Text = mController.XMLFilePath;
+			else
+				xmlFilePathLabel.Text = string.Empty;
+
+			namespaceTextBox.Text = mController.NameSpace;
+			projectCheckBox.Checked = mController.GenProject;
+			projectTextBox.Text = mController.ProjectName;
+			solutionCheckBox.Checked = mController.GenSolution;
+			solutionTextBox.Text = mController.SolutionName;
+			codeTextBox.Text = mController.OutputFolder;
+			UpdateProjectSolutionInfo();
 		}
 
 		/// <summary>
@@ -87,7 +91,7 @@ namespace XMLToDataClass
 		/// <param name="node"></param>
 		private void UpdateTree(TreeNode node)
 		{
-			if (node.Tag is ElementInfo[] && mInfo.HierarchyMaintained)
+			if (node.Tag is ElementInfo[] && mController.Info.HierarchyMaintained)
 			{
 				// Elements are selected so load child elements.
 				foreach (TreeNode child in node.Nodes)
@@ -135,6 +139,7 @@ namespace XMLToDataClass
 				return;
 
 			codeTextBox.Text = dialog.SelectedPath;
+			mController.OutputFolder = dialog.SelectedPath;
 		}
 
 		/// <summary>
@@ -146,39 +151,18 @@ namespace XMLToDataClass
 		{
 			generateButton.Enabled = false;
 
-			CSCodeGen.DefaultValues.CompanyName = Properties.Settings.Default.CSCodeGenCompanyName;
-			CSCodeGen.DefaultValues.Developer = Properties.Settings.Default.CSCodeGenDeveloper;
-			CSCodeGen.DefaultValues.UseTabs = Properties.Settings.Default.CSCodeGenUseTabs;
-			CSCodeGen.DefaultValues.IncludeSubHeader = Properties.Settings.Default.CSCodeGenIncludeSubHeader;
-			CSCodeGen.DefaultValues.FlowerBoxCharacter = Properties.Settings.Default.CSCodeGenFlowerBoxCharacter;
-			CSCodeGen.DefaultValues.NumCharactersPerLine = Properties.Settings.Default.CSCodeGenNumCharsPerLine;
-			CSCodeGen.DefaultValues.TabSize = Properties.Settings.Default.CSCodeGenIndentSize;
-			CSCodeGen.DefaultValues.FileInfoTemplate = ParseTemplate(Properties.Settings.Default.CSCodeGenFileHeaderTemplate);
-			CSCodeGen.DefaultValues.CopyrightTemplate = MergeTemplate(ParseTemplate(Properties.Settings.Default.CSCodeGenCopyrightTemplate));
-			CSCodeGen.DefaultValues.LicenseTemplate = ParseTemplate(Properties.Settings.Default.CSCodeGenLicenseTemplate);
-
-			string codePath = codeTextBox.Text;
-			string nameSpace = namespaceTextBox.Text;
-
-			if(codePath.Length == 0)
-			{
-				MessageBox.Show("Path to the code folder cannot be empty", "Error Processing XML", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				generateButton.Enabled = true;
-				return;
-			}
-
 			try
 			{
-				codePath = Path.GetFullPath(codePath);
+				mController.Validate();
 			}
-			catch (Exception ex)
+			catch (InvalidOperationException ex)
 			{
-				MessageBox.Show("Unable to obtain the path to the code folder: " + ex.Message, "Error Processing XML", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show(ex.Message, "Error Generating Code", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				generateButton.Enabled = true;
 				return;
 			}
 
-			if(!Directory.Exists(codePath))
+			if (!Directory.Exists(mController.OutputFolder))
 			{
 				if (MessageBox.Show("The code output folder does not exist. Should it be created?", "Output Folder Does Not Exist", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
 				{
@@ -188,7 +172,7 @@ namespace XMLToDataClass
 
 				try
 				{
-					Directory.CreateDirectory(codePath);
+					Directory.CreateDirectory(mController.OutputFolder);
 				}
 				catch(Exception ex)
 				{
@@ -198,30 +182,19 @@ namespace XMLToDataClass
 				}
 			}
 
-			if (nameSpace.Length == 0)
+			try
 			{
-				MessageBox.Show("The Namespace cannot be empty", "Error Processing XML", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				mController.Process();
+			}
+			catch(InvalidOperationException ex)
+			{
+				MessageBox.Show(ex.Message, "Error Generating Code", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				generateButton.Enabled = true;
 				return;
 			}
 
-			//CodeGen.GenerateCodeClasses(mInfo, codePath, nameSpace, projectCheckBox.Checked, projectTextBox.Text, solutionCheckBox.Checked, solutionTextBox.Text);
-
-			string projectName = null;
-			if (projectCheckBox.Checked)
-				projectName = projectTextBox.Text;
-			string solutionName = null;
-			if (solutionCheckBox.Checked)
-				solutionName = solutionTextBox.Text;
-			mInfo.GenerateCode(codePath, nameSpace, projectName, solutionName);
-
-			Properties.Settings.Default.Project = projectCheckBox.Checked;
-			Properties.Settings.Default.ProjectName = projectTextBox.Text;
-			Properties.Settings.Default.Solution = solutionCheckBox.Checked;
-			Properties.Settings.Default.SolutionName = solutionTextBox.Text;
-			Properties.Settings.Default.Namespace = namespaceTextBox.Text;
-			Properties.Settings.Default.OutputFolder = codeTextBox.Text;
-			Properties.Settings.Default.Save();
+			// Store the settings.
+			mController.StoreSettings();
 
 			MessageBox.Show("Code files were generated successfully", "Processing Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
 			generateButton.Enabled = true;
@@ -248,7 +221,7 @@ namespace XMLToDataClass
 			if (dialog.ShowDialog() != DialogResult.OK)
 				return;
 
-			mInfo.Save(dialog.FileName, codeTextBox.Text, namespaceTextBox.Text, projectCheckBox.Checked, projectTextBox.Text, solutionCheckBox.Checked, solutionTextBox.Text);
+			mController.SaveConfig(dialog.FileName);
 			Properties.Settings.Default.ConfigFileLocation = dialog.FileName;
 			Properties.Settings.Default.Save();
 		}
@@ -275,30 +248,11 @@ namespace XMLToDataClass
 			if (dialog.ShowDialog() != DialogResult.OK)
 				return;
 
-			string outputFolder;
-			string nameSpace;
-			bool? genProject;
-			string projectName;
-			bool? genSolution;
-			string solutionName;
-			mInfo.Load(dialog.FileName, out outputFolder, out nameSpace, out genProject, out projectName, out genSolution, out solutionName);
+			mController.LoadConfig(dialog.FileName);
 
-			if (!string.IsNullOrEmpty(outputFolder))
-				codeTextBox.Text = outputFolder;
-			if (!string.IsNullOrEmpty(nameSpace))
-				namespaceTextBox.Text = nameSpace;
-			if (genProject.HasValue)
-				projectCheckBox.Checked = genProject.Value;
-			if (!string.IsNullOrEmpty(projectName))
-				projectTextBox.Text = projectName;
-			if (genSolution.HasValue)
-				solutionCheckBox.Checked = genSolution.Value;
-			if (!string.IsNullOrEmpty(solutionName))
-				solutionTextBox.Text = solutionName;
-
+			UpdateDetailView();
 			Properties.Settings.Default.ConfigFileLocation = dialog.FileName;
 			Properties.Settings.Default.Save();
-			UpdateDetailView();
 		}
 
 		/// <summary>
@@ -323,16 +277,16 @@ namespace XMLToDataClass
 			mainTreeView.Nodes.Clear();
 			UpdateGUIAccess(false);
 
-			if (mInfo != null)
+			if (mController.Info != null)
 			{
 				ElementInfo[] roots;
-				if (mInfo.HierarchyMaintained)
+				if (mController.Info.HierarchyMaintained)
 				{
-					roots = new ElementInfo[1] { mInfo.RootNode };
+					roots = new ElementInfo[1] { mController.Info.RootNode };
 				}
 				else
 				{
-					roots = mInfo.GetAllNodes();
+					roots = mController.Info.GetAllNodes();
 				}
 
 				foreach (ElementInfo info in roots)
@@ -342,7 +296,7 @@ namespace XMLToDataClass
 					AddParentLevelTreeNode(mainTreeView.Nodes[index], info);
 				}
 
-				mainClassTextBox.Text = mInfo.MainClassName;
+				mainClassTextBox.Text = mController.Info.MainClassName;
 
 				UpdateDetailView();
 				UpdateGUIAccess(true);
@@ -404,15 +358,15 @@ namespace XMLToDataClass
 		/// </summary>
 		private void UpdateDetailView()
 		{
-			if (mInfo != null)
-				mainClassTextBox.Text = mInfo.MainClassName;
+			if (mController.Info != null)
+				mainClassTextBox.Text = mController.Info.MainClassName;
 
 			mainSplitContainer.Panel2.Controls.Clear();
 			if(mainTreeView.SelectedNode != null)
 			{
 				if(mainTreeView.SelectedNode.Tag is ElementInfo)
 				{
-					if (mInfo.HierarchyMaintained || mainTreeView.SelectedNode.Parent == null)
+					if (mController.Info.HierarchyMaintained || mainTreeView.SelectedNode.Parent == null)
 					{
 						ElementInfoPanel panel = new ElementInfoPanel(mainTreeView.SelectedNode.Tag as ElementInfo);
 						mainSplitContainer.Panel2.Controls.Add(panel);
@@ -468,28 +422,26 @@ namespace XMLToDataClass
 		/// <param name="e"><see cref="EventArgs"/> containing the arguments for the event.</param>
 		private void loadButton_Click(object sender, EventArgs e)
 		{
+			mLoadForm.FilePath = mController.XMLFilePath;
+
 			if (mLoadForm.ShowDialog() != DialogResult.OK)
 				return;
 
 			UpdateGUIAccess(false);
-			xmlFilePathLabel.Text = "";
+			xmlFilePathLabel.Text = string.Empty;
+			mController.UnLoad();
 
 			try
 			{
-				mInfo = new XMLInfo(mLoadForm.FilePath, mLoadForm.PreserveHierarchy);
+				mController.Load(mLoadForm.FilePath, mLoadForm.PreserveHierarchy);
 			}
-			catch (InvalidDataException error)
+			catch(ArgumentException ex)
 			{
-				MessageBox.Show(error.Message, "Error Parsing XML File", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				return;
-			}
-			catch (Exception error)
-			{
-				MessageBox.Show(error.Message, "Error Parsing XML File", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show(ex.Message, "Error Parsing XML File", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				return;
 			}
 
-			xmlFilePathLabel.Text = mLoadForm.FilePath;
+			xmlFilePathLabel.Text = mController.XMLFilePath;
 			Properties.Settings.Default.XMLFileLocation = mLoadForm.FilePath;
 			Properties.Settings.Default.Save();
 			UpdateTreeView();
@@ -502,6 +454,7 @@ namespace XMLToDataClass
 		/// <param name="e"><see cref="EventArgs"/> containing the arguments for the event.</param>
 		private void projectCheckBox_CheckedChanged(object sender, EventArgs e)
 		{
+			mController.GenProject = projectCheckBox.Checked;
 			UpdateProjectSolutionInfo();
 		}
 
@@ -512,6 +465,7 @@ namespace XMLToDataClass
 		/// <param name="e"><see cref="EventArgs"/> containing the arguments for the event.</param>
 		private void solutionCheckBox_CheckedChanged(object sender, EventArgs e)
 		{
+			mController.GenSolution = solutionCheckBox.Checked;
 			UpdateProjectSolutionInfo();
 		}
 
@@ -561,41 +515,65 @@ namespace XMLToDataClass
 		private void settingsButton_Click(object sender, EventArgs e)
 		{
 			SettingsForm form = new SettingsForm();
-			form.Company = Properties.Settings.Default.CSCodeGenCompanyName;
-			form.Developer = Properties.Settings.Default.CSCodeGenDeveloper;
-			form.UseTabs = Properties.Settings.Default.CSCodeGenUseTabs;
-			form.IncludeSubHeader = Properties.Settings.Default.CSCodeGenIncludeSubHeader;
-			form.FlowerBoxCharacter = Properties.Settings.Default.CSCodeGenFlowerBoxCharacter;
-			form.NumberOfCharsPerLine = Properties.Settings.Default.CSCodeGenNumCharsPerLine;
-			form.IndentSize = Properties.Settings.Default.CSCodeGenIndentSize;
+
+			if(!string.IsNullOrWhiteSpace(Properties.Settings.Default.CSCodeGenSettings))
+			{
+				using (StringReader sr = new StringReader(Properties.Settings.Default.CSCodeGenSettings))
+				using (XmlReader reader = XmlReader.Create(sr))
+				{
+					try
+					{
+						SettingsFile sf = new SettingsFile(reader);
+						form.Panel.ImportSettings(sf.Root);
+					}
+					catch(ArgumentException)
+					{
+						// Ignore error and skip the settings.
+					}
+				}
+			}
 			form.FileExtensionAddition = Properties.Settings.Default.FileExtensionAddition;
-			form.CopyrightTemplate = Properties.Settings.Default.CSCodeGenCopyrightTemplate;
-			form.FileHeaderTemplate = ParseTemplate(Properties.Settings.Default.CSCodeGenFileHeaderTemplate);
-			form.LicenseTemplate = ParseTemplate(Properties.Settings.Default.CSCodeGenLicenseTemplate);
 
 			if (form.ShowDialog() != DialogResult.OK)
 				return;
 
-			Properties.Settings.Default.CSCodeGenCompanyName = form.Company;
-			Properties.Settings.Default.CSCodeGenDeveloper = form.Developer;
-			Properties.Settings.Default.CSCodeGenUseTabs = form.UseTabs;
-			Properties.Settings.Default.CSCodeGenIncludeSubHeader = form.IncludeSubHeader;
-			Properties.Settings.Default.CSCodeGenFlowerBoxCharacter = form.FlowerBoxCharacter;
-			Properties.Settings.Default.CSCodeGenNumCharsPerLine = form.NumberOfCharsPerLine;
-			Properties.Settings.Default.CSCodeGenIndentSize = form.IndentSize;
+			using (StringWriter sw = new StringWriter())
+			using (XmlWriter writer = XmlWriter.Create(sw))
+			{
+				SettingsFile sf = new SettingsFile(new Settings(DateTime.Now, new Version(1, 0), form.Panel.ExportSettings()), "UTF-8", "1.0");
+				sf.ExportToXML(writer);
+				Properties.Settings.Default.CSCodeGenSettings = sw.ToString();
+			}
 			Properties.Settings.Default.FileExtensionAddition = form.FileExtensionAddition;
-			Properties.Settings.Default.CSCodeGenFileHeaderTemplate = MergeTemplate(form.FileHeaderTemplate);
-			Properties.Settings.Default.CSCodeGenCopyrightTemplate = form.CopyrightTemplate;
-			Properties.Settings.Default.CSCodeGenLicenseTemplate = MergeTemplate(form.LicenseTemplate);
 			Properties.Settings.Default.Save();
 		}
 
 		private void mainClassTextBox_TextChanged(object sender, EventArgs e)
 		{
-			if (mInfo != null)
-				mInfo.MainClassName = mainClassTextBox.Text;
+			if (mController.Info != null)
+				mController.Info.MainClassName = mainClassTextBox.Text;
 		}
 
 		#endregion Methods
+
+		private void codeTextBox_TextChanged(object sender, EventArgs e)
+		{
+			mController.OutputFolder = codeTextBox.Text;
+		}
+
+		private void namespaceTextBox_TextChanged(object sender, EventArgs e)
+		{
+			mController.NameSpace = namespaceTextBox.Text;
+		}
+
+		private void projectTextBox_TextChanged(object sender, EventArgs e)
+		{
+			mController.ProjectName = projectTextBox.Text;
+		}
+
+		private void solutionTextBox_TextChanged(object sender, EventArgs e)
+		{
+			mController.SolutionName = solutionTextBox.Text;
+		}
 	}
 }
