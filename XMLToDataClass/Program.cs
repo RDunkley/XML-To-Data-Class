@@ -29,7 +29,15 @@ namespace XMLToDataClass
 		[STAThread]
 		static void Main()
 		{
-			ConsoleArgs<CommandSettings>.Populate(Environment.CommandLine, Settings);
+			try
+			{
+				ConsoleArgs<CommandSettings>.Populate(Environment.CommandLine, Settings);
+			}
+			catch(InvalidOperationException e)
+			{
+				Console.WriteLine(e.Message);
+				return;
+			}
 			Settings.ValidateSettings();
 
 			GenController controller = new GenController(Settings);

@@ -725,7 +725,7 @@ namespace System
 			private void TokenizeCommandLine()
 			{
 				// -(-)?([A-Za-z][A-Za-z0-9]*)+( )*(=)?( )*(\"([^\"]*)\"|([^-,\s][^,\s]*)|)((\s)*,(\s)*(\"([^\"]*)\"|([^,\s]*)))*
-				string pattern = "-(-)?" + // Opening --
+				string pattern = " -(-)?" + // Opening --
 					"(?<tag>[\\p{Lu}\\p{Ll}\\p{Lt}\\p{Lm}\\p{Lo}][\\p{Lu}\\p{Ll}\\p{Lt}\\p{Lm}\\p{Lo}\\p{Nl}\\p{Mn}\\p{Mc}\\p{Nd}\\p{Pc}\\p{Cf}]*)+" + // tag
 					"(\\s)*(=)?(\\s)*" + // ' = ' option
 										 //"(?<value>\"[^\"]*\"|([^-,\\s][^,\\s]*)|)" + // 1st value.

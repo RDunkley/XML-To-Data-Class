@@ -268,6 +268,7 @@ namespace XMLToDataClass.Data
 			first.OverloadedSummary = string.Format("Instantiates a new <see cref=\"{0}\"/> object.", ClassName);
 			info.Constructors.Add(first);
 			info.Constructors.Add(GenerateDataClassXmlNodeConstructor());
+			info.Methods.Add(GenerateXmlNodeParsingMethod());
 
 			// Add additional methods.
 			info.Methods.AddRange(GenerateMethods(dataList.ToArray()));
@@ -707,6 +708,120 @@ namespace XMLToDataClass.Data
 			}
 		}
 
+		private MethodInfo GenerateXmlNodeParsingMethod()
+		{
+			string summary = string.Format("Parses an XML node and populates the data into this object.");
+			MethodInfo info = new MethodInfo("public", "void", "ParseXmlNode", summary);
+			info.Parameters.Add(new ParameterInfo("XmlNode", "node", "<see cref=\"XmlNode\"/> containing the data to extract.", false));
+			info.Parameters.Add(new ParameterInfo("int", "ordinal", "Index of the <see cref=\"XmlNode\"/> in it's parent elements."));
+			info.Exceptions.Add(new ExceptionInfo("ArgumentException", string.Format("<paramref name=\"node\"/> does not correspond to a {0} node.", Name)));
+			info.Exceptions.Add(new ExceptionInfo("InvalidDataException", "An error occurred while reading the data into the node, or one of it's child nodes."));
+
+			info.CodeLines.Add(string.Format("if(string.Compare(node.Name, \"{0}\", false) != 0)", Name));
+			info.CodeLines.Add(string.Format("	throw new ArgumentException(\"node does not correspond to a {0} node.\");", Name));
+
+			string textName = StringUtility.GetLowerCamelCase(Text.Info.PropertyName, true);
+			string dataName = StringUtility.GetLowerCamelCase(CDATA.Info.PropertyName, true);
+
+			if (Attributes.Length > 0)
+			{
+				info.CodeLines.Add(string.Empty);
+				info.CodeLines.Add("XmlAttribute attrib;");
+
+				foreach (AttributeInfo attrib in Attributes)
+				{
+					info.CodeLines.Add(string.Empty);
+					info.CodeLines.Add(string.Format("// {0}", attrib.Info.Name));
+					info.CodeLines.Add(string.Format("attrib = node.Attributes[\"{0}\"];", attrib.Info.Name));
+					string space = string.Empty;
+					if (!attrib.Info.IsOptional)
+					{
+						info.CodeLines.Add("if(attrib == null)");
+						info.CodeLines.Add(string.Format("	throw new InvalidDataException(\"An XML string Attribute ({0}) is not optional, but was not found in the XML element ({1}).\");", attrib.Info.Name, Name));
+					}
+					else
+					{
+						info.CodeLines.Add("if(attrib == null)");
+						info.CodeLines.Add(string.Format("	{0} = null;", attrib.Info.PropertyName));
+						info.CodeLines.Add("else");
+						space = "	";
+					}
+					info.CodeLines.Add(string.Format("{0}{1}(attrib.Value);", space, GetImportMethodName(attrib.Info.PropertyName)));
+				}
+			}
+
+			// Parse the child nodes if needed.
+			if (Text.Include || CDATA.Include || Children.Length > 0)
+			{
+				info.CodeLines.Add(string.Empty);
+				info.CodeLines.Add("// Read the child objects.");
+				foreach (ElementInfo child in Children)
+					info.CodeLines.Add(string.Format("List<{0}> {1}List = new List<{0}>();", child.ClassName, StringUtility.GetLowerCamelCase(GenerateChildArrayNameProperty(child.ClassName), true)));
+
+				if (Text.Include)
+					info.CodeLines.Add(string.Format("bool {0}Found = false;", textName));
+
+				if (CDATA.Include)
+					info.CodeLines.Add(string.Format("bool {0}Found = false;", dataName));
+
+				info.CodeLines.Add("int index = 0;");
+				info.CodeLines.Add("foreach(XmlNode child in node.ChildNodes)");
+				info.CodeLines.Add("{");
+				foreach (ElementInfo child in Children)
+				{
+					info.CodeLines.Add(string.Format("	if(child.NodeType == XmlNodeType.Element && child.Name == \"{0}\")", child.Name));
+					info.CodeLines.Add(string.Format("		{0}List.Add(new {1}(child, index++));", StringUtility.GetLowerCamelCase(GenerateChildArrayNameProperty(child.ClassName), true), child.ClassName));
+				}
+
+				if (Text.Include)
+				{
+					info.CodeLines.Add("	if(child.NodeType == XmlNodeType.Text)");
+					info.CodeLines.Add("	{");
+					info.CodeLines.Add(string.Format("		{0}(child.Value);", GetImportMethodName(Text.Info.PropertyName)));
+					info.CodeLines.Add(string.Format("		{0}Found = true;", textName));
+					info.CodeLines.Add("	}");
+				}
+
+				if (CDATA.Include)
+				{
+					info.CodeLines.Add("	if(child.NodeType == XmlNodeType.CDATA)");
+					info.CodeLines.Add("	{");
+					info.CodeLines.Add(string.Format("		{0}(child.Value);", GetImportMethodName(CDATA.Info.PropertyName)));
+					info.CodeLines.Add(string.Format("		{0}Found = true;", dataName));
+					info.CodeLines.Add("	}");
+				}
+
+				info.CodeLines.Add("}");
+				foreach (ElementInfo child in Children)
+				{
+					string propertyName = GenerateChildArrayNameProperty(child.ClassName);
+					info.CodeLines.Add(string.Format("{0} = {1}List.ToArray();", propertyName, StringUtility.GetLowerCamelCase(propertyName, true)));
+				}
+				if (Text.Include)
+				{
+					info.CodeLines.Add(string.Empty);
+					info.CodeLines.Add(string.Format("if(!{0}Found)", textName));
+					if (Text.Info.IsOptional)
+						info.CodeLines.Add(string.Format("	{0} = null;", Text.Info.PropertyName));
+					else
+						info.CodeLines.Add(string.Format("	throw new InvalidDataException(\"An XML child Text node is not optional, but was not found in the XML element ({0}).\");", Name));
+				}
+				if (CDATA.Include)
+				{
+					info.CodeLines.Add(string.Empty);
+					info.CodeLines.Add(string.Format("if(!{0}Found)", dataName));
+					if (CDATA.Info.IsOptional)
+						info.CodeLines.Add(string.Format("	{0} = null;", CDATA.Info.PropertyName));
+					else
+						info.CodeLines.Add(string.Format("	throw new InvalidDataException(\"An XML child CDATA node is not optional, but was not found in the XML element ({0}).\");", Name));
+				}
+				info.CodeLines.Add(string.Empty);
+			}
+
+			info.CodeLines.Add("Ordinal = ordinal;");
+			return info;
+		}
+
 		private ConstructorInfo GenerateDataClassXmlNodeConstructor()
 		{
 			string summary = string.Format("Instantiates a new <see cref=\"{0}\"/> object from an <see cref=\"XmlNode\"/> object.", ClassName);
@@ -721,109 +836,9 @@ namespace XMLToDataClass.Data
 			cInfo.CodeLines.Add("	throw new ArgumentException(\"the ordinal specified is negative.\");");
 			cInfo.CodeLines.Add("if(node.NodeType != XmlNodeType.Element)");
 			cInfo.CodeLines.Add("	throw new ArgumentException(\"node is not of type 'Element'.\");");
-			cInfo.CodeLines.Add(string.Format("if(string.Compare(node.Name, \"{0}\", false) != 0)", Name));
-			cInfo.CodeLines.Add(string.Format("	throw new ArgumentException(\"node does not correspond to a {0} node.\");", Name));
 
-			string textName = StringUtility.GetLowerCamelCase(Text.Info.PropertyName, true);
-			string dataName = StringUtility.GetLowerCamelCase(CDATA.Info.PropertyName, true);
-
-			if (Attributes.Length > 0)
-			{
-				cInfo.CodeLines.Add(string.Empty);
-				cInfo.CodeLines.Add("XmlAttribute attrib;");
-
-				foreach (AttributeInfo attrib in Attributes)
-				{
-					cInfo.CodeLines.Add(string.Empty);
-					cInfo.CodeLines.Add(string.Format("// {0}", attrib.Info.Name));
-					cInfo.CodeLines.Add(string.Format("attrib = node.Attributes[\"{0}\"];", attrib.Info.Name));
-					string space = string.Empty;
-					if (!attrib.Info.IsOptional)
-					{
-						cInfo.CodeLines.Add("if(attrib == null)");
-						cInfo.CodeLines.Add(string.Format("	throw new InvalidDataException(\"An XML string Attribute ({0}) is not optional, but was not found in the XML element ({1}).\");", attrib.Info.Name, Name));
-					}
-					else
-					{
-						cInfo.CodeLines.Add("if(attrib == null)");
-						cInfo.CodeLines.Add(string.Format("	{0} = null;", attrib.Info.PropertyName));
-						cInfo.CodeLines.Add("else");
-						space = "	";
-						
-					}
-					cInfo.CodeLines.Add(string.Format("{0}{1}(attrib.Value);", space, GetImportMethodName(attrib.Info.PropertyName)));
-				}
-			}
-
-			// Parse the child nodes if needed.
-			if (Text.Include || CDATA.Include || Children.Length > 0)
-			{
-				cInfo.CodeLines.Add(string.Empty);
-				cInfo.CodeLines.Add("// Read the child objects.");
-				foreach (ElementInfo child in Children)
-					cInfo.CodeLines.Add(string.Format("List<{0}> {1}List = new List<{0}>();", child.ClassName, StringUtility.GetLowerCamelCase(GenerateChildArrayNameProperty(child.ClassName), true)));
-
-				if (Text.Include)
-					cInfo.CodeLines.Add(string.Format("bool {0}Found = false;", textName));
-
-				if (CDATA.Include)
-					cInfo.CodeLines.Add(string.Format("bool {0}Found = false;", dataName));
-
-				cInfo.CodeLines.Add("int index = 0;");
-				cInfo.CodeLines.Add("foreach(XmlNode child in node.ChildNodes)");
-				cInfo.CodeLines.Add("{");
-				foreach (ElementInfo child in Children)
-				{
-					cInfo.CodeLines.Add(string.Format("	if(child.NodeType == XmlNodeType.Element && child.Name == \"{0}\")", child.Name));
-					cInfo.CodeLines.Add(string.Format("		{0}List.Add(new {1}(child, index++));", StringUtility.GetLowerCamelCase(GenerateChildArrayNameProperty(child.ClassName), true), child.ClassName));
-				}
-
-				if (Text.Include)
-				{
-					cInfo.CodeLines.Add("	if(child.NodeType == XmlNodeType.Text)");
-					cInfo.CodeLines.Add("	{");
-					cInfo.CodeLines.Add(string.Format("		{0}(child.Value);", GetImportMethodName(Text.Info.PropertyName)));
-					cInfo.CodeLines.Add(string.Format("		{0}Found = true;", textName));
-					cInfo.CodeLines.Add("	}");
-				}
-
-				if (CDATA.Include)
-				{
-					cInfo.CodeLines.Add("	if(child.NodeType == XmlNodeType.CDATA)");
-					cInfo.CodeLines.Add("	{");
-					cInfo.CodeLines.Add(string.Format("		{0}(child.Value);", GetImportMethodName(CDATA.Info.PropertyName)));
-					cInfo.CodeLines.Add(string.Format("		{0}Found = true;", dataName));
-					cInfo.CodeLines.Add("	}");
-				}
-
-				cInfo.CodeLines.Add("}");
-				foreach (ElementInfo child in Children)
-				{
-					string propertyName = GenerateChildArrayNameProperty(child.ClassName);
-					cInfo.CodeLines.Add(string.Format("{0} = {1}List.ToArray();", propertyName, StringUtility.GetLowerCamelCase(propertyName, true)));
-				}
-				if (Text.Include)
-				{
-					cInfo.CodeLines.Add(string.Empty);
-					cInfo.CodeLines.Add(string.Format("if(!{0}Found)", textName));
-					if (Text.Info.IsOptional)
-						cInfo.CodeLines.Add(string.Format("	{0} = null;", Text.Info.PropertyName));
-					else
-						cInfo.CodeLines.Add(string.Format("	throw new InvalidDataException(\"An XML child Text node is not optional, but was not found in the XML element ({0}).\");", Name));
-				}
-				if (CDATA.Include)
-				{
-					cInfo.CodeLines.Add(string.Empty);
-					cInfo.CodeLines.Add(string.Format("if(!{0}Found)", dataName));
-					if (CDATA.Info.IsOptional)
-						cInfo.CodeLines.Add(string.Format("	{0} = null;", CDATA.Info.PropertyName));
-					else
-						cInfo.CodeLines.Add(string.Format("	throw new InvalidDataException(\"An XML child CDATA node is not optional, but was not found in the XML element ({0}).\");", Name));
-				}
-				cInfo.CodeLines.Add(string.Empty);
-			}
-
-			cInfo.CodeLines.Add("Ordinal = ordinal;");
+			cInfo.CodeLines.Add(string.Empty);
+			cInfo.CodeLines.Add("ParseXmlNode(node, ordinal);");
 
 			return cInfo;
 		}

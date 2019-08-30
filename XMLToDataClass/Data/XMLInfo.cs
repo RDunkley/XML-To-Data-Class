@@ -25,6 +25,18 @@ namespace XMLToDataClass.Data
 	/// </summary>
 	public class XMLInfo
 	{
+		#region Enums
+
+		private enum XmlType
+		{
+			File,
+			Stream,
+			Text,
+			XML,
+		}
+
+		#endregion
+
 		#region Properties
 
 		public ElementInfo RootNode { get; private set; }
@@ -139,8 +151,7 @@ namespace XMLToDataClass.Data
 
 		private void GetHeaderInformation(XmlDocument doc)
 		{
-			XmlDeclaration dec = doc.FirstChild as XmlDeclaration;
-			if(dec != null)
+			if (doc.FirstChild is XmlDeclaration dec)
 			{
 				Version = dec.Version;
 				Encoding = dec.Encoding;
@@ -279,154 +290,301 @@ namespace XMLToDataClass.Data
 			return nodeList.ToArray();
 		}
 
+		private string GetXmlFileVersionProperty(List<PropertyInfo> props)
+		{
+			string name = "XmlFileVersion";
+			bool found = false;
+			foreach(PropertyInfo prop in props)
+			{
+				if(string.Compare(prop.Name, name, false) == 0)
+				{
+					found = true;
+					break;
+				}
+			}
+
+			if (!found)
+				return name;
+
+			name = "XmlVersion";
+			found = false;
+			foreach (PropertyInfo prop in props)
+			{
+				if (string.Compare(prop.Name, name, false) == 0)
+				{
+					found = true;
+					break;
+				}
+			}
+
+			if (!found)
+				return name;
+
+			name = "Xml_File_Version";
+			found = false;
+			foreach (PropertyInfo prop in props)
+			{
+				if (string.Compare(prop.Name, name, false) == 0)
+				{
+					found = true;
+					break;
+				}
+			}
+
+			if (!found)
+				return name;
+
+			name = "Xml_Version";
+			found = false;
+			foreach (PropertyInfo prop in props)
+			{
+				if (string.Compare(prop.Name, name, false) == 0)
+				{
+					found = true;
+					break;
+				}
+			}
+
+			if (!found)
+				return name;
+
+			// Give up.
+			throw new InvalidOperationException("Could not find an available property name for the XML Version in the root XML node class (attempted: XmlFileVersion, XmlVersion, Xml_File_Version, and Xml_Version). One of these property names must be free to generate the code.");
+		}
+
+		private string GetXmlFileEncodingProperty(List<PropertyInfo> props)
+		{
+			string name = "XmlFileEncoding";
+			bool found = false;
+			foreach (PropertyInfo prop in props)
+			{
+				if (string.Compare(prop.Name, name, false) == 0)
+				{
+					found = true;
+					break;
+				}
+			}
+
+			if (!found)
+				return name;
+
+			name = "XmlEncoding";
+			found = false;
+			foreach (PropertyInfo prop in props)
+			{
+				if (string.Compare(prop.Name, name, false) == 0)
+				{
+					found = true;
+					break;
+				}
+			}
+
+			if (!found)
+				return name;
+
+			name = "Xml_File_Encoding";
+			found = false;
+			foreach (PropertyInfo prop in props)
+			{
+				if (string.Compare(prop.Name, name, false) == 0)
+				{
+					found = true;
+					break;
+				}
+			}
+
+			if (!found)
+				return name;
+
+			name = "Xml_Encoding";
+			found = false;
+			foreach (PropertyInfo prop in props)
+			{
+				if (string.Compare(prop.Name, name, false) == 0)
+				{
+					found = true;
+					break;
+				}
+			}
+
+			if (!found)
+				return name;
+
+			// Give up.
+			throw new InvalidOperationException("Could not find an available property name for the XML Encoding in the root XML node class (attempted: XmlFileEncoding, XmlEncoding, Xml_File_Encoding, and Xml_Encoding). One of these property names must be free to generate the code.");
+		}
+
 		public CSCodeGen.FileInfo[] GenerateClassFiles(string nameSpace)
 		{
 			// Add the main class.
 			List<CSCodeGen.FileInfo> fileList = new List<CSCodeGen.FileInfo>();
-			ClassInfo main = GenerateMainClass();
-			main.AddUsing("System.Xml");
-			main.AddUsing("System.IO");
-			main.AddUsing("System.Security");
 			string fileExtension = null;
 			if (!string.IsNullOrEmpty(Properties.Settings.Default.FileExtensionAddition))
 				fileExtension = Properties.Settings.Default.FileExtensionAddition;
-			fileList.Add(new CSCodeGen.FileInfo(nameSpace, main, null, null, fileExtension));
 
 			if (HierarchyMaintained)
 			{
-				main.AddChildClass(RootNode.GenerateDataClass(HierarchyMaintained));
+				ClassInfo rootClass = RootNode.GenerateDataClass(HierarchyMaintained);
+				AddAdditionalItemsToRoot(rootClass);
+				fileList.Add(new CSCodeGen.FileInfo(nameSpace, rootClass, null, null, fileExtension));
 			}
 			else
 			{
 				ElementInfo[] nodes = GetAllNodes();
 				foreach (ElementInfo info in nodes)
-					fileList.Add(new CSCodeGen.FileInfo(nameSpace, info.GenerateDataClass(HierarchyMaintained), null, null, fileExtension));
+				{
+					ClassInfo classInfo = info.GenerateDataClass(HierarchyMaintained);
+					if(info == RootNode)
+						AddAdditionalItemsToRoot(classInfo);
+					fileList.Add(new CSCodeGen.FileInfo(nameSpace, classInfo, null, null, fileExtension));
+				}
 			}
-
 			return fileList.ToArray();
 		}
 
-		private ClassInfo GenerateMainClass()
+		private void AddAdditionalItemsToRoot(ClassInfo classInfo)
 		{
-			string summary = string.Format("Provides the methods to import and export data to/from an XML file. The schema was taken from the {0} file.", Path.GetFileName(FilePath));
-			ClassInfo info = new ClassInfo("public partial", MainClassName, null, summary);
-
-			// Add properties for each root element.
-			summary = string.Format("Contains the root {0} element in the XML file.", RootNode.Name);
-			info.Properties.Add(new PropertyInfo("public", string.Format("{0}", RootNode.ClassName), "Root", summary, null, null, "private"));
-			info.Properties.Add(new PropertyInfo("public", "string", "Encoding", "Encoding of the XML file."));
-			info.Properties.Add(new PropertyInfo("public", "string", "Version", "XML specification version of the XML file."));
-
-			info.Constructors.Add(GenerateRootConstructorMethod());
-			info.Constructors.Add(GenerateXmlConstructorMethod());
-
-			info.Methods.Add(GenerateImporterMethod());
-			info.Methods.Add(GenerateExporterMethod());
-			return info;
+			string xmlVersionName = GetXmlFileVersionProperty(classInfo.Properties);
+			string xmlEncodingName = GetXmlFileEncodingProperty(classInfo.Properties);
+			foreach (ConstructorInfo con in classInfo.Constructors)
+			{
+				con.CodeLines.Add(string.Format("{0} = mDefaultXMLVersion;", xmlVersionName));
+				con.CodeLines.Add(string.Format("{0} = mDefaultXMLEncoding;", xmlEncodingName));
+			}
+			classInfo.Fields.Add(new FieldInfo("private const", "string", "mDefaultXMLVersion", "Default version of the XML file generated from this object.", null, "\"1.0\""));
+			classInfo.Fields.Add(new FieldInfo("private const", "string", "mDefaultXMLEncoding", "Default encoding of the XML file generated from this object.", null, "\"UTF-8\""));
+			classInfo.Properties.Add(new PropertyInfo("public", "string", xmlVersionName, "Version of the XML file this root node will be contained in.", "Defaults to '1.0'"));
+			classInfo.Properties.Add(new PropertyInfo("public", "string", xmlEncodingName, "Encoding of the XML file this root node will be contained in.", "Defaults to 'UTF-8'"));
+			classInfo.Constructors.Add(GenerateXMLFileConstructor(xmlVersionName, xmlEncodingName, XmlType.File));
+			classInfo.Constructors.Add(GenerateXMLFileConstructor(xmlVersionName, xmlEncodingName, XmlType.Stream));
+			classInfo.Constructors.Add(GenerateXMLFileConstructor(xmlVersionName, xmlEncodingName, XmlType.Text));
+			classInfo.Constructors.Add(GenerateXMLFileConstructor(xmlVersionName, xmlEncodingName, XmlType.XML));
+			classInfo.Methods.Add(GenerateExporterMethod(xmlVersionName, xmlEncodingName, XmlType.File));
+			classInfo.Methods.Add(GenerateExporterMethod(xmlVersionName, xmlEncodingName, XmlType.Stream));
+			classInfo.Methods.Add(GenerateExporterMethod(xmlVersionName, xmlEncodingName, XmlType.Text));
+			classInfo.Methods.Add(GenerateExporterMethod(xmlVersionName, xmlEncodingName, XmlType.XML));
+			classInfo.Methods.Add(GenerateImporterMethod(xmlVersionName, xmlEncodingName, XmlType.File));
+			classInfo.Methods.Add(GenerateImporterMethod(xmlVersionName, xmlEncodingName, XmlType.Stream));
+			classInfo.Methods.Add(GenerateImporterMethod(xmlVersionName, xmlEncodingName, XmlType.Text));
+			classInfo.Methods.Add(GenerateImporterMethod(xmlVersionName, xmlEncodingName, XmlType.XML));
+			classInfo.AddUsing("System.Xml");
+			classInfo.AddUsing("System.IO");
+			classInfo.AddUsing("System.Security");
 		}
 
-		private ConstructorInfo GenerateXmlConstructorMethod()
+		private MethodInfo GenerateImporterMethod(string versionProperty, string encodingProperty, XmlType type)
 		{
-			string summary = string.Format("Instantiates a new {0} object using the provided XML file.", MainClassName);
-			ConstructorInfo method = new ConstructorInfo("public", MainClassName, summary);
-			method.OverloadedSummary = string.Format("Instantiates a new {0} object.", MainClassName);
-
-			method.Parameters.Add(new ParameterInfo("string", "filePath", "Path to the XML file to be parsed.", false, false));
-
-			method.CodeLines.Add(string.Empty);
-			method.CodeLines.Add("ImportFromXML(filePath);");
-			return method;
-		}
-
-		private ConstructorInfo GenerateRootConstructorMethod()
-		{
-			string summary = string.Format("Instantiates a new {0} object using the provided root object and XML parameters.", MainClassName);
-			ConstructorInfo method = new ConstructorInfo("public", MainClassName, summary);
-			method.OverloadedSummary = string.Format("Instantiates a new {0} object.", MainClassName);
-
-			method.Parameters.Add(new ParameterInfo(RootNode.ClassName, "root", "Root object of the XML file.", false));
-			method.Parameters.Add(new ParameterInfo("string", "xmlEncoding", "Encoding of the XML file.", true));
-			method.Parameters.Add(new ParameterInfo("string", "xmlVersion", "XML specification version of the XML file.", true));
-
-			method.CodeLines.Add(string.Empty);
-			method.CodeLines.Add("if(string.IsNullOrEmpty(xmlEncoding))");
-			method.CodeLines.Add("	Encoding = \"UTF-8\";");
-			method.CodeLines.Add("else");
-			method.CodeLines.Add("	Encoding = xmlEncoding;");
-			method.CodeLines.Add("if(string.IsNullOrEmpty(xmlVersion))");
-			method.CodeLines.Add("	Version = \"1.0\";");
-			method.CodeLines.Add("else");
-			method.CodeLines.Add("	Version = xmlVersion;");
-			method.CodeLines.Add("Root = root;");
-			method.CodeLines.Add("Root.Ordinal = 0;");
-			return method;
-		}
-
-		private MethodInfo GenerateImporterMethod()
-		{
-			// Append the signature of the method.
-			string summary = "Imports data from an XML file.";
+			string summary = null;
+			switch(type)
+			{
+				case XmlType.File:
+					summary = "Imports data from an XML file.";
+					break;
+				case XmlType.Stream:
+					summary = "Imports data from an XML stream.";
+					break;
+				case XmlType.Text:
+					summary = "Imports data from an XML text reader.";
+					break;
+				case XmlType.XML:
+					summary = "Imports data from an XML reader.";
+					break;
+			}
 			MethodInfo method = new MethodInfo("public", "void", "ImportFromXML", summary);
 
-			method.Parameters.Add(new ParameterInfo("string", "filePath", "Path to the XML file containing the data to be imported.", false, false));
-			method.Exceptions.Add(new ExceptionInfo("ArgumentException", "<paramref name=\"filePath\"/> is an invalid file path."));
-			method.Exceptions.Add(new ExceptionInfo("InvalidOperationException", "<paramref name=\"filePath\"/> could not be opened."));
-			method.Exceptions.Add(new ExceptionInfo("InvalidDataException", "An error occurred while parsing the XML data."));
+			switch(type)
+			{
+				case XmlType.File:
+					method.Parameters.Add(new ParameterInfo("string", "filePath", "Path to the XML file containing the data to be imported.", false, false));
+					method.Exceptions.Add(new ExceptionInfo("ArgumentException", "<paramref name=\"filePath\"/> is invalid or an error occurred while accessing it."));
+					break;
+				case XmlType.Stream:
+					method.Parameters.Add(new ParameterInfo("Stream", "stream", "Stream containing the XML file data.", false));
+					method.Exceptions.Add(new ExceptionInfo("ArgumentException", "<paramref name=\"stream\"/> did not contain valid XML."));
+					break;
+				case XmlType.Text:
+					method.Parameters.Add(new ParameterInfo("TextReader", "reader", "TextReader object containing the XML file data.", false));
+					method.Exceptions.Add(new ExceptionInfo("ArgumentException", "A parsing error occurred while attempting to load the XML from <paramref name=\"reader\"/>."));
+					break;
+				case XmlType.XML:
+					method.Parameters.Add(new ParameterInfo("XmlReader", "reader", "XmlReader object containing the XML file data.", false));
+					method.Exceptions.Add(new ExceptionInfo("ArgumentException", "A parsing error occurred while attempting to load the XML from <paramref name=\"reader\"/>."));
+					break;
+			}
+			method.Exceptions.Add(new ExceptionInfo("InvalidDataException", "The XML was valid, but an error occurred while extracting the data from it."));
 
 			method.CodeLines.Add(string.Empty);
 			method.CodeLines.Add("XmlDocument doc = new XmlDocument();");
 			method.CodeLines.Add("try");
 			method.CodeLines.Add("{");
-			method.CodeLines.Add("	doc.Load(filePath);");
-			method.CodeLines.Add("}");
-			method.CodeLines.Add("catch(ArgumentException e)");
-			method.CodeLines.Add("{");
-			method.CodeLines.Add("	throw new ArgumentException(\"filePath was not a valid XML file path.\", e);");
-			method.CodeLines.Add("}");
-			method.CodeLines.Add("catch(PathTooLongException e)");
-			method.CodeLines.Add("{");
-			method.CodeLines.Add("	throw new ArgumentException(\"filePath was not a valid XML file path.\", e);");
-			method.CodeLines.Add("}");
-			method.CodeLines.Add("catch(DirectoryNotFoundException e)");
-			method.CodeLines.Add("{");
-			method.CodeLines.Add("	throw new ArgumentException(\"filePath was not a valid XML file path.\", e);");
-			method.CodeLines.Add("}");
-			method.CodeLines.Add("catch(NotSupportedException e)");
-			method.CodeLines.Add("{");
-			method.CodeLines.Add("	throw new InvalidOperationException(\"filePath referenced a file that is in an invalid format.\", e);");
-			method.CodeLines.Add("}");
-			method.CodeLines.Add("catch(FileNotFoundException e)");
-			method.CodeLines.Add("{");
-			method.CodeLines.Add("	throw new InvalidOperationException(\"filePath referenced a file that could not be found.\", e);");
-			method.CodeLines.Add("}");
-			method.CodeLines.Add("catch(IOException e)");
-			method.CodeLines.Add("{");
-			method.CodeLines.Add("	throw new InvalidOperationException(\"filePath referenced a file that could not be opened.\", e);");
-			method.CodeLines.Add("}");
-			method.CodeLines.Add("catch(UnauthorizedAccessException e)");
-			method.CodeLines.Add("{");
-			method.CodeLines.Add("	throw new InvalidOperationException(\"filePath referenced a file that could not be opened.\", e);");
-			method.CodeLines.Add("}");
-			method.CodeLines.Add("catch(SecurityException e)");
-			method.CodeLines.Add("{");
-			method.CodeLines.Add("	throw new InvalidOperationException(\"filePath referenced a file that could not be opened.\", e);");
-			method.CodeLines.Add("}");
-			method.CodeLines.Add("catch(XmlException e)");
-			method.CodeLines.Add("{");
-			method.CodeLines.Add("	throw new InvalidOperationException(\"filePath referenced a file that does not contain valid XML.\", e);");
-			method.CodeLines.Add("}");
+			switch(type)
+			{
+				case XmlType.File:
+					method.CodeLines.Add("	doc.Load(filePath);");
+					method.CodeLines.Add("}");
+					method.CodeLines.Add("catch(PathTooLongException e)");
+					method.CodeLines.Add("{");
+					method.CodeLines.Add("	throw new ArgumentException(string.Format(\"The file path specified ({0}) is not valid ({1}).\", filePath, e.Message), nameof(filePath), e);");
+					method.CodeLines.Add("}");
+					method.CodeLines.Add("catch(DirectoryNotFoundException e)");
+					method.CodeLines.Add("{");
+					method.CodeLines.Add("	throw new ArgumentException(string.Format(\"The file path specified ({0}) is not valid ({1}).\", filePath, e.Message), nameof(filePath), e);");
+					method.CodeLines.Add("}");
+					method.CodeLines.Add("catch(NotSupportedException e)");
+					method.CodeLines.Add("{");
+					method.CodeLines.Add("	throw new ArgumentException(string.Format(\"The file path specified ({0}) is not valid ({1}).\", filePath, e.Message), nameof(filePath), e);");
+					method.CodeLines.Add("}");
+					method.CodeLines.Add("catch(FileNotFoundException e)");
+					method.CodeLines.Add("{");
+					method.CodeLines.Add("	throw new ArgumentException(string.Format(\"The file could not be located at the path specified ({0}).\", filePath), nameof(filePath), e);");
+					method.CodeLines.Add("}");
+					method.CodeLines.Add("catch(IOException e)");
+					method.CodeLines.Add("{");
+					method.CodeLines.Add("	throw new ArgumentException(string.Format(\"An I/O error occurred ({0}) while opening the file specified ({1}).\", e.Message, filePath), nameof(filePath), e);");
+					method.CodeLines.Add("}");
+					method.CodeLines.Add("catch(UnauthorizedAccessException e)");
+					method.CodeLines.Add("{");
+					method.CodeLines.Add("	throw new ArgumentException(string.Format(\"Unable to access the file path specified ({0}).\", filePath), nameof(filePath), e);");
+					method.CodeLines.Add("}");
+					method.CodeLines.Add("catch(SecurityException e)");
+					method.CodeLines.Add("{");
+					method.CodeLines.Add("	throw new ArgumentException(string.Format(\"The caller doesn't have the required permissions to access the file path specified ({0}).\", filePath), nameof(filePath), e);");
+					method.CodeLines.Add("}");
+					method.CodeLines.Add("catch(XmlException e)");
+					method.CodeLines.Add("{");
+					method.CodeLines.Add("	throw new ArgumentException(string.Format(\"Unable to parse the XML from the file specified ({0}). Error message: {1}.\", filePath, e.Message), nameof(filePath), e);");
+					method.CodeLines.Add("}");
+					break;
+				case XmlType.Stream:
+					method.CodeLines.Add("	doc.Load(stream);");
+					method.CodeLines.Add("}");
+					method.CodeLines.Add("catch(XmlException e)");
+					method.CodeLines.Add("{");
+					method.CodeLines.Add("	throw new ArgumentException(string.Format(\"Unable to parse the XML from the stream. Error message: {0}.\", e.Message), nameof(stream), e);");
+					method.CodeLines.Add("}");
+					break;
+				default:
+					method.CodeLines.Add("	doc.Load(reader);");
+					method.CodeLines.Add("}");
+					method.CodeLines.Add("catch(XmlException e)");
+					method.CodeLines.Add("{");
+					method.CodeLines.Add("	throw new ArgumentException(string.Format(\"Unable to parse the XML from the reader. Error message: {0}.\", e.Message), nameof(reader), e);");
+					method.CodeLines.Add("}");
+					break;
+			}
+
 			method.CodeLines.Add(string.Empty);
 			method.CodeLines.Add("// Pull the version and encoding");
 			method.CodeLines.Add("XmlDeclaration dec = doc.FirstChild as XmlDeclaration;");
 			method.CodeLines.Add("if(dec != null)");
 			method.CodeLines.Add("{");
-			method.CodeLines.Add("	Version = dec.Version;");
-			method.CodeLines.Add("	Encoding = dec.Encoding;");
+			method.CodeLines.Add(string.Format("	{0} = dec.Version;", versionProperty));
+			method.CodeLines.Add(string.Format("	{0} = dec.Encoding;", encodingProperty));
 			method.CodeLines.Add("}");
 			method.CodeLines.Add("else");
 			method.CodeLines.Add("{");
-			method.CodeLines.Add("	Version = \"1.0\";");
-			method.CodeLines.Add("	Encoding = \"UTF-8\";");
+			method.CodeLines.Add(string.Format("	{0} = mDefaultXMLVersion;", versionProperty));
+			method.CodeLines.Add(string.Format("	{0} = mDefaultXMLEncoding;", encodingProperty));
 			method.CodeLines.Add("}");
 			method.CodeLines.Add(string.Empty);
 
@@ -435,28 +593,89 @@ namespace XMLToDataClass.Data
 			method.CodeLines.Add("if(root.NodeType != XmlNodeType.Element)");
 			method.CodeLines.Add("	throw new InvalidDataException(\"The root node is not an element node.\");");
 			method.CodeLines.Add(string.Format("if(string.Compare(root.Name, \"{0}\", false) != 0)", RootNode.Name));
-			method.CodeLines.Add(string.Format("	throw new InvalidDataException(\"The root node is not a '{0}' named node.\");", RootNode.Name));
-			method.CodeLines.Add(string.Format("Root = new {0}(root, 0);", RootNode.ClassName));
+			method.CodeLines.Add(string.Format("	throw new InvalidDataException(string.Format(\"The root element name is not the one expected (Actual: '{{0}}', Expected: '{0}').\", root.Name));", RootNode.Name));
+			method.CodeLines.Add(string.Empty);
+			method.CodeLines.Add("ParseXmlNode(root, 0);");
 			return method;
 		}
 
-		private MethodInfo GenerateExporterMethod()
+		private ConstructorInfo GenerateXMLFileConstructor(string versionProperty, string encodingProperty, XmlType type)
+		{
+			// Append the signature of the method.
+			string summary = string.Format("Instantiates a new <see cref=\"{0}\"/> object from an XML file.", RootNode.ClassName);
+			ConstructorInfo method = new ConstructorInfo("public", RootNode.ClassName, summary);
+
+			switch (type)
+			{
+				case XmlType.File:
+					method.Parameters.Add(new ParameterInfo("string", "filePath", "Path to the XML file containing the data to be imported.", false, false));
+					method.Exceptions.Add(new ExceptionInfo("ArgumentException", "<paramref name=\"filePath\"/> is invalid or an error occurred while accessing it."));
+					method.CodeLines.Add(string.Empty);
+					method.CodeLines.Add("ImportFromXML(filePath);");
+					break;
+				case XmlType.Stream:
+					method.Parameters.Add(new ParameterInfo("Stream", "stream", "Stream containing the XML file data.", false));
+					method.Exceptions.Add(new ExceptionInfo("ArgumentException", "<paramref name=\"stream\"/> did not contain valid XML."));
+					method.CodeLines.Add(string.Empty);
+					method.CodeLines.Add("ImportFromXML(stream);");
+					break;
+				case XmlType.Text:
+					method.Parameters.Add(new ParameterInfo("TextReader", "reader", "TextReader object containing the XML file data.", false));
+					method.Exceptions.Add(new ExceptionInfo("ArgumentException", "A parsing error occurred while attempting to load the XML from <paramref name=\"reader\"/>."));
+					method.CodeLines.Add(string.Empty);
+					method.CodeLines.Add("ImportFromXML(reader);");
+					break;
+				case XmlType.XML:
+					method.Parameters.Add(new ParameterInfo("XmlReader", "reader", "XmlReader object containing the XML file data.", false));
+					method.Exceptions.Add(new ExceptionInfo("ArgumentException", "A parsing error occurred while attempting to load the XML from <paramref name=\"reader\"/>."));
+					method.CodeLines.Add(string.Empty);
+					method.CodeLines.Add("ImportFromXML(reader);");
+					break;
+			}
+			method.Exceptions.Add(new ExceptionInfo("InvalidDataException", "An error occurred while parsing the XML data."));
+			return method;
+		}
+
+		private MethodInfo GenerateExporterMethod(string versionPropName, string encodingPropName, XmlType type)
 		{
 			string summary = "Exports data to an XML file.";
 			MethodInfo method = new MethodInfo("public", "void", "ExportToXML", summary);
-
-			method.Parameters.Add(new ParameterInfo("string", "filePath", "Path to the XML file to be written to. If file exists all contents will be destroyed.", false, false));
-			method.Exceptions.Add(new ExceptionInfo("ArgumentException", "<paramref name=\"filePath\"/> is an invalid file path."));
-			method.Exceptions.Add(new ExceptionInfo("InvalidOperationException", "<paramref name=\"filePath\"/> could not be opened."));
-
+			switch (type)
+			{
+				case XmlType.File:
+					method.Parameters.Add(new ParameterInfo("string", "filePath", "Path to the XML file to be written to. If file exists all contents will be destroyed.", false, false));
+					method.Exceptions.Add(new ExceptionInfo("ArgumentException", "<paramref name=\"filePath\"/> is invalid or an error occurred while accessing it."));
+					break;
+				case XmlType.Stream:
+					method.Parameters.Add(new ParameterInfo("Stream", "stream", "Stream to write the XML to.", false));
+					break;
+				case XmlType.Text:
+					method.Parameters.Add(new ParameterInfo("TextWriter", "writer", "TextWriter object to write the XML to.", false));
+					break;
+				case XmlType.XML:
+					method.Parameters.Add(new ParameterInfo("XmlWriter", "writer", "XmlWriter object to write the XML to.", false));
+					break;
+			}
 			method.CodeLines.Add("XmlDocument doc = new XmlDocument();");
-			method.CodeLines.Add("XmlDeclaration dec = doc.CreateXmlDeclaration(Version, Encoding, null);");
+			method.CodeLines.Add(string.Format("XmlDeclaration dec = doc.CreateXmlDeclaration({0}, {1}, null);", versionPropName, encodingPropName));
 			method.CodeLines.Add("doc.InsertBefore(dec, doc.DocumentElement);");
 			method.CodeLines.Add(string.Empty);
 
-			method.CodeLines.Add("XmlElement root = Root.CreateElement(doc);");
+			method.CodeLines.Add("XmlElement root = CreateElement(doc);");
 			method.CodeLines.Add("doc.AppendChild(root);");
-			method.CodeLines.Add("doc.Save(filePath);");
+			switch (type)
+			{
+				case XmlType.File:
+					method.CodeLines.Add("doc.Save(filePath);");
+					break;
+				case XmlType.Stream:
+					method.CodeLines.Add("doc.Save(stream);");
+					break;
+				default:
+					method.CodeLines.Add("doc.Save(writer);");
+					break;
+			}
+			
 			return method;
 		}
 
@@ -575,8 +794,7 @@ namespace XMLToDataClass.Data
 					attrib = node.Attributes["GenerateProject"];
 					if (attrib != null)
 					{
-						bool temp;
-						if (bool.TryParse(attrib.Value, out temp))
+						if (bool.TryParse(attrib.Value, out bool temp))
 							genProject = temp;
 					}
 					attrib = node.Attributes["ProjectName"];
@@ -585,8 +803,7 @@ namespace XMLToDataClass.Data
 					attrib = node.Attributes["GenerateSolution"];
 					if (attrib != null)
 					{
-						bool temp;
-						if (bool.TryParse(attrib.Value, out temp))
+						if (bool.TryParse(attrib.Value, out bool temp))
 							genSolution = temp;
 					}
 					attrib = node.Attributes["SolutionName"];

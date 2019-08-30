@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28307.168
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XMLToDataClass", "XMLToDataClass\XMLToDataClass.csproj", "{DFD30515-7A72-4750-A900-D9B87F0E0569}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSCodeGen", "..\CSCodeGen\CSCodeGen\CSCodeGen.csproj", "{5A0655C3-B2BD-4B4B-BFE5-3EE9BD9A8A4B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSCodeGen", "..\CSCodeGen\CSCodeGen\CSCodeGen.csproj", "{5A0655C3-B2BD-4B4B-BFE5-3EE9BD9A8A4B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSCodeGenSettingsGui", "..\CSCodeGen\CSCodeGenSettingsGui\CSCodeGenSettingsGui.csproj", "{70F4BAB7-33ED-46B4-A50C-FBFF0EDF656E}"
 EndProject
