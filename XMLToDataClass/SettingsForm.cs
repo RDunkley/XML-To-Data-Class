@@ -11,7 +11,7 @@
 // CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and
 // limitations under the License.
 //********************************************************************************************************************************
-using CSCodeGen.Parse;
+using CSCodeGen.Parse.SettingsFile;
 using CSCodeGenSettingsGui;
 using System;
 using System.Collections.Generic;
@@ -64,7 +64,7 @@ namespace XMLToDataClass
 
 		#endregion Methods
 
-		private void exportButton_Click(object sender, System.EventArgs e)
+		private void ExportButton_Click(object sender, System.EventArgs e)
 		{
 			if (!ValidateSettings())
 				return;
@@ -82,11 +82,9 @@ namespace XMLToDataClass
 				return;
 
 			Settings settings = new Settings(DateTime.Now, Assembly.GetExecutingAssembly().GetName().Version, ExportSettings());
-
-			SettingsFile file = new SettingsFile(settings);
 			try
 			{
-				file.ExportToXML(dialog.FileName);
+				settings.ExportToXML(dialog.FileName);
 			}
 			catch(InvalidOperationException ex)
 			{
@@ -116,23 +114,25 @@ namespace XMLToDataClass
 			settings.SetProperties(typeof(SettingsForm), this);
 		}
 
-		private void importButton_Click(object sender, EventArgs e)
+		private void ImportButton_Click(object sender, EventArgs e)
 		{
-			OpenFileDialog dialog = new OpenFileDialog();
-			dialog.CheckFileExists = true;
-			dialog.CheckPathExists = true;
-			dialog.Filter = "Setting files (*.x2dsettings)|*.x2dsettings|All files (*.*)|*.*";
-			dialog.DefaultExt = "x2dsettings";
-			dialog.Multiselect = false;
-			dialog.Title = "Specify the file and path to load the settings from";
+			OpenFileDialog dialog = new OpenFileDialog
+			{
+				CheckFileExists = true,
+				CheckPathExists = true,
+				Filter = "Setting files (*.x2dsettings)|*.x2dsettings|All files (*.*)|*.*",
+				DefaultExt = "x2dsettings",
+				Multiselect = false,
+				Title = "Specify the file and path to load the settings from"
+			};
 
 			if (dialog.ShowDialog() != DialogResult.OK)
 				return;
 
-			SettingsFile file;
+			Settings file;
 			try
 			{
-				file = new SettingsFile(dialog.FileName);
+				file = new Settings(dialog.FileName);
 			}
 			catch(ArgumentException ex)
 			{
@@ -140,7 +140,7 @@ namespace XMLToDataClass
 				return;
 			}
 
-			ImportSettings(file.Root);
+			ImportSettings(file);
 		}
 
 		public bool ValidateSettings()
@@ -170,7 +170,7 @@ namespace XMLToDataClass
 			return true;
 		}
 
-		private void okButton_Click(object sender, EventArgs e)
+		private void OkButton_Click(object sender, EventArgs e)
 		{
 			if (!ValidateSettings())
 				return;

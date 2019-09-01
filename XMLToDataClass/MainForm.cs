@@ -11,7 +11,7 @@
 // CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and
 // limitations under the License.
 //********************************************************************************************************************************
-using CSCodeGen.Parse;
+using CSCodeGen.Parse.SettingsFile;
 using System;
 using System.IO;
 using System.Reflection;
@@ -52,7 +52,7 @@ namespace XMLToDataClass
 
 			this.Text = string.Format("{0} Version: {1}", this.Text, Assembly.GetExecutingAssembly().GetName().Version.ToString());
 			mainSplitContainer.Panel2.AutoScroll = true;
-			mainTreeView.AfterSelect += mainTreeView_AfterSelect;
+			mainTreeView.AfterSelect += MainTreeView_AfterSelect;
 
 			UpdateGui();
 			UpdateTreeView();
@@ -109,7 +109,7 @@ namespace XMLToDataClass
 		/// </summary>
 		/// <param name="sender">Sender of the event.</param>
 		/// <param name="e"><see cref="TreeViewEventArgs"/> containing the arguments for the event.</param>
-		private void mainTreeView_AfterSelect(object sender, TreeViewEventArgs e)
+		private void MainTreeView_AfterSelect(object sender, TreeViewEventArgs e)
 		{
 			UpdateTree(e.Node);
 		}
@@ -119,7 +119,7 @@ namespace XMLToDataClass
 		/// </summary>
 		/// <param name="sender">Sender of the event.</param>
 		/// <param name="e"><see cref="TreeViewEventArgs"/> containing the arguments for the event.</param>
-		private void mainTreeView_AfterExpand(object sender, TreeViewEventArgs e)
+		private void MainTreeView_AfterExpand(object sender, TreeViewEventArgs e)
 		{
 			UpdateTree(e.Node);
 		}
@@ -129,11 +129,13 @@ namespace XMLToDataClass
 		/// </summary>
 		/// <param name="sender">Sender of the event.</param>
 		/// <param name="e"><see cref="EventArgs"/> containing the arguments for the event.</param>
-		private void codeBrowseButton_Click(object sender, EventArgs e)
+		private void CodeBrowseButton_Click(object sender, EventArgs e)
 		{
-			FolderBrowserDialog dialog = new FolderBrowserDialog();
-			dialog.ShowNewFolderButton = true;
-			dialog.Description = "Select the folder to save the data class files into";
+			FolderBrowserDialog dialog = new FolderBrowserDialog
+			{
+				ShowNewFolderButton = true,
+				Description = "Select the folder to save the data class files into"
+			};
 
 			if (dialog.ShowDialog() != DialogResult.OK)
 				return;
@@ -147,7 +149,7 @@ namespace XMLToDataClass
 		/// </summary>
 		/// <param name="sender">Sender of the event.</param>
 		/// <param name="e"><see cref="EventArgs"/> containing the arguments for the event.</param>
-		private void processButton_Click(object sender, EventArgs e)
+		private void ProcessButton_Click(object sender, EventArgs e)
 		{
 			generateButton.Enabled = false;
 
@@ -200,14 +202,16 @@ namespace XMLToDataClass
 			generateButton.Enabled = true;
 		}
 
-		private void saveConfigButton_Click(object sender, EventArgs e)
+		private void SaveConfigButton_Click(object sender, EventArgs e)
 		{
-			SaveFileDialog dialog = new SaveFileDialog();
-			dialog.CheckPathExists = true;
-			dialog.OverwritePrompt = true;
-			dialog.Title = "Specify the file and path to save the configuration data to";
-			dialog.Filter = "Config files (*.x2dconf)|*.x2dconf|All files (*.*)|*.*";
-			dialog.DefaultExt = "x2dconf";
+			SaveFileDialog dialog = new SaveFileDialog
+			{
+				CheckPathExists = true,
+				OverwritePrompt = true,
+				Title = "Specify the file and path to save the configuration data to",
+				Filter = "Config files (*.x2dconf)|*.x2dconf|All files (*.*)|*.*",
+				DefaultExt = "x2dconf"
+			};
 			try
 			{
 				dialog.InitialDirectory = Path.GetDirectoryName(Properties.Settings.Default.ConfigFileLocation);
@@ -226,15 +230,17 @@ namespace XMLToDataClass
 			Properties.Settings.Default.Save();
 		}
 
-		private void loadConfigButton_Click(object sender, EventArgs e)
+		private void LoadConfigButton_Click(object sender, EventArgs e)
 		{
-			OpenFileDialog dialog = new OpenFileDialog();
-			dialog.CheckFileExists = true;
-			dialog.CheckPathExists = true;
-			dialog.Filter = "Config files (*.x2dconf)|*.x2dconf|All files (*.*)|*.*";
-			dialog.DefaultExt = "x2dconf";
-			dialog.Multiselect = false;
-			dialog.Title = "Specify the file and path to load the configuration data from";
+			OpenFileDialog dialog = new OpenFileDialog
+			{
+				CheckFileExists = true,
+				CheckPathExists = true,
+				Filter = "Config files (*.x2dconf)|*.x2dconf|All files (*.*)|*.*",
+				DefaultExt = "x2dconf",
+				Multiselect = false,
+				Title = "Specify the file and path to load the configuration data from"
+			};
 			try
 			{
 				dialog.InitialDirectory = Path.GetDirectoryName(Properties.Settings.Default.ConfigFileLocation);
@@ -413,7 +419,7 @@ namespace XMLToDataClass
 		/// </summary>
 		/// <param name="sender">Sender of the event.</param>
 		/// <param name="e"><see cref="EventArgs"/> containing the arguments for the event.</param>
-		private void loadButton_Click(object sender, EventArgs e)
+		private void LoadButton_Click(object sender, EventArgs e)
 		{
 			mLoadForm.FilePath = mController.XMLFilePath;
 
@@ -445,7 +451,7 @@ namespace XMLToDataClass
 		/// </summary>
 		/// <param name="sender">Sender of the event.</param>
 		/// <param name="e"><see cref="EventArgs"/> containing the arguments for the event.</param>
-		private void projectCheckBox_CheckedChanged(object sender, EventArgs e)
+		private void ProjectCheckBox_CheckedChanged(object sender, EventArgs e)
 		{
 			mController.GenProject = projectCheckBox.Checked;
 			UpdateProjectSolutionInfo();
@@ -456,7 +462,7 @@ namespace XMLToDataClass
 		/// </summary>
 		/// <param name="sender">Sender of the event.</param>
 		/// <param name="e"><see cref="EventArgs"/> containing the arguments for the event.</param>
-		private void solutionCheckBox_CheckedChanged(object sender, EventArgs e)
+		private void SolutionCheckBox_CheckedChanged(object sender, EventArgs e)
 		{
 			mController.GenSolution = solutionCheckBox.Checked;
 			UpdateProjectSolutionInfo();
@@ -505,19 +511,18 @@ namespace XMLToDataClass
 		/// </summary>
 		/// <param name="sender">Sender of the event.</param>
 		/// <param name="e"><see cref="EventArgs"/> containing the arguments for the event.</param>
-		private void settingsButton_Click(object sender, EventArgs e)
+		private void SettingsButton_Click(object sender, EventArgs e)
 		{
 			SettingsForm form = new SettingsForm();
 
 			if(!string.IsNullOrWhiteSpace(Properties.Settings.Default.CSCodeGenSettings))
 			{
 				using (StringReader sr = new StringReader(Properties.Settings.Default.CSCodeGenSettings))
-				using (XmlReader reader = XmlReader.Create(sr))
 				{
 					try
 					{
-						SettingsFile sf = new SettingsFile(reader);
-						form.Panel.ImportSettings(sf.Root);
+						Settings sf = new Settings(sr);
+						form.Panel.ImportSettings(sf);
 					}
 					catch(ArgumentException)
 					{
@@ -531,10 +536,9 @@ namespace XMLToDataClass
 				return;
 
 			using (StringWriter sw = new StringWriter())
-			using (XmlWriter writer = XmlWriter.Create(sw))
 			{
-				SettingsFile sf = new SettingsFile(new Settings(DateTime.Now, new Version(1, 0), form.Panel.ExportSettings()), "UTF-8", "1.0");
-				sf.ExportToXML(writer);
+				Settings sf = new Settings(DateTime.Now, new Version(1, 0), form.Panel.ExportSettings());
+				sf.ExportToXML(sw);
 				Properties.Settings.Default.CSCodeGenSettings = sw.ToString();
 			}
 			Properties.Settings.Default.FileExtensionAddition = form.FileExtensionAddition;
@@ -543,22 +547,22 @@ namespace XMLToDataClass
 
 		#endregion Methods
 
-		private void codeTextBox_TextChanged(object sender, EventArgs e)
+		private void CodeTextBox_TextChanged(object sender, EventArgs e)
 		{
 			mController.OutputFolder = codeTextBox.Text;
 		}
 
-		private void namespaceTextBox_TextChanged(object sender, EventArgs e)
+		private void NamespaceTextBox_TextChanged(object sender, EventArgs e)
 		{
 			mController.NameSpace = namespaceTextBox.Text;
 		}
 
-		private void projectTextBox_TextChanged(object sender, EventArgs e)
+		private void ProjectTextBox_TextChanged(object sender, EventArgs e)
 		{
 			mController.ProjectName = projectTextBox.Text;
 		}
 
-		private void solutionTextBox_TextChanged(object sender, EventArgs e)
+		private void SolutionTextBox_TextChanged(object sender, EventArgs e)
 		{
 			mController.SolutionName = solutionTextBox.Text;
 		}

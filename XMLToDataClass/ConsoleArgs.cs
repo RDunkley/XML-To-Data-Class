@@ -50,10 +50,7 @@ namespace System
 		/// <exception cref="ArgumentNullException"><paramref name="usage"/> is a null reference.</exception>
 		public Usage(string usage)
 		{
-			if (usage == null)
-				throw new ArgumentNullException("usage");
-
-			mUsageStatement = usage;
+			mUsageStatement = usage ?? throw new ArgumentNullException("usage");
 		}
 
 		/// <summary>

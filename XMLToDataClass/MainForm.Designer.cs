@@ -81,7 +81,7 @@ namespace XMLToDataClass
 			this.codeTextBox.Name = "codeTextBox";
 			this.codeTextBox.Size = new System.Drawing.Size(411, 20);
 			this.codeTextBox.TabIndex = 2;
-			this.codeTextBox.TextChanged += new System.EventHandler(this.codeTextBox_TextChanged);
+			this.codeTextBox.TextChanged += new System.EventHandler(this.CodeTextBox_TextChanged);
 			// 
 			// codeBrowseButton
 			// 
@@ -92,7 +92,7 @@ namespace XMLToDataClass
 			this.codeBrowseButton.TabIndex = 3;
 			this.codeBrowseButton.Text = "Browse";
 			this.codeBrowseButton.UseVisualStyleBackColor = true;
-			this.codeBrowseButton.Click += new System.EventHandler(this.codeBrowseButton_Click);
+			this.codeBrowseButton.Click += new System.EventHandler(this.CodeBrowseButton_Click);
 			// 
 			// label2
 			// 
@@ -114,7 +114,7 @@ namespace XMLToDataClass
 			this.generateButton.TabIndex = 6;
 			this.generateButton.Text = "Generate Code";
 			this.generateButton.UseVisualStyleBackColor = true;
-			this.generateButton.Click += new System.EventHandler(this.processButton_Click);
+			this.generateButton.Click += new System.EventHandler(this.ProcessButton_Click);
 			// 
 			// mainTableLayoutPanel
 			// 
@@ -192,7 +192,7 @@ namespace XMLToDataClass
 			this.mainTreeView.Name = "mainTreeView";
 			this.mainTreeView.Size = new System.Drawing.Size(185, 225);
 			this.mainTreeView.TabIndex = 0;
-			this.mainTreeView.AfterExpand += new System.Windows.Forms.TreeViewEventHandler(this.mainTreeView_AfterExpand);
+			this.mainTreeView.AfterExpand += new System.Windows.Forms.TreeViewEventHandler(this.MainTreeView_AfterExpand);
 			// 
 			// label1
 			// 
@@ -225,7 +225,7 @@ namespace XMLToDataClass
 			this.loadButton.TabIndex = 12;
 			this.loadButton.Text = "Load";
 			this.loadButton.UseVisualStyleBackColor = true;
-			this.loadButton.Click += new System.EventHandler(this.loadButton_Click);
+			this.loadButton.Click += new System.EventHandler(this.LoadButton_Click);
 			// 
 			// namespaceTextBox
 			// 
@@ -236,7 +236,7 @@ namespace XMLToDataClass
 			this.namespaceTextBox.TabIndex = 9;
 			this.namespaceTextBox.Text = "XMLToDataClass";
 			this.namespaceTextBox.WordWrap = false;
-			this.namespaceTextBox.TextChanged += new System.EventHandler(this.namespaceTextBox_TextChanged);
+			this.namespaceTextBox.TextChanged += new System.EventHandler(this.NamespaceTextBox_TextChanged);
 			// 
 			// label3
 			// 
@@ -259,7 +259,7 @@ namespace XMLToDataClass
 			this.projectCheckBox.TabIndex = 14;
 			this.projectCheckBox.Text = "Generate Project File with Code";
 			this.projectCheckBox.UseVisualStyleBackColor = true;
-			this.projectCheckBox.CheckedChanged += new System.EventHandler(this.projectCheckBox_CheckedChanged);
+			this.projectCheckBox.CheckedChanged += new System.EventHandler(this.ProjectCheckBox_CheckedChanged);
 			// 
 			// label4
 			// 
@@ -279,7 +279,7 @@ namespace XMLToDataClass
 			this.projectTextBox.Name = "projectTextBox";
 			this.projectTextBox.Size = new System.Drawing.Size(411, 20);
 			this.projectTextBox.TabIndex = 16;
-			this.projectTextBox.TextChanged += new System.EventHandler(this.projectTextBox_TextChanged);
+			this.projectTextBox.TextChanged += new System.EventHandler(this.ProjectTextBox_TextChanged);
 			// 
 			// solutionCheckBox
 			// 
@@ -291,7 +291,7 @@ namespace XMLToDataClass
 			this.solutionCheckBox.TabIndex = 17;
 			this.solutionCheckBox.Text = "Generate Solution for Project";
 			this.solutionCheckBox.UseVisualStyleBackColor = true;
-			this.solutionCheckBox.CheckedChanged += new System.EventHandler(this.solutionCheckBox_CheckedChanged);
+			this.solutionCheckBox.CheckedChanged += new System.EventHandler(this.SolutionCheckBox_CheckedChanged);
 			// 
 			// label5
 			// 
@@ -311,7 +311,7 @@ namespace XMLToDataClass
 			this.solutionTextBox.Name = "solutionTextBox";
 			this.solutionTextBox.Size = new System.Drawing.Size(411, 20);
 			this.solutionTextBox.TabIndex = 19;
-			this.solutionTextBox.TextChanged += new System.EventHandler(this.solutionTextBox_TextChanged);
+			this.solutionTextBox.TextChanged += new System.EventHandler(this.SolutionTextBox_TextChanged);
 			// 
 			// settingsButton
 			// 
@@ -322,7 +322,7 @@ namespace XMLToDataClass
 			this.settingsButton.TabIndex = 20;
 			this.settingsButton.Text = "Settings";
 			this.settingsButton.UseVisualStyleBackColor = true;
-			this.settingsButton.Click += new System.EventHandler(this.settingsButton_Click);
+			this.settingsButton.Click += new System.EventHandler(this.SettingsButton_Click);
 			// 
 			// buttonFlowLayoutPanel
 			// 
@@ -345,7 +345,7 @@ namespace XMLToDataClass
 			this.saveConfigButton.TabIndex = 7;
 			this.saveConfigButton.Text = "Save";
 			this.saveConfigButton.UseVisualStyleBackColor = true;
-			this.saveConfigButton.Click += new System.EventHandler(this.saveConfigButton_Click);
+			this.saveConfigButton.Click += new System.EventHandler(this.SaveConfigButton_Click);
 			// 
 			// loadConfigButton
 			// 
@@ -355,7 +355,7 @@ namespace XMLToDataClass
 			this.loadConfigButton.TabIndex = 8;
 			this.loadConfigButton.Text = "Load";
 			this.loadConfigButton.UseVisualStyleBackColor = true;
-			this.loadConfigButton.Click += new System.EventHandler(this.loadConfigButton_Click);
+			this.loadConfigButton.Click += new System.EventHandler(this.LoadConfigButton_Click);
 			// 
 			// MainForm
 			// 

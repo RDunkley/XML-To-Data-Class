@@ -10,7 +10,7 @@
 // CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and
 // limitations under the License.
 //********************************************************************************************************************************
-using CSCodeGen.Parse;
+using CSCodeGen.Parse.SettingsFile;
 using System;
 using System.IO;
 using System.Security;
@@ -56,10 +56,9 @@ namespace XMLToDataClass
 			if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.CSCodeGenSettings))
 			{
 				using (StringReader sr = new StringReader(Properties.Settings.Default.CSCodeGenSettings))
-				using (XmlReader reader = XmlReader.Create(sr))
 				{
-					SettingsFile sf = new SettingsFile(reader);
-					CSCodeGen.DefaultValues.ImportValues(sf.Root);
+					Settings sf = new Settings(sr);
+					CSCodeGen.DefaultValues.ImportValues(sf);
 				}
 			}
 
@@ -114,13 +113,7 @@ namespace XMLToDataClass
 			if (filePath == null)
 				throw new ArgumentNullException("filePath");
 
-			string outputFolder;
-			string nameSpace;
-			bool? genProject;
-			string projectName;
-			bool? genSolution;
-			string solutionName;
-			Info.Load(filePath, out outputFolder, out nameSpace, out genProject, out projectName, out genSolution, out solutionName);
+			Info.Load(filePath, out string outputFolder, out string nameSpace, out bool? genProject, out string projectName, out bool? genSolution, out string solutionName);
 
 			if (!string.IsNullOrEmpty(outputFolder))
 				OutputFolder = outputFolder;
@@ -169,6 +162,16 @@ namespace XMLToDataClass
 		public void Process()
 		{
 			Validate();
+
+			// Load the latest settings.
+			if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.CSCodeGenSettings))
+			{
+				using (StringReader sr = new StringReader(Properties.Settings.Default.CSCodeGenSettings))
+				{
+					Settings sf = new Settings(sr);
+					CSCodeGen.DefaultValues.ImportValues(sf);
+				}
+			}
 
 			string projectName = null;
 			if (GenProject)
