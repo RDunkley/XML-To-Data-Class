@@ -66,8 +66,6 @@ namespace XMLToDataClass
 			this.buttonFlowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
 			this.saveConfigButton = new System.Windows.Forms.Button();
 			this.loadConfigButton = new System.Windows.Forms.Button();
-			this.mainClassLabel = new System.Windows.Forms.Label();
-			this.mainClassTextBox = new System.Windows.Forms.TextBox();
 			this.mainTableLayoutPanel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.mainSplitContainer)).BeginInit();
 			this.mainSplitContainer.Panel1.SuspendLayout();
@@ -79,9 +77,9 @@ namespace XMLToDataClass
 			// codeTextBox
 			// 
 			this.codeTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.codeTextBox.Location = new System.Drawing.Point(101, 32);
+			this.codeTextBox.Location = new System.Drawing.Point(88, 32);
 			this.codeTextBox.Name = "codeTextBox";
-			this.codeTextBox.Size = new System.Drawing.Size(398, 20);
+			this.codeTextBox.Size = new System.Drawing.Size(411, 20);
 			this.codeTextBox.TabIndex = 2;
 			this.codeTextBox.TextChanged += new System.EventHandler(this.codeTextBox_TextChanged);
 			// 
@@ -102,7 +100,7 @@ namespace XMLToDataClass
 			this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.label2.Location = new System.Drawing.Point(3, 29);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(92, 29);
+			this.label2.Size = new System.Drawing.Size(79, 29);
 			this.label2.TabIndex = 5;
 			this.label2.Text = "Output Folder:";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -124,7 +122,7 @@ namespace XMLToDataClass
 			this.mainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.mainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.mainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.mainTableLayoutPanel.Controls.Add(this.mainSplitContainer, 0, 8);
+			this.mainTableLayoutPanel.Controls.Add(this.mainSplitContainer, 0, 7);
 			this.mainTableLayoutPanel.Controls.Add(this.label1, 0, 0);
 			this.mainTableLayoutPanel.Controls.Add(this.xmlFilePathLabel, 1, 0);
 			this.mainTableLayoutPanel.Controls.Add(this.loadButton, 2, 0);
@@ -139,15 +137,12 @@ namespace XMLToDataClass
 			this.mainTableLayoutPanel.Controls.Add(this.solutionCheckBox, 1, 5);
 			this.mainTableLayoutPanel.Controls.Add(this.label5, 0, 6);
 			this.mainTableLayoutPanel.Controls.Add(this.solutionTextBox, 1, 6);
-			this.mainTableLayoutPanel.Controls.Add(this.settingsButton, 2, 9);
-			this.mainTableLayoutPanel.Controls.Add(this.buttonFlowLayoutPanel, 0, 9);
-			this.mainTableLayoutPanel.Controls.Add(this.mainClassLabel, 0, 7);
-			this.mainTableLayoutPanel.Controls.Add(this.mainClassTextBox, 1, 7);
+			this.mainTableLayoutPanel.Controls.Add(this.settingsButton, 2, 8);
+			this.mainTableLayoutPanel.Controls.Add(this.buttonFlowLayoutPanel, 0, 8);
 			this.mainTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.mainTableLayoutPanel.Location = new System.Drawing.Point(0, 0);
 			this.mainTableLayoutPanel.Name = "mainTableLayoutPanel";
-			this.mainTableLayoutPanel.RowCount = 10;
-			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.mainTableLayoutPanel.RowCount = 9;
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -157,6 +152,7 @@ namespace XMLToDataClass
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+			this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.mainTableLayoutPanel.Size = new System.Drawing.Size(583, 467);
 			this.mainTableLayoutPanel.TabIndex = 7;
 			// 
@@ -164,7 +160,7 @@ namespace XMLToDataClass
 			// 
 			this.mainTableLayoutPanel.SetColumnSpan(this.mainSplitContainer, 3);
 			this.mainSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.mainSplitContainer.Location = new System.Drawing.Point(3, 211);
+			this.mainSplitContainer.Location = new System.Drawing.Point(3, 185);
 			this.mainSplitContainer.Name = "mainSplitContainer";
 			// 
 			// mainSplitContainer.Panel1
@@ -174,7 +170,7 @@ namespace XMLToDataClass
 			// mainSplitContainer.Panel2
 			// 
 			this.mainSplitContainer.Panel2.AutoScroll = true;
-			this.mainSplitContainer.Size = new System.Drawing.Size(577, 218);
+			this.mainSplitContainer.Size = new System.Drawing.Size(577, 244);
 			this.mainSplitContainer.SplitterDistance = 191;
 			this.mainSplitContainer.TabIndex = 7;
 			// 
@@ -184,7 +180,7 @@ namespace XMLToDataClass
 			this.elementGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.elementGroupBox.Location = new System.Drawing.Point(0, 0);
 			this.elementGroupBox.Name = "elementGroupBox";
-			this.elementGroupBox.Size = new System.Drawing.Size(191, 218);
+			this.elementGroupBox.Size = new System.Drawing.Size(191, 244);
 			this.elementGroupBox.TabIndex = 0;
 			this.elementGroupBox.TabStop = false;
 			this.elementGroupBox.Text = "Elements";
@@ -194,7 +190,7 @@ namespace XMLToDataClass
 			this.mainTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.mainTreeView.Location = new System.Drawing.Point(3, 16);
 			this.mainTreeView.Name = "mainTreeView";
-			this.mainTreeView.Size = new System.Drawing.Size(185, 199);
+			this.mainTreeView.Size = new System.Drawing.Size(185, 225);
 			this.mainTreeView.TabIndex = 0;
 			this.mainTreeView.AfterExpand += new System.Windows.Forms.TreeViewEventHandler(this.mainTreeView_AfterExpand);
 			// 
@@ -204,7 +200,7 @@ namespace XMLToDataClass
 			this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.label1.Location = new System.Drawing.Point(3, 0);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(92, 29);
+			this.label1.Size = new System.Drawing.Size(79, 29);
 			this.label1.TabIndex = 10;
 			this.label1.Text = "XML File:";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -213,9 +209,9 @@ namespace XMLToDataClass
 			// 
 			this.xmlFilePathLabel.AutoSize = true;
 			this.xmlFilePathLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.xmlFilePathLabel.Location = new System.Drawing.Point(101, 0);
+			this.xmlFilePathLabel.Location = new System.Drawing.Point(88, 0);
 			this.xmlFilePathLabel.Name = "xmlFilePathLabel";
-			this.xmlFilePathLabel.Size = new System.Drawing.Size(398, 29);
+			this.xmlFilePathLabel.Size = new System.Drawing.Size(411, 29);
 			this.xmlFilePathLabel.TabIndex = 11;
 			this.xmlFilePathLabel.Text = "label4";
 			this.xmlFilePathLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -234,9 +230,9 @@ namespace XMLToDataClass
 			// namespaceTextBox
 			// 
 			this.namespaceTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.namespaceTextBox.Location = new System.Drawing.Point(101, 61);
+			this.namespaceTextBox.Location = new System.Drawing.Point(88, 61);
 			this.namespaceTextBox.Name = "namespaceTextBox";
-			this.namespaceTextBox.Size = new System.Drawing.Size(398, 20);
+			this.namespaceTextBox.Size = new System.Drawing.Size(411, 20);
 			this.namespaceTextBox.TabIndex = 9;
 			this.namespaceTextBox.Text = "XMLToDataClass";
 			this.namespaceTextBox.WordWrap = false;
@@ -248,7 +244,7 @@ namespace XMLToDataClass
 			this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.label3.Location = new System.Drawing.Point(3, 58);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(92, 26);
+			this.label3.Size = new System.Drawing.Size(79, 26);
 			this.label3.TabIndex = 8;
 			this.label3.Text = "Namespace:";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -257,9 +253,9 @@ namespace XMLToDataClass
 			// 
 			this.projectCheckBox.AutoSize = true;
 			this.projectCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.projectCheckBox.Location = new System.Drawing.Point(101, 87);
+			this.projectCheckBox.Location = new System.Drawing.Point(88, 87);
 			this.projectCheckBox.Name = "projectCheckBox";
-			this.projectCheckBox.Size = new System.Drawing.Size(398, 17);
+			this.projectCheckBox.Size = new System.Drawing.Size(411, 17);
 			this.projectCheckBox.TabIndex = 14;
 			this.projectCheckBox.Text = "Generate Project File with Code";
 			this.projectCheckBox.UseVisualStyleBackColor = true;
@@ -271,7 +267,7 @@ namespace XMLToDataClass
 			this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.label4.Location = new System.Drawing.Point(3, 107);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(92, 26);
+			this.label4.Size = new System.Drawing.Size(79, 26);
 			this.label4.TabIndex = 15;
 			this.label4.Text = "Project Name:";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -279,9 +275,9 @@ namespace XMLToDataClass
 			// projectTextBox
 			// 
 			this.projectTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.projectTextBox.Location = new System.Drawing.Point(101, 110);
+			this.projectTextBox.Location = new System.Drawing.Point(88, 110);
 			this.projectTextBox.Name = "projectTextBox";
-			this.projectTextBox.Size = new System.Drawing.Size(398, 20);
+			this.projectTextBox.Size = new System.Drawing.Size(411, 20);
 			this.projectTextBox.TabIndex = 16;
 			this.projectTextBox.TextChanged += new System.EventHandler(this.projectTextBox_TextChanged);
 			// 
@@ -289,9 +285,9 @@ namespace XMLToDataClass
 			// 
 			this.solutionCheckBox.AutoSize = true;
 			this.solutionCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.solutionCheckBox.Location = new System.Drawing.Point(101, 136);
+			this.solutionCheckBox.Location = new System.Drawing.Point(88, 136);
 			this.solutionCheckBox.Name = "solutionCheckBox";
-			this.solutionCheckBox.Size = new System.Drawing.Size(398, 17);
+			this.solutionCheckBox.Size = new System.Drawing.Size(411, 17);
 			this.solutionCheckBox.TabIndex = 17;
 			this.solutionCheckBox.Text = "Generate Solution for Project";
 			this.solutionCheckBox.UseVisualStyleBackColor = true;
@@ -303,7 +299,7 @@ namespace XMLToDataClass
 			this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.label5.Location = new System.Drawing.Point(3, 156);
 			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(92, 26);
+			this.label5.Size = new System.Drawing.Size(79, 26);
 			this.label5.TabIndex = 18;
 			this.label5.Text = "Solution Name:";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -311,9 +307,9 @@ namespace XMLToDataClass
 			// solutionTextBox
 			// 
 			this.solutionTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.solutionTextBox.Location = new System.Drawing.Point(101, 159);
+			this.solutionTextBox.Location = new System.Drawing.Point(88, 159);
 			this.solutionTextBox.Name = "solutionTextBox";
-			this.solutionTextBox.Size = new System.Drawing.Size(398, 20);
+			this.solutionTextBox.Size = new System.Drawing.Size(411, 20);
 			this.solutionTextBox.TabIndex = 19;
 			this.solutionTextBox.TextChanged += new System.EventHandler(this.solutionTextBox_TextChanged);
 			// 
@@ -361,26 +357,6 @@ namespace XMLToDataClass
 			this.loadConfigButton.UseVisualStyleBackColor = true;
 			this.loadConfigButton.Click += new System.EventHandler(this.loadConfigButton_Click);
 			// 
-			// mainClassLabel
-			// 
-			this.mainClassLabel.AutoSize = true;
-			this.mainClassLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.mainClassLabel.Location = new System.Drawing.Point(3, 182);
-			this.mainClassLabel.Name = "mainClassLabel";
-			this.mainClassLabel.Size = new System.Drawing.Size(92, 26);
-			this.mainClassLabel.TabIndex = 22;
-			this.mainClassLabel.Text = "Main Class Name:";
-			this.mainClassLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// mainClassTextBox
-			// 
-			this.mainClassTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.mainClassTextBox.Location = new System.Drawing.Point(101, 185);
-			this.mainClassTextBox.Name = "mainClassTextBox";
-			this.mainClassTextBox.Size = new System.Drawing.Size(398, 20);
-			this.mainClassTextBox.TabIndex = 23;
-			this.mainClassTextBox.TextChanged += new System.EventHandler(this.mainClassTextBox_TextChanged);
-			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -426,8 +402,6 @@ namespace XMLToDataClass
 		private System.Windows.Forms.FlowLayoutPanel buttonFlowLayoutPanel;
 		private System.Windows.Forms.Button saveConfigButton;
 		private System.Windows.Forms.Button loadConfigButton;
-		private System.Windows.Forms.Label mainClassLabel;
-		private System.Windows.Forms.TextBox mainClassTextBox;
 	}
 }
 

@@ -47,8 +47,6 @@ namespace XMLToDataClass.Data
 
 		public string FilePath { get; private set; }
 
-		public string MainClassName { get; set; }
-
 		public string Version { get; set; }
 
 		public string Encoding { get; set; }
@@ -127,7 +125,6 @@ namespace XMLToDataClass.Data
 			AddChildElements(xmlNodesByName, xmlElements, maintainHierarchy);
 			RootNode = GetRootNode(doc, xmlElements);
 			Elements = xmlElements;
-			MainClassName = StringUtility.GetUpperCamelCase(Path.GetFileNameWithoutExtension(filePath));
 			FilePath = filePath;
 			HierarchyMaintained = maintainHierarchy;
 		}
@@ -741,11 +738,8 @@ namespace XMLToDataClass.Data
 			XmlElement root = doc.CreateElement("save_data");
 			doc.AppendChild(root);
 
-			XmlAttribute attrib = root.Attributes.Append(doc.CreateAttribute("MainClassName"));
-			attrib.Value = MainClassName;
-
 			// Store the additional settings from the caller.
-			attrib = root.Attributes.Append(doc.CreateAttribute("OutputFolder"));
+			XmlAttribute attrib = root.Attributes.Append(doc.CreateAttribute("OutputFolder"));
 			attrib.Value = outputFolder;
 			attrib = root.Attributes.Append(doc.CreateAttribute("NameSpace"));
 			attrib.Value = nameSpace;
@@ -782,10 +776,7 @@ namespace XMLToDataClass.Data
 			{
 				if (node.NodeType == XmlNodeType.Element && string.Compare(node.Name, "save_data", true) == 0)
 				{
-					XmlAttribute attrib = node.Attributes["MainClassName"];
-					if (attrib != null)
-						MainClassName = attrib.Value;
-					attrib = node.Attributes["OutputFolder"];
+					XmlAttribute attrib = node.Attributes["OutputFolder"];
 					if (attrib != null)
 						outputFolder = attrib.Value;
 					attrib = node.Attributes["NameSpace"];
