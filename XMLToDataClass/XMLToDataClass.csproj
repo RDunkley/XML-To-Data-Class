@@ -200,6 +200,12 @@
     <Compile Include="View\VersionTypeSettings.Designer.cs">
       <DependentUpon>VersionTypeSettings.cs</DependentUpon>
     </Compile>
+    <Compile Include="View\ViewValuesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\ViewValuesForm.Designer.cs">
+      <DependentUpon>ViewValuesForm.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -253,6 +259,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="View\VersionTypeSettings.resx">
       <DependentUpon>VersionTypeSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\ViewValuesForm.resx">
+      <DependentUpon>ViewValuesForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">

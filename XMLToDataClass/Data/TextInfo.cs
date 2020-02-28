@@ -63,11 +63,11 @@ namespace XMLToDataClass.Data
 				{
 					foreach (XmlNode child in node.ChildNodes)
 					{
-						if (child.NodeType == XmlNodeType.CDATA)
+						if (child.NodeType == XmlNodeType.Text)
 						{
-							XmlCDataSection cDataNode = (XmlCDataSection)child;
-							if (cDataNode.Data != null && cDataNode.Data.Length > 0)
-								valueList.Add(cDataNode.Data);
+							XmlText textNode = (XmlText)child;
+							if (textNode.Data != null && textNode.Data.Length > 0)
+								valueList.Add(textNode.Data);
 						}
 					}
 				}

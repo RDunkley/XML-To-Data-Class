@@ -86,9 +86,19 @@ namespace XMLToDataClass.Data
 		public string Remarks { get; set; }
 
 		/// <summary>
-		///   Gets the XML node name.
+		///   Gets the full XML node name including the namespace.
+		/// </summary>
+		public string FullName { get; private set; }
+
+		/// <summary>
+		///   Gets the XML node name without the Namespace.
 		/// </summary>
 		public string Name { get; private set; }
+
+		/// <summary>
+		///   Gets the namespace of the XML node or an empty string if no namespace is specified.
+		/// </summary>
+		public string NameSpace { get; private set; }
 
 		/// <summary>
 		///   Gets or sets the accessibility of the class.
@@ -107,24 +117,34 @@ namespace XMLToDataClass.Data
 				throw new ArgumentException("nodes is an empty array");
 
 			// Verify all the nodes are elements and have the same element name.
-			string elementName = null;
+			string elementFullName = null;
+			string name = null;
+			string prefix = null;
 			foreach(XmlNode node in nodes)
 			{
 				if (node.NodeType != XmlNodeType.Element)
 					throw new ArgumentException("nodes contained an XmlNode that was not an element node type.");
-				if (elementName == null)
+				if (elementFullName == null)
 				{
-					elementName = node.Name;
+					elementFullName = node.Name;
+					name = node.LocalName;
+					prefix = node.Prefix;
 				}
 				else
 				{
-					if (string.Compare(elementName, node.Name, false) != 0)
-						throw new ArgumentException("One or more of the nodes provided do not contain the same element name");
+					if (string.Compare(elementFullName, node.Name, false) != 0)
+						throw new ArgumentException($"One of the nodes provided contains a name ({node.Name}) different than another ({elementFullName}).");
+					if (string.Compare(name, node.LocalName, false) != 0)
+						throw new ArgumentException($"One of the nodes provided contains a local name ({node.LocalName}) different than another ({name}).");
+					if (string.Compare(prefix, node.Prefix, false) != 0)
+						throw new ArgumentException($"One of the nodes provided contains a prefix or namespcae ({node.Prefix}) different than another ({prefix}).");
 				}
 			}
 
-			Name = elementName;
-			ClassName = StringUtility.GetUpperCamelCase(elementName);
+			Name = name;
+			NameSpace = prefix;
+			FullName = elementFullName;
+			ClassName = StringUtility.GetUpperCamelCase(elementFullName);
 			Summary = string.Format("In memory representation of the XML element \"{0}\".", Name);
 			Remarks = null;
 			Accessibility = Access.Public;

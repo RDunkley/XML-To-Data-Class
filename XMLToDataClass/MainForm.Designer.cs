@@ -50,7 +50,9 @@ namespace XMLToDataClass
 			this.mainTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
 			this.mainSplitContainer = new System.Windows.Forms.SplitContainer();
 			this.elementGroupBox = new System.Windows.Forms.GroupBox();
-			this.mainTreeView = new System.Windows.Forms.TreeView();
+			this.treeTabControl = new System.Windows.Forms.TabControl();
+			this.tabPage1 = new System.Windows.Forms.TabPage();
+			this.tabPage2 = new System.Windows.Forms.TabPage();
 			this.label1 = new System.Windows.Forms.Label();
 			this.xmlFilePathLabel = new System.Windows.Forms.Label();
 			this.loadButton = new System.Windows.Forms.Button();
@@ -71,6 +73,7 @@ namespace XMLToDataClass
 			this.mainSplitContainer.Panel1.SuspendLayout();
 			this.mainSplitContainer.SuspendLayout();
 			this.elementGroupBox.SuspendLayout();
+			this.treeTabControl.SuspendLayout();
 			this.buttonFlowLayoutPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -79,16 +82,16 @@ namespace XMLToDataClass
 			this.codeTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.codeTextBox.Location = new System.Drawing.Point(88, 32);
 			this.codeTextBox.Name = "codeTextBox";
-			this.codeTextBox.Size = new System.Drawing.Size(411, 20);
+			this.codeTextBox.Size = new System.Drawing.Size(381, 20);
 			this.codeTextBox.TabIndex = 2;
 			this.codeTextBox.TextChanged += new System.EventHandler(this.CodeTextBox_TextChanged);
 			// 
 			// codeBrowseButton
 			// 
 			this.codeBrowseButton.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.codeBrowseButton.Location = new System.Drawing.Point(505, 32);
+			this.codeBrowseButton.Location = new System.Drawing.Point(475, 32);
 			this.codeBrowseButton.Name = "codeBrowseButton";
-			this.codeBrowseButton.Size = new System.Drawing.Size(75, 23);
+			this.codeBrowseButton.Size = new System.Drawing.Size(105, 23);
 			this.codeBrowseButton.TabIndex = 3;
 			this.codeBrowseButton.Text = "Browse";
 			this.codeBrowseButton.UseVisualStyleBackColor = true;
@@ -176,7 +179,7 @@ namespace XMLToDataClass
 			// 
 			// elementGroupBox
 			// 
-			this.elementGroupBox.Controls.Add(this.mainTreeView);
+			this.elementGroupBox.Controls.Add(this.treeTabControl);
 			this.elementGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.elementGroupBox.Location = new System.Drawing.Point(0, 0);
 			this.elementGroupBox.Name = "elementGroupBox";
@@ -185,14 +188,37 @@ namespace XMLToDataClass
 			this.elementGroupBox.TabStop = false;
 			this.elementGroupBox.Text = "Elements";
 			// 
-			// mainTreeView
+			// treeTabControl
 			// 
-			this.mainTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.mainTreeView.Location = new System.Drawing.Point(3, 16);
-			this.mainTreeView.Name = "mainTreeView";
-			this.mainTreeView.Size = new System.Drawing.Size(185, 225);
-			this.mainTreeView.TabIndex = 0;
-			this.mainTreeView.AfterExpand += new System.Windows.Forms.TreeViewEventHandler(this.MainTreeView_AfterExpand);
+			this.treeTabControl.Controls.Add(this.tabPage1);
+			this.treeTabControl.Controls.Add(this.tabPage2);
+			this.treeTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.treeTabControl.Location = new System.Drawing.Point(3, 16);
+			this.treeTabControl.Name = "treeTabControl";
+			this.treeTabControl.SelectedIndex = 0;
+			this.treeTabControl.Size = new System.Drawing.Size(185, 225);
+			this.treeTabControl.TabIndex = 0;
+			this.treeTabControl.SelectedIndexChanged += new System.EventHandler(this.treeTabControl_SelectedIndexChanged);
+			// 
+			// tabPage1
+			// 
+			this.tabPage1.Location = new System.Drawing.Point(4, 22);
+			this.tabPage1.Name = "tabPage1";
+			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPage1.Size = new System.Drawing.Size(177, 199);
+			this.tabPage1.TabIndex = 0;
+			this.tabPage1.Text = "tabPage1";
+			this.tabPage1.UseVisualStyleBackColor = true;
+			// 
+			// tabPage2
+			// 
+			this.tabPage2.Location = new System.Drawing.Point(4, 22);
+			this.tabPage2.Name = "tabPage2";
+			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPage2.Size = new System.Drawing.Size(177, 77);
+			this.tabPage2.TabIndex = 1;
+			this.tabPage2.Text = "tabPage2";
+			this.tabPage2.UseVisualStyleBackColor = true;
 			// 
 			// label1
 			// 
@@ -211,7 +237,7 @@ namespace XMLToDataClass
 			this.xmlFilePathLabel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.xmlFilePathLabel.Location = new System.Drawing.Point(88, 0);
 			this.xmlFilePathLabel.Name = "xmlFilePathLabel";
-			this.xmlFilePathLabel.Size = new System.Drawing.Size(411, 29);
+			this.xmlFilePathLabel.Size = new System.Drawing.Size(381, 29);
 			this.xmlFilePathLabel.TabIndex = 11;
 			this.xmlFilePathLabel.Text = "label4";
 			this.xmlFilePathLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -219,9 +245,9 @@ namespace XMLToDataClass
 			// loadButton
 			// 
 			this.loadButton.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.loadButton.Location = new System.Drawing.Point(505, 3);
+			this.loadButton.Location = new System.Drawing.Point(475, 3);
 			this.loadButton.Name = "loadButton";
-			this.loadButton.Size = new System.Drawing.Size(75, 23);
+			this.loadButton.Size = new System.Drawing.Size(105, 23);
 			this.loadButton.TabIndex = 12;
 			this.loadButton.Text = "Load";
 			this.loadButton.UseVisualStyleBackColor = true;
@@ -232,7 +258,7 @@ namespace XMLToDataClass
 			this.namespaceTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.namespaceTextBox.Location = new System.Drawing.Point(88, 61);
 			this.namespaceTextBox.Name = "namespaceTextBox";
-			this.namespaceTextBox.Size = new System.Drawing.Size(411, 20);
+			this.namespaceTextBox.Size = new System.Drawing.Size(381, 20);
 			this.namespaceTextBox.TabIndex = 9;
 			this.namespaceTextBox.Text = "XMLToDataClass";
 			this.namespaceTextBox.WordWrap = false;
@@ -255,7 +281,7 @@ namespace XMLToDataClass
 			this.projectCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.projectCheckBox.Location = new System.Drawing.Point(88, 87);
 			this.projectCheckBox.Name = "projectCheckBox";
-			this.projectCheckBox.Size = new System.Drawing.Size(411, 17);
+			this.projectCheckBox.Size = new System.Drawing.Size(381, 17);
 			this.projectCheckBox.TabIndex = 14;
 			this.projectCheckBox.Text = "Generate Project File with Code";
 			this.projectCheckBox.UseVisualStyleBackColor = true;
@@ -277,7 +303,7 @@ namespace XMLToDataClass
 			this.projectTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.projectTextBox.Location = new System.Drawing.Point(88, 110);
 			this.projectTextBox.Name = "projectTextBox";
-			this.projectTextBox.Size = new System.Drawing.Size(411, 20);
+			this.projectTextBox.Size = new System.Drawing.Size(381, 20);
 			this.projectTextBox.TabIndex = 16;
 			this.projectTextBox.TextChanged += new System.EventHandler(this.ProjectTextBox_TextChanged);
 			// 
@@ -287,7 +313,7 @@ namespace XMLToDataClass
 			this.solutionCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.solutionCheckBox.Location = new System.Drawing.Point(88, 136);
 			this.solutionCheckBox.Name = "solutionCheckBox";
-			this.solutionCheckBox.Size = new System.Drawing.Size(411, 17);
+			this.solutionCheckBox.Size = new System.Drawing.Size(381, 17);
 			this.solutionCheckBox.TabIndex = 17;
 			this.solutionCheckBox.Text = "Generate Solution for Project";
 			this.solutionCheckBox.UseVisualStyleBackColor = true;
@@ -309,16 +335,16 @@ namespace XMLToDataClass
 			this.solutionTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.solutionTextBox.Location = new System.Drawing.Point(88, 159);
 			this.solutionTextBox.Name = "solutionTextBox";
-			this.solutionTextBox.Size = new System.Drawing.Size(411, 20);
+			this.solutionTextBox.Size = new System.Drawing.Size(381, 20);
 			this.solutionTextBox.TabIndex = 19;
 			this.solutionTextBox.TextChanged += new System.EventHandler(this.SolutionTextBox_TextChanged);
 			// 
 			// settingsButton
 			// 
 			this.settingsButton.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.settingsButton.Location = new System.Drawing.Point(505, 435);
+			this.settingsButton.Location = new System.Drawing.Point(475, 435);
 			this.settingsButton.Name = "settingsButton";
-			this.settingsButton.Size = new System.Drawing.Size(75, 29);
+			this.settingsButton.Size = new System.Drawing.Size(105, 29);
 			this.settingsButton.TabIndex = 20;
 			this.settingsButton.Text = "Settings";
 			this.settingsButton.UseVisualStyleBackColor = true;
@@ -333,7 +359,7 @@ namespace XMLToDataClass
 			this.buttonFlowLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.buttonFlowLayoutPanel.Location = new System.Drawing.Point(3, 435);
 			this.buttonFlowLayoutPanel.Name = "buttonFlowLayoutPanel";
-			this.buttonFlowLayoutPanel.Size = new System.Drawing.Size(496, 29);
+			this.buttonFlowLayoutPanel.Size = new System.Drawing.Size(466, 29);
 			this.buttonFlowLayoutPanel.TabIndex = 21;
 			// 
 			// saveConfigButton
@@ -371,6 +397,7 @@ namespace XMLToDataClass
 			((System.ComponentModel.ISupportInitialize)(this.mainSplitContainer)).EndInit();
 			this.mainSplitContainer.ResumeLayout(false);
 			this.elementGroupBox.ResumeLayout(false);
+			this.treeTabControl.ResumeLayout(false);
 			this.buttonFlowLayoutPanel.ResumeLayout(false);
 			this.buttonFlowLayoutPanel.PerformLayout();
 			this.ResumeLayout(false);
@@ -388,7 +415,6 @@ namespace XMLToDataClass
 		private System.Windows.Forms.GroupBox elementGroupBox;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.TextBox namespaceTextBox;
-		private System.Windows.Forms.TreeView mainTreeView;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label xmlFilePathLabel;
 		private System.Windows.Forms.Button loadButton;
@@ -402,6 +428,9 @@ namespace XMLToDataClass
 		private System.Windows.Forms.FlowLayoutPanel buttonFlowLayoutPanel;
 		private System.Windows.Forms.Button saveConfigButton;
 		private System.Windows.Forms.Button loadConfigButton;
+		private System.Windows.Forms.TabControl treeTabControl;
+		private System.Windows.Forms.TabPage tabPage1;
+		private System.Windows.Forms.TabPage tabPage2;
 	}
 }
 

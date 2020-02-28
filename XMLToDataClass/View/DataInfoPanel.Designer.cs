@@ -46,6 +46,7 @@
 			this.remarksTextBox = new System.Windows.Forms.TextBox();
 			this.label6 = new System.Windows.Forms.Label();
 			this.accessibilityComboBox = new System.Windows.Forms.ComboBox();
+			this.viewDataButton = new System.Windows.Forms.Button();
 			this.dataTableLayoutPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -72,6 +73,7 @@
 			this.dataTableLayoutPanel.Controls.Add(this.remarksTextBox, 1, 4);
 			this.dataTableLayoutPanel.Controls.Add(this.label6, 0, 2);
 			this.dataTableLayoutPanel.Controls.Add(this.accessibilityComboBox, 1, 2);
+			this.dataTableLayoutPanel.Controls.Add(this.viewDataButton, 2, 5);
 			this.dataTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.dataTableLayoutPanel.Location = new System.Drawing.Point(0, 0);
 			this.dataTableLayoutPanel.Name = "dataTableLayoutPanel";
@@ -81,7 +83,7 @@
 			this.dataTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.dataTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.dataTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.dataTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
+			this.dataTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
 			this.dataTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
 			this.dataTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
 			this.dataTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
@@ -114,7 +116,7 @@
 			// 
 			this.label3.AutoSize = true;
 			this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label3.Location = new System.Drawing.Point(3, 141);
+			this.label3.Location = new System.Drawing.Point(3, 153);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(80, 27);
 			this.label3.TabIndex = 6;
@@ -125,7 +127,7 @@
 			// 
 			this.dataTypeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.dataTypeComboBox.FormattingEnabled = true;
-			this.dataTypeComboBox.Location = new System.Drawing.Point(89, 144);
+			this.dataTypeComboBox.Location = new System.Drawing.Point(89, 156);
 			this.dataTypeComboBox.Name = "dataTypeComboBox";
 			this.dataTypeComboBox.Size = new System.Drawing.Size(100, 21);
 			this.dataTypeComboBox.TabIndex = 7;
@@ -135,7 +137,7 @@
 			// 
 			this.emptyCheckBox.AutoSize = true;
 			this.emptyCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.emptyCheckBox.Location = new System.Drawing.Point(89, 200);
+			this.emptyCheckBox.Location = new System.Drawing.Point(89, 212);
 			this.emptyCheckBox.Name = "emptyCheckBox";
 			this.emptyCheckBox.Size = new System.Drawing.Size(100, 23);
 			this.emptyCheckBox.TabIndex = 9;
@@ -147,7 +149,7 @@
 			// 
 			this.optionalCheckBox.AutoSize = true;
 			this.optionalCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.optionalCheckBox.Location = new System.Drawing.Point(89, 171);
+			this.optionalCheckBox.Location = new System.Drawing.Point(89, 183);
 			this.optionalCheckBox.Name = "optionalCheckBox";
 			this.optionalCheckBox.Size = new System.Drawing.Size(100, 23);
 			this.optionalCheckBox.TabIndex = 8;
@@ -181,9 +183,10 @@
 			// allTypesCheckBox
 			// 
 			this.allTypesCheckBox.AutoSize = true;
+			this.allTypesCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.allTypesCheckBox.Location = new System.Drawing.Point(89, 121);
 			this.allTypesCheckBox.Name = "allTypesCheckBox";
-			this.allTypesCheckBox.Size = new System.Drawing.Size(99, 17);
+			this.allTypesCheckBox.Size = new System.Drawing.Size(100, 29);
 			this.allTypesCheckBox.TabIndex = 12;
 			this.allTypesCheckBox.Text = "Show All Types";
 			this.allTypesCheckBox.UseVisualStyleBackColor = true;
@@ -193,9 +196,9 @@
 			// 
 			this.dataTableLayoutPanel.SetColumnSpan(this.typePanel, 3);
 			this.typePanel.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.typePanel.Location = new System.Drawing.Point(3, 229);
+			this.typePanel.Location = new System.Drawing.Point(3, 241);
 			this.typePanel.Name = "typePanel";
-			this.typePanel.Size = new System.Drawing.Size(317, 85);
+			this.typePanel.Size = new System.Drawing.Size(317, 73);
 			this.typePanel.TabIndex = 13;
 			// 
 			// errorLabel
@@ -203,7 +206,7 @@
 			this.errorLabel.AutoSize = true;
 			this.errorLabel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.errorLabel.ForeColor = System.Drawing.Color.Red;
-			this.errorLabel.Location = new System.Drawing.Point(195, 141);
+			this.errorLabel.Location = new System.Drawing.Point(195, 153);
 			this.errorLabel.Name = "errorLabel";
 			this.errorLabel.Size = new System.Drawing.Size(125, 27);
 			this.errorLabel.TabIndex = 14;
@@ -276,6 +279,17 @@
 			this.accessibilityComboBox.TabIndex = 20;
 			this.accessibilityComboBox.SelectedIndexChanged += new System.EventHandler(this.accessibilityComboBox_SelectedIndexChanged);
 			// 
+			// viewDataButton
+			// 
+			this.viewDataButton.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.viewDataButton.Location = new System.Drawing.Point(195, 121);
+			this.viewDataButton.Name = "viewDataButton";
+			this.viewDataButton.Size = new System.Drawing.Size(125, 29);
+			this.viewDataButton.TabIndex = 21;
+			this.viewDataButton.Text = "View Values";
+			this.viewDataButton.UseVisualStyleBackColor = true;
+			this.viewDataButton.Click += new System.EventHandler(this.viewDataButton_Click);
+			// 
 			// DataInfoPanel
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -310,5 +324,6 @@
 		private System.Windows.Forms.TextBox remarksTextBox;
 		private System.Windows.Forms.Label label6;
 		private System.Windows.Forms.ComboBox accessibilityComboBox;
+		private System.Windows.Forms.Button viewDataButton;
 	}
 }

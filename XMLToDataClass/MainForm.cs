@@ -52,10 +52,9 @@ namespace XMLToDataClass
 
 			this.Text = string.Format("{0} Version: {1}", this.Text, Assembly.GetExecutingAssembly().GetName().Version.ToString());
 			mainSplitContainer.Panel2.AutoScroll = true;
-			mainTreeView.AfterSelect += MainTreeView_AfterSelect;
 
 			UpdateGui();
-			UpdateTreeView();
+			UpdateTrees();
 		}
 
 		private void UpdateGui()
@@ -109,7 +108,7 @@ namespace XMLToDataClass
 		/// </summary>
 		/// <param name="sender">Sender of the event.</param>
 		/// <param name="e"><see cref="TreeViewEventArgs"/> containing the arguments for the event.</param>
-		private void MainTreeView_AfterSelect(object sender, TreeViewEventArgs e)
+		private void TreeView_AfterSelect(object sender, TreeViewEventArgs e)
 		{
 			UpdateTree(e.Node);
 		}
@@ -119,7 +118,7 @@ namespace XMLToDataClass
 		/// </summary>
 		/// <param name="sender">Sender of the event.</param>
 		/// <param name="e"><see cref="TreeViewEventArgs"/> containing the arguments for the event.</param>
-		private void MainTreeView_AfterExpand(object sender, TreeViewEventArgs e)
+		private void TreeView_AfterExpand(object sender, TreeViewEventArgs e)
 		{
 			UpdateTree(e.Node);
 		}
@@ -273,35 +272,71 @@ namespace XMLToDataClass
 			loadConfigButton.Enabled = enable;
 		}
 
+		private void CleanTrees()
+		{
+			foreach (TabPage page in treeTabControl.TabPages)
+			{
+				if (page.Controls.Count > 0)
+				{
+					TreeView view = page.Controls[0] as TreeView;
+					if (view != null)
+					{
+						view.AfterSelect -= TreeView_AfterSelect;
+						view.AfterExpand -= TreeView_AfterExpand;
+						view.Dispose();
+					}
+				}
+				page.Dispose();
+			}
+			treeTabControl.TabPages.Clear();
+		}
+
+		private void UpdateTrees()
+		{
+			UpdateGUIAccess(false);
+			CleanTrees();
+			if (mController.Info == null)
+				return;
+
+			string[] tabNames = mController.Info.GetAllNamespaces();
+			foreach(string name in tabNames)
+			{
+				TabPage page = new TabPage(name);
+				TreeView view = new TreeView();
+				view.AfterSelect += TreeView_AfterSelect;
+				view.AfterExpand += TreeView_AfterExpand;
+				page.Controls.Add(view);
+				view.Dock = DockStyle.Fill;
+				treeTabControl.TabPages.Add(page);
+				UpdateTreeView(name, view);
+			}
+
+			UpdateDetailView();
+			UpdateGUIAccess(true);
+		}
+
 		/// <summary>
 		///   Updates the tree view.
 		/// </summary>
-		private void UpdateTreeView()
+		private void UpdateTreeView(string name, TreeView view)
 		{
-			mainTreeView.Nodes.Clear();
-			UpdateGUIAccess(false);
+			view.Nodes.Clear();
 
-			if (mController.Info != null)
+			ElementInfo[] roots;
+			if (mController.Info.HierarchyMaintained)
 			{
-				ElementInfo[] roots;
-				if (mController.Info.HierarchyMaintained)
-				{
-					roots = new ElementInfo[1] { mController.Info.RootNode };
-				}
-				else
-				{
-					roots = mController.Info.GetAllNodes();
-				}
+				roots = new ElementInfo[1] { mController.Info.RootNode };
+			}
+			else
+			{
+				roots = mController.Info.GetAllNamespaceNodes(name);
+			}
 
-				foreach (ElementInfo info in roots)
-				{
-					int index = mainTreeView.Nodes.Add(new TreeNode(info.Name));
-					mainTreeView.Nodes[index].Tag = info;
-					AddParentLevelTreeNode(mainTreeView.Nodes[index], info);
-				}
-
-				UpdateDetailView();
-				UpdateGUIAccess(true);
+			foreach (ElementInfo info in roots)
+			{
+				int index = view.Nodes.Add(new TreeNode(info.Name));
+				view.Nodes[index].Tag = info;
+				AddParentLevelTreeNode(view.Nodes[index], info);
 			}
 		}
 
@@ -351,7 +386,7 @@ namespace XMLToDataClass
 		/// <param name="element"><see cref="ElementInfo"/> corresponding to the node.</param>
 		private void AddLeafNode(TreeNode node, ElementInfo element)
 		{
-			int index = node.Nodes.Add(new TreeNode(element.Name));
+			int index = node.Nodes.Add(new TreeNode(element.FullName));
 			node.Nodes[index].Tag = element;
 		}
 
@@ -361,56 +396,68 @@ namespace XMLToDataClass
 		private void UpdateDetailView()
 		{
 			mainSplitContainer.Panel2.Controls.Clear();
-			if(mainTreeView.SelectedNode != null)
+			if (treeTabControl.SelectedTab == null)
+				return;
+
+			TreeView view = treeTabControl.SelectedTab.Controls[0] as TreeView;
+			if (view == null)
+				return;
+
+			if (view.SelectedNode == null)
+				return;
+			
+			if(view.SelectedNode.Tag is ElementInfo)
 			{
-				if(mainTreeView.SelectedNode.Tag is ElementInfo)
+				if (mController.Info.HierarchyMaintained || view.SelectedNode.Parent == null)
 				{
-					if (mController.Info.HierarchyMaintained || mainTreeView.SelectedNode.Parent == null)
-					{
-						ElementInfoPanel panel = new ElementInfoPanel(mainTreeView.SelectedNode.Tag as ElementInfo);
-						mainSplitContainer.Panel2.Controls.Add(panel);
-						mainSplitContainer.Panel2.AutoScrollMinSize = panel.MinimumSize;
-						panel.Dock = DockStyle.Fill;
-					}
-				}
-				else if(mainTreeView.SelectedNode.Tag is AttributeInfo)
-				{
-					DataInfoPanel panel = new DataInfoPanel(((AttributeInfo)mainTreeView.SelectedNode.Tag).Info);
+					ElementInfoPanel panel = new ElementInfoPanel(view.SelectedNode.Tag as ElementInfo);
 					mainSplitContainer.Panel2.Controls.Add(panel);
 					mainSplitContainer.Panel2.AutoScrollMinSize = panel.MinimumSize;
+					panel.AutoScroll = true;
 					panel.Dock = DockStyle.Fill;
 				}
-				else if (mainTreeView.SelectedNode.Tag is CDataInfo)
+			}
+			else if(view.SelectedNode.Tag is AttributeInfo)
+			{
+				DataInfoPanel panel = new DataInfoPanel(((AttributeInfo)view.SelectedNode.Tag).Info);
+				mainSplitContainer.Panel2.Controls.Add(panel);
+				mainSplitContainer.Panel2.AutoScrollMinSize = panel.MinimumSize;
+				panel.AutoScroll = true;
+				panel.Dock = DockStyle.Fill;
+			}
+			else if (view.SelectedNode.Tag is CDataInfo)
+			{
+				CDataInfo info = view.SelectedNode.Tag as CDataInfo;
+				if (info.Include)
 				{
-					CDataInfo info = mainTreeView.SelectedNode.Tag as CDataInfo;
-					if (info.Include)
-					{
-						DataInfoPanel panel = new DataInfoPanel(info.Info);
-						mainSplitContainer.Panel2.Controls.Add(panel);
-						mainSplitContainer.Panel2.AutoScrollMinSize = panel.MinimumSize;
-						panel.Dock = DockStyle.Fill;
-						panel.Enabled = info.Include;
-					}
-				}
-				else if (mainTreeView.SelectedNode.Tag is TextInfo)
-				{
-					TextInfo info = mainTreeView.SelectedNode.Tag as TextInfo;
-					if (info.Include)
-					{
-						DataInfoPanel panel = new DataInfoPanel(info.Info);
-						mainSplitContainer.Panel2.Controls.Add(panel);
-						mainSplitContainer.Panel2.AutoScrollMinSize = panel.MinimumSize;
-						panel.Dock = DockStyle.Fill;
-						panel.Enabled = info.Include;
-					}
-				}
-				else if(mainTreeView.SelectedNode.Tag is DataInfo)
-				{
-					DataInfoPanel panel = new DataInfoPanel(mainTreeView.SelectedNode.Tag as DataInfo);
+					DataInfoPanel panel = new DataInfoPanel(info.Info);
 					mainSplitContainer.Panel2.Controls.Add(panel);
 					mainSplitContainer.Panel2.AutoScrollMinSize = panel.MinimumSize;
+					panel.AutoScroll = true;
 					panel.Dock = DockStyle.Fill;
+					panel.Enabled = info.Include;
 				}
+			}
+			else if (view.SelectedNode.Tag is TextInfo)
+			{
+				TextInfo info = view.SelectedNode.Tag as TextInfo;
+				if (info.Include)
+				{
+					DataInfoPanel panel = new DataInfoPanel(info.Info);
+					mainSplitContainer.Panel2.Controls.Add(panel);
+					mainSplitContainer.Panel2.AutoScrollMinSize = panel.MinimumSize;
+					panel.AutoScroll = true;
+					panel.Dock = DockStyle.Fill;
+					panel.Enabled = info.Include;
+				}
+			}
+			else if(view.SelectedNode.Tag is DataInfo)
+			{
+				DataInfoPanel panel = new DataInfoPanel(view.SelectedNode.Tag as DataInfo);
+				mainSplitContainer.Panel2.Controls.Add(panel);
+				mainSplitContainer.Panel2.AutoScrollMinSize = panel.MinimumSize;
+				panel.AutoScroll = true;
+				panel.Dock = DockStyle.Fill;
 			}
 		}
 
@@ -443,7 +490,7 @@ namespace XMLToDataClass
 			xmlFilePathLabel.Text = mController.XMLFilePath;
 			Properties.Settings.Default.XMLFileLocation = mLoadForm.FilePath;
 			Properties.Settings.Default.Save();
-			UpdateTreeView();
+			UpdateTrees();
 		}
 
 		/// <summary>
@@ -565,6 +612,11 @@ namespace XMLToDataClass
 		private void SolutionTextBox_TextChanged(object sender, EventArgs e)
 		{
 			mController.SolutionName = solutionTextBox.Text;
+		}
+
+		private void treeTabControl_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			UpdateDetailView();
 		}
 	}
 }

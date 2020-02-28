@@ -113,6 +113,8 @@ namespace XMLToDataClass.Data
 		/// </summary>
 		public Access Accessibility { get; set; }
 
+		public string[] PossibleValues { get; private set; }
+
 		#endregion Properties
 
 		#region Methods
@@ -135,6 +137,7 @@ namespace XMLToDataClass.Data
 			Accessibility = Access.Public;
 			CanBeEmpty = canBeEmpty;
 			IsOptional = optional;
+			PossibleValues = possibleValues;
 
 			// Create the possible data type objects.
 			mTypeLookup = new Dictionary<DataType, IDataType>();

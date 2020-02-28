@@ -244,5 +244,18 @@ namespace XMLToDataClass.View
 			if (accessibilityComboBox.SelectedIndex > -1)
 				Info.Accessibility = (DataInfo.Access)Enum.Parse(typeof(DataInfo.Access), (string)accessibilityComboBox.Items[accessibilityComboBox.SelectedIndex]);
 		}
+
+		private void viewDataButton_Click(object sender, EventArgs e)
+		{
+			if (Info.PossibleValues == null || Info.PossibleValues.Length == 0)
+			{
+				MessageBox.Show("No Values to be displayed", "Error Displaying Values", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+				return;
+			}
+
+			ViewValuesForm form = new ViewValuesForm(Info.Name + " Values", Info.PossibleValues);
+			form.ShowDialog();
+			return;
+		}
 	}
 }

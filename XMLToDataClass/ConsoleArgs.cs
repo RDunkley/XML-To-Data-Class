@@ -32,6 +32,11 @@ namespace System
 		#region Fields
 
 		/// <summary>
+		///   Stores the description associated with the settings class.
+		/// </summary>
+		private readonly string mDescription;
+
+		/// <summary>
 		///   Stores the usage statement associated with the settings class.
 		/// </summary>
 		private readonly string mUsageStatement;
@@ -43,14 +48,22 @@ namespace System
 		/// <summary>
 		///   Instantiates a new <see cref="Usage"/> <see cref="Attribute"/> object.
 		/// </summary>
-		/// <param name="usage">
-		///   Usage statement to include at the start of the help text. Should direct the user how to use the command line
-		///   options. Can be null, but the help text will not be complete.
-		/// </param>
-		/// <exception cref="ArgumentNullException"><paramref name="usage"/> is a null reference.</exception>
-		public Usage(string usage)
+		/// <param name="description">Description to include at the start of the help text describing the command line program.</param>
+		/// <param name="usage">Directs the user on how to use the command line program.</param>
+		/// <exception cref="ArgumentNullException"><paramref name="description"/> or <paramref name="usage"/> is a null reference.</exception>
+		public Usage(string description, string usage)
 		{
-			mUsageStatement = usage ?? throw new ArgumentNullException("usage");
+			mDescription = description ?? throw new ArgumentNullException(nameof(description));
+			mUsageStatement = usage ?? throw new ArgumentNullException(nameof(usage));
+		}
+
+		/// <summary>
+		///   Gets the description pulled from the class attribute.
+		/// </summary>
+		/// <returns>String containing the description.</returns>
+		public string GetDescription()
+		{
+			return mDescription;
 		}
 
 		/// <summary>
@@ -230,6 +243,11 @@ namespace System
 			/// </summary>
 			public string UsageString { get; private set; }
 
+			/// <summary>
+			///   Gets the description string associated with the class.
+			/// </summary>
+			public string Description { get; private set; }
+
 			#endregion Properties
 
 			#region Methods
@@ -251,6 +269,7 @@ namespace System
 					throw new ArgumentException("The type specified is not a class type.", "type");
 
 				UsageString = GetUsageStatement(type);
+				Description = GetDescription(type);
 
 				// Parse the type information.
 				PropertyInfo[] props = type.GetProperties();
@@ -264,7 +283,7 @@ namespace System
 						{
 							propAttr = GetArgumentAttribute(prop);
 						}
-						catch(ArgumentException e)
+						catch (ArgumentException e)
 						{
 							throw new ArgumentException(
 								string.Format("The type specified contained a property ({0}) with an invalid 'Argument' attribute ({1}).",
@@ -308,10 +327,11 @@ namespace System
 			///   Generates the help text associated with the property.
 			/// </summary>
 			/// <param name="prop"><see cref="PropertyInfo"/> object to generate the help text for.</param>
+			/// <param name="maxLineWidth">Maximum number of characters allowed in a line.</param>
 			/// <returns>Multi-line string containing the help text associated with the property.</returns>
 			/// <exception cref="ArgumentException"><paramref name="prop"/> does not match a property in <see cref="PropertiesWithArguments"/>.</exception>
 			/// <exception cref="ArgumentNullException"><paramref name="prop"/> is a null reference.</exception>
-			public string GeneratePropertyHelpText(PropertyInfo prop)
+			public string GeneratePropertyHelpText(PropertyInfo prop, int maxLineWidth)
 			{
 				if (prop == null)
 					throw new ArgumentNullException("prop");
@@ -321,73 +341,83 @@ namespace System
 					throw new ArgumentException("The PropertyInfo object provided does not match a property that contains an 'Argument' attribute.", "prop");
 
 				if (mFlagProperties.ContainsValue(prop))
-					return GenerateFlagPropertyHelpText(prop);
+					return GenerateFlagPropertyHelpText(prop, maxLineWidth);
 				if (mArrayProperties.ContainsValue(prop))
-					return GenerateArrayPropertyHelpText(prop);
-				return GenerateValuePropertyHelpText(prop);
+					return GenerateArrayPropertyHelpText(prop, maxLineWidth);
+				return GenerateValuePropertyHelpText(prop, maxLineWidth);
 			}
 
 			/// <summary>
 			///  Generates the help text for an array property object.
 			/// </summary>
 			/// <param name="prop"><see cref="PropertyInfo"/> object containing the array property information.</param>
+			/// <param name="maxLineWidth">Maximum number of characters allowed in a line.</param>
 			/// <exception cref="ArgumentException">
 			///   <paramref name="prop"/> does not contain an <see cref="Argument"/> <see cref="Attribute"/>.
 			/// </exception>
-			private string GenerateArrayPropertyHelpText(PropertyInfo prop)
+			private string GenerateArrayPropertyHelpText(PropertyInfo prop, int maxLineWidth)
 			{
 				Argument arg = (Argument)GetArgumentAttribute(prop);
 
 				StringBuilder sb = new StringBuilder();
-				sb.AppendLine("\t" + GenerateKeyString(arg) + "=" + prop.Name + ",...");
-				if (!arg.Required)
-					sb.AppendLine("\t\t[Optional] - " + arg.GetDescription());
-				else
-					sb.AppendLine("\t\t" + arg.GetDescription());
+				sb.AppendLine("    " + GenerateKeyString(arg) + "=" + prop.Name + ",...");
+				GenerateArgumentDescription(sb, arg, maxLineWidth);
 				return sb.ToString();
+			}
+
+			/// <summary>
+			///   Generates the argument descrption lines.
+			/// </summary>
+			/// <param name="sb"><see cref="StringBuilder"/> object to add the lines to.</param>
+			/// <param name="arg"><see cref="Argument"/> object to pull the description from.</param>
+			/// <param name="maxLineWidth">Maximum number of characters allowed in a line.</param>
+			private void GenerateArgumentDescription(StringBuilder sb, Argument arg, int maxLineWidth)
+			{
+				if (!arg.Required)
+				{
+					sb.Append("        [Optional] - ");
+					WrapLines(sb, arg.GetDescription(), maxLineWidth, 21, 8);
+				}
+				else
+				{
+					sb.Append("        ");
+					WrapLines(sb, arg.GetDescription(), maxLineWidth, 8, 8);
+				}
 			}
 
 			/// <summary>
 			///   Generates the help text for a flag property object.
 			/// </summary>
-			/// <param name="sb"><see cref="StringBuilder"/> object used to build up the help text string.</param>
-			/// <param name="arg"><see cref="Argument"/> object containing the single flag attribute information.</param>
 			/// <param name="prop"><see cref="PropertyInfo"/> object containing the boolean property information.</param>
+			/// <param name="maxLineWidth">Maximum number of characters allowed in a line.</param>
 			/// <exception cref="ArgumentException">
 			///   <paramref name="prop"/> does not contain an <see cref="Argument"/> <see cref="Attribute"/>.
 			/// </exception>
-			private string GenerateFlagPropertyHelpText(PropertyInfo prop)
+			private string GenerateFlagPropertyHelpText(PropertyInfo prop, int maxLineWidth)
 			{
 				Argument arg = (Argument)GetArgumentAttribute(prop);
 
 				StringBuilder sb = new StringBuilder();
-				sb.AppendLine("\t" + GenerateKeyString(arg));
-				if (!arg.Required)
-					sb.AppendLine("\t\t[Optional] - " + arg.GetDescription());
-				else
-					sb.AppendLine("\t\t" + arg.GetDescription());
+				sb.AppendLine("    " + GenerateKeyString(arg));
+				GenerateArgumentDescription(sb, arg, maxLineWidth);
 				return sb.ToString();
 			}
 
 			/// <summary>
 			///   Generates the help text for a property object.
 			/// </summary>
-			/// <param name="sb"><see cref="StringBuilder"/> object used to build up the help text string.</param>
-			/// <param name="arg"><see cref="Argument"/> object containing the attribute information.</param>
 			/// <param name="prop"><see cref="PropertyInfo"/> object containing the property information.</param>
+			/// <param name="maxLineWidth">Maximum number of characters allowed in a line.</param>
 			/// <exception cref="ArgumentException">
 			///   <paramref name="prop"/> does not contain an <see cref="Argument"/> <see cref="Attribute"/>.
 			/// </exception>
-			private string GenerateValuePropertyHelpText(PropertyInfo prop)
+			private string GenerateValuePropertyHelpText(PropertyInfo prop, int maxLineWidth)
 			{
 				Argument arg = (Argument)GetArgumentAttribute(prop);
 
 				StringBuilder sb = new StringBuilder();
-				sb.AppendLine("\t" + GenerateKeyString(arg) + "=" + prop.Name);
-				if (!arg.Required)
-					sb.AppendLine("\t\t[Optional] - " + arg.GetDescription());
-				else
-					sb.AppendLine("\t\t" + arg.GetDescription());
+				sb.AppendLine("    " + GenerateKeyString(arg) + "=" + prop.Name);
+				GenerateArgumentDescription(sb, arg, maxLineWidth);
 				return sb.ToString();
 			}
 
@@ -501,7 +531,7 @@ namespace System
 			}
 
 			/// <summary>
-			///   Gets the <see cref="Usage"/> <see cref="Attribute"/> from the provided class type.
+			///   Gets the <see cref="Usage"/> <see cref="Attribute"/>'s usage statement from the provided class type.
 			/// </summary>
 			/// <param name="source"><see cref="Type"/> of the settings class.</param>
 			/// <returns>Usage <see cref="Attribute"/> found on the class type.</returns>
@@ -530,6 +560,38 @@ namespace System
 
 				Usage use = (Usage)attr;
 				return use.GetUsageStatement();
+			}
+
+			/// <summary>
+			///   Gets the <see cref="Usage"/> <see cref="Attribute"/>'s description from the provided class type.
+			/// </summary>
+			/// <param name="source"><see cref="Type"/> of the settings class.</param>
+			/// <returns>Usage <see cref="Attribute"/> found on the class type.</returns>
+			/// <exception cref="ArgumentException">
+			///   There was more than one usage attribute applied to the class, the class type does not contain a usage attribute,
+			///   or the usage attribute type could not be loaded.
+			/// </exception>
+			private string GetDescription(Type source)
+			{
+				Attribute attr;
+				try
+				{
+					attr = Attribute.GetCustomAttribute(source, typeof(Usage));
+				}
+				catch (AmbiguousMatchException e)
+				{
+					throw new ArgumentException("More than one 'Usage' attribute is tied to the type.", e);
+				}
+				catch (TypeLoadException e)
+				{
+					throw new ArgumentException("An error occurred while loading the attribute type for the 'Usage' attribute tied to the type.", e);
+				}
+
+				if (attr == null)
+					throw new ArgumentException("The class does not contain a 'Usage' attribute.");
+
+				Usage use = (Usage)attr;
+				return use.GetDescription();
 			}
 
 			#endregion Methods
@@ -618,7 +680,7 @@ namespace System
 			/// </exception>
 			private void FindProperties(bool throwErrorOnNotFound)
 			{
-				foreach(string tag in mMatches.Keys)
+				foreach (string tag in mMatches.Keys)
 				{
 					int keyIndex = mMatches[tag].Groups["tag"].Index;
 					PropertyLookup.PropType propType = mProps.GetPropertyType(tag);
@@ -630,7 +692,7 @@ namespace System
 							string[] lines = GenerateErrorString(mCommandLine, keyIndex);
 							throw new InvalidOperationException(string.Format("ERROR: Found a tag ({0}) corresponding to a single value, but no value was found after the tag (Ex: --tag <value> or --tag=<value>).\n{1}\n{2}", keyIndex, lines[0], lines[1]));
 						}
-						else if(mMatches[tag].Groups["value"].Captures.Count != 1)
+						else if (mMatches[tag].Groups["value"].Captures.Count != 1)
 						{
 							// Single found, but multiple values are present.
 							string[] lines = GenerateErrorString(mCommandLine, keyIndex);
@@ -642,7 +704,7 @@ namespace System
 							mTagType.Add(tag, PropertyLookup.PropType.Single);
 						}
 					}
-					else if(propType == PropertyLookup.PropType.Flag)
+					else if (propType == PropertyLookup.PropType.Flag)
 					{
 						int count = mMatches[tag].Groups["value"].Captures.Count;
 						if (count > 1 || (count == 1 && mMatches[tag].Groups["value"].Captures[0].Value != string.Empty))
@@ -657,14 +719,14 @@ namespace System
 							mTagType.Add(tag, PropertyLookup.PropType.Flag);
 						}
 					}
-					else if(propType == PropertyLookup.PropType.Array)
+					else if (propType == PropertyLookup.PropType.Array)
 					{
 						mTagProperties.Add(tag, mProps.GetPropertyInfo(tag));
 						mTagType.Add(tag, PropertyLookup.PropType.Array);
 					}
 					else
 					{
-						if(throwErrorOnNotFound)
+						if (throwErrorOnNotFound)
 						{
 							string[] lines = GenerateErrorString(mCommandLine, keyIndex);
 							throw new InvalidOperationException(string.Format("ERROR: Found a tag ({0}), but it does not appear to be a valid command line argument.\n{1}\n{2}", keyIndex, lines[0], lines[1]));
@@ -725,13 +787,13 @@ namespace System
 				string pattern = " -(-)?" + // Opening --
 					"(?<tag>[\\p{Lu}\\p{Ll}\\p{Lt}\\p{Lm}\\p{Lo}][\\p{Lu}\\p{Ll}\\p{Lt}\\p{Lm}\\p{Lo}\\p{Nl}\\p{Mn}\\p{Mc}\\p{Nd}\\p{Pc}\\p{Cf}]*)+" + // tag
 					"(((\\s)*\\=(\\s)*|(\\s))" + // ' = ' option
-										 //"(?<value>\"[^\"]*\"|([^-,\\s][^,\\s]*)|)" + // 1st value.
+												 //"(?<value>\"[^\"]*\"|([^-,\\s][^,\\s]*)|)" + // 1st value.
 					"(\"(?<value>[^\"]*)\"|(?<value>[^-,\\s][^,\\s]*))" + // 1st value.
 					"((\\s)*,(\\s)*(\"(?<value>[^\"]*)\"|(?<value>[^,\\s]*)))*)?"; // other values.
-				Regex r = new Regex(pattern, RegexOptions.Singleline|RegexOptions.ExplicitCapture);
+				Regex r = new Regex(pattern, RegexOptions.Singleline | RegexOptions.ExplicitCapture);
 
 				Match m = r.Match(mCommandLine);
-				while(m.Success)
+				while (m.Success)
 				{
 					if (mMatches.ContainsKey(m.Groups["tag"].Value))
 						throw new InvalidOperationException();
@@ -776,21 +838,142 @@ namespace System
 		/// <summary>
 		///   Generates the help text to display to the user for usage explanation.
 		/// </summary>
+		/// <param name="maxLineWidth">Maximum number of characters per line. This can be pulled using <see cref="Console"/>.<see cref="Console.BufferWidth"/>.</param>
 		/// <returns>Multi-line string containing information on how to use the application based on the attributes found in the specified type.</returns>
 		/// <remarks>The text is built from the descriptions in the added attributes.</remarks>
-		public static string GenerateHelpText()
+		public static string GenerateHelpText(int maxLineWidth)
 		{
 			// Parse the type information.
 			Type settingsType = typeof(T);
 			PropertyLookup pl = new PropertyLookup(settingsType);
 
 			StringBuilder helpText = new StringBuilder();
-			helpText.AppendLine(pl.UsageString);
+			helpText.AppendLine("NAME");
+			helpText.AppendLine("    " + Assembly.GetExecutingAssembly().GetName().Name);
+			helpText.AppendLine();
+
+			helpText.AppendLine("SYNOPSIS");
+			helpText.Append("    ");
+			WrapLines(helpText, pl.UsageString, maxLineWidth, 4, 4);
+			helpText.AppendLine();
+
+			helpText.AppendLine("DESCRIPTION");
+			helpText.Append("    ");
+			WrapLines(helpText, pl.Description, maxLineWidth, 4, 4);
+			helpText.AppendLine();
 
 			foreach (PropertyInfo prop in pl.PropertiesWithArguments)
-				helpText.Append(pl.GeneratePropertyHelpText(prop));
+				helpText.Append(pl.GeneratePropertyHelpText(prop, maxLineWidth));
 
 			return helpText.ToString();
+		}
+
+		/// <summary>
+		///   Writes the line to a string builder object, but will wrap the text lines if they are too long.
+		/// </summary>
+		/// <param name="sb"><see cref="StringBuilder"/> object to write the line to.</param>
+		/// <param name="line">Line to be written.</param>
+		/// <param name="maxLineWidth">Maximum number of characters per line.</param>
+		/// <param name="currentPos">Current position to begin writing to. This provides an offset if needed to where the line will begin to be written.</param>
+		/// <param name="newLineIndent">If the text is wrapped to a new line, this specifies how many spaces are placed to indent the new line.</param>
+		private static void WrapLines(StringBuilder sb, string line, int maxLineWidth, int currentPos, int newLineIndent)
+		{
+			int indent = currentPos;
+			bool cantfitText = false;
+			while (line != null)
+			{
+				SplitOnEndOfLine(line, indent, maxLineWidth, out string lineText, out string remainingText);
+				if (lineText.Length == 0)
+				{
+					// Can't fit any text on the line.
+					if (cantfitText)
+					{
+						// This is the second time we can't fit text, which means we can't write any of the text so just write the whole text.
+						sb.AppendLine(line);
+						return;
+					}
+					else
+					{
+						// Skip a line and see if we can write it on the new line with the new line indentation.
+						cantfitText = true;
+						sb.AppendLine();
+						indent = newLineIndent;
+					}
+				}
+				else
+				{
+					// Write the rest of the line's text.
+					sb.AppendLine(lineText);
+					if (remainingText != null)
+					{
+						for (int i = 0; i < newLineIndent; i++)
+							sb.Append(' ');
+						indent = newLineIndent;
+					}
+				}
+				line = remainingText;
+			}
+		}
+
+		/// <summary>
+		///   Splits the comment text on a space between words, or splits a word and hyphens it.
+		/// </summary>
+		/// <param name="text">Text to evaluate for splitting.</param>
+		/// <param name="lineOffset">Offset in the line where the text will start.</param>
+		/// <param name="lineText">Text to be written to the line. Can be empty if there is no room to write any text.</param>
+		/// <param name="remainingText">Text remaining that could not fit on the line. Can be null if no text is remaining.</param>
+		private static void SplitOnEndOfLine(string text, int lineOffset, int numCharsPerLine, out string lineText, out string remainingText)
+		{
+			// remove any leading or trailing whitespace.
+			text = text.Trim();
+
+			int remainingSpace = numCharsPerLine - lineOffset - 1;
+			if (text.Length <= remainingSpace)
+			{
+				// The text will fit in the space.
+				lineText = text;
+				remainingText = null;
+				return;
+			}
+
+			if (remainingSpace < 1)
+			{
+				// Not enough space to add any text.
+				lineText = string.Empty;
+				remainingText = text;
+				return;
+			}
+
+			if (remainingSpace == 1)
+			{
+				// Might not be enough space if we need a hyphen.
+				if (text[1] == ' ')
+				{
+					// Add single character to text.
+					lineText = text[0].ToString();
+					remainingText = text.Substring(2);
+				}
+				else
+				{
+					// Not enough space to add one character and hyphen.
+					lineText = string.Empty;
+					remainingText = text;
+				}
+			}
+
+			int splitIndex = text.LastIndexOf(' ', remainingSpace - 1, remainingSpace);
+			if (splitIndex == -1)
+			{
+				// Break the file on the end of the text and place a hyphen.
+				lineText = string.Format("{0}-", text.Substring(0, remainingSpace - 1)); // Should fill remaining space.
+				remainingText = text.Substring(remainingSpace - 1);
+			}
+			else
+			{
+				lineText = text.Substring(0, splitIndex);
+				remainingText = text.Substring(splitIndex + 1);
+			}
+			return;
 		}
 
 		/// <summary>

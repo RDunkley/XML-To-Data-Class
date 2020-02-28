@@ -41,7 +41,7 @@ namespace XMLToDataClass.Data
 
 		public ElementInfo RootNode { get; private set; }
 
-		public Dictionary<string, ElementInfo> Elements { get; private set; }
+		public Dictionary<string, Dictionary<string, ElementInfo>> Elements { get; private set; }
 
 		public bool HierarchyMaintained { get; private set; }
 
@@ -119,9 +119,14 @@ namespace XMLToDataClass.Data
 				xmlNodesByName = BuildUniqueElementTable(doc);
 
 			// Generate the element objects.
-			Dictionary<string, ElementInfo> xmlElements = new Dictionary<string, ElementInfo>();
-			foreach(string key in xmlNodesByName.Keys)
-				xmlElements.Add(key, new ElementInfo(xmlNodesByName[key]));
+			Dictionary<string, Dictionary<string, ElementInfo>> xmlElements = new Dictionary<string, Dictionary<string, ElementInfo>>();
+			foreach (string key in xmlNodesByName.Keys)
+			{
+				ElementInfo element = new ElementInfo(xmlNodesByName[key]);
+				if (!xmlElements.ContainsKey(element.NameSpace))
+					xmlElements.Add(element.NameSpace, new Dictionary<string, ElementInfo>());
+				xmlElements[element.NameSpace].Add(element.Name, element);
+			}
 			AddChildElements(xmlNodesByName, xmlElements, maintainHierarchy);
 			RootNode = GetRootNode(doc, xmlElements);
 			Elements = xmlElements;
@@ -129,17 +134,13 @@ namespace XMLToDataClass.Data
 			HierarchyMaintained = maintainHierarchy;
 		}
 
-		private ElementInfo GetRootNode(XmlDocument doc, Dictionary<string, ElementInfo> xmlElements)
+		private ElementInfo GetRootNode(XmlDocument doc, Dictionary<string, Dictionary<string, ElementInfo>> xmlElements)
 		{
 			foreach(XmlNode child in doc.ChildNodes)
 			{
 				if(child.NodeType == XmlNodeType.Element)
 				{
-					foreach(ElementInfo element in xmlElements.Values)
-					{
-						if (string.Compare(child.Name, element.Name, false) == 0)
-							return element;
-					}
+					return xmlElements[child.Prefix][child.LocalName];
 				}
 			}
 
@@ -160,37 +161,34 @@ namespace XMLToDataClass.Data
 		/// </summary>
 		/// <param name="nodesByName">Lookup table of each <see cref="XmlNode"/> by it's name.</param>
 		/// <param name="elementsByName">Lookup table of each <see cref="ElementInfo"/> by it's <see cref="XmlNode"/> name.</param>
-		private void AddChildElements(Dictionary<string, XmlNode[]> nodesByName, Dictionary<string, ElementInfo> elementsByName, bool maintainHierarchy)
+		private void AddChildElements(Dictionary<string, XmlNode[]> nodesByName, Dictionary<string, Dictionary<string, ElementInfo>> elementsByName, bool maintainHierarchy)
 		{
 			foreach (string name in nodesByName.Keys)
 			{
 				// Get all the child node names.
-				List<string> childNames = new List<string>();
+				SortedDictionary<string, XmlNode> childLookup = new SortedDictionary<string, XmlNode>();
 				foreach (XmlNode node in nodesByName[name])
 				{
 					foreach (XmlNode child in node.ChildNodes)
 					{
 						string childName = child.Name;
-						if (child.NodeType == XmlNodeType.Element && !childNames.Contains(childName))
-							childNames.Add(childName);
+						if (child.NodeType == XmlNodeType.Element && !childLookup.ContainsKey(childName))
+							childLookup.Add(childName, child);
 					}
 				}
 
-				// Sort the child names.
-				childNames.Sort();
-
 				// Build the child element array.
-				List<ElementInfo> childElements = new List<ElementInfo>(childNames.Count);
-				foreach (string childName in childNames)
+				List<ElementInfo> childElements = new List<ElementInfo>(childLookup.Count);
+				foreach (string childName in childLookup.Keys)
 				{
 					string elementName = childName;
 					if (maintainHierarchy)
 						elementName = string.Format("{0}.{1}", name, childName);
-					childElements.Add(elementsByName[elementName]);
+					childElements.Add(elementsByName[childLookup[childName].Prefix][childLookup[childName].LocalName]);
 				}
 
 				// Add the array to the element.
-				elementsByName[name].Children = childElements.ToArray();
+				elementsByName[nodesByName[name][0].Prefix][nodesByName[name][0].LocalName].Children = childElements.ToArray();
 			}
 		}
 
@@ -282,9 +280,27 @@ namespace XMLToDataClass.Data
 
 		public ElementInfo[] GetAllNodes()
 		{
-			List<ElementInfo> nodeList = new List<ElementInfo>(Elements.Count);
-			nodeList.AddRange(Elements.Values);
+			List<ElementInfo> nodeList = new List<ElementInfo>();
+			foreach(string namespc in Elements.Keys)
+				nodeList.AddRange(Elements[namespc].Values);
 			return nodeList.ToArray();
+		}
+
+		public ElementInfo[] GetAllNamespaceNodes(string nameSpace)
+		{
+			if (!Elements.ContainsKey(nameSpace))
+				throw new ArgumentException($"The name space specified ({nameSpace}) was not found in the XML file.");
+
+			List<ElementInfo> nodeList = new List<ElementInfo>(Elements[nameSpace].Count);
+			nodeList.AddRange(Elements[nameSpace].Values);
+			return nodeList.ToArray();
+		}
+
+		public string[] GetAllNamespaces()
+		{
+			List<string> names = new List<string>(Elements.Count);
+			names.AddRange(Elements.Keys);
+			return names.ToArray();
 		}
 
 		private string GetXmlFileVersionProperty(List<PropertyInfo> props)
@@ -754,8 +770,11 @@ namespace XMLToDataClass.Data
 
 
 			// Save all the element configuration.
-			foreach (ElementInfo element in Elements.Values)
-				element.Save(doc, root);
+			foreach (string namespc in Elements.Keys)
+			{
+				foreach (ElementInfo element in Elements[namespc].Values)
+					element.Save(doc, root);
+			}
 
 			doc.Save(filePath);
 		}
@@ -802,8 +821,11 @@ namespace XMLToDataClass.Data
 						solutionName = attrib.Value;
 
 					// Load all the element configurations.
-					foreach (ElementInfo element in Elements.Values)
-						element.Load(node);
+					foreach (string namespc in Elements.Keys)
+					{
+						foreach (ElementInfo element in Elements[namespc].Values)
+							element.Load(node);
+					}
 					break;
 				}
 			}

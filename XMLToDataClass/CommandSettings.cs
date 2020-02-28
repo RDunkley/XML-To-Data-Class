@@ -17,7 +17,7 @@ using System.Security;
 
 namespace XMLToDataClass
 {
-	[Usage("Usage: XMLToDataClass.exe [OPTIONS] [-e <settingsfile.x2dsettings>] [-n <namespace>] [-p <projectname>] [-s <solutionname>] [-c <configfile>] -i <xmlfilepath> -o <outputfolder>")]
+	[Usage("Reads an XML file and generates C# data classes to give an in memory representation of the data. Also will add additional parsing constraints to validate the data as it is parsed into memory.", "XMLToDataClass.exe [OPTIONS] [-e <settingsfile.x2dsettings>] [-n <namespace>] [-p <projectname>] [-s <solutionname>] [-c <configfile>] -i <xmlfilepath> -o <outputfolder>")]
 	public class CommandSettings
 	{
 		[Argument('e', "Pulls in the application global settings from a previously saved settings file (x2dsettings).", Word ="setting")]
