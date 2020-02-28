@@ -125,7 +125,7 @@ namespace XMLToDataClass.Data
 				ElementInfo element = new ElementInfo(xmlNodesByName[key]);
 				if (!xmlElements.ContainsKey(element.NameSpace))
 					xmlElements.Add(element.NameSpace, new Dictionary<string, ElementInfo>());
-				xmlElements[element.NameSpace].Add(element.Name, element);
+				xmlElements[element.NameSpace].Add(key, element);
 			}
 			AddChildElements(xmlNodesByName, xmlElements, maintainHierarchy);
 			RootNode = GetRootNode(doc, xmlElements);
@@ -140,7 +140,7 @@ namespace XMLToDataClass.Data
 			{
 				if(child.NodeType == XmlNodeType.Element)
 				{
-					return xmlElements[child.Prefix][child.LocalName];
+					return xmlElements[child.Prefix][child.Name];
 				}
 			}
 
@@ -184,11 +184,11 @@ namespace XMLToDataClass.Data
 					string elementName = childName;
 					if (maintainHierarchy)
 						elementName = string.Format("{0}.{1}", name, childName);
-					childElements.Add(elementsByName[childLookup[childName].Prefix][childLookup[childName].LocalName]);
+					childElements.Add(elementsByName[childLookup[childName].Prefix][elementName]);
 				}
 
 				// Add the array to the element.
-				elementsByName[nodesByName[name][0].Prefix][nodesByName[name][0].LocalName].Children = childElements.ToArray();
+				elementsByName[nodesByName[name][0].Prefix][name].Children = childElements.ToArray();
 			}
 		}
 
