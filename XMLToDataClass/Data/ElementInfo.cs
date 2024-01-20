@@ -219,7 +219,7 @@ namespace XMLToDataClass.Data
 		/// <returns>Name of the property.</returns>
 		private string GenerateChildArrayNameProperty(string className)
 		{
-			return string.Format("{0}s", className);
+			return string.Format("Child{0}s", className);
 		}
 
 		public ClassInfo GenerateDataClass(bool preserveHierarchy)
@@ -287,11 +287,15 @@ namespace XMLToDataClass.Data
 			ConstructorInfo first = GenerateDataClassConstructor();
 			first.OverloadedSummary = string.Format("Instantiates a new <see cref=\"{0}\"/> object.", ClassName);
 			info.Constructors.Add(first);
+			if(Children.Length > 0)
+				info.Constructors.Add(GenerateEmptyDataClassConstructor());
 			info.Constructors.Add(GenerateDataClassXmlNodeConstructor());
 			info.Methods.Add(GenerateXmlNodeParsingMethod());
 
 			// Add additional methods.
 			info.Methods.AddRange(GenerateMethods(dataList.ToArray()));
+			info.Methods.AddRange(GenerateAddMethods());
+			info.Methods.AddRange(GenerateRemoveMethods());
 			info.Methods.Add(GenerateCreateElementMethod());
 
 			if(preserveHierarchy)
@@ -305,6 +309,83 @@ namespace XMLToDataClass.Data
 			}
 
 			return info;
+		}
+
+		private MethodInfo[] GenerateRemoveMethods()
+		{
+			var list = new List<MethodInfo>();
+			foreach (ElementInfo child in Children)
+			{
+				string propName = GenerateChildArrayNameProperty(child.ClassName);
+
+				MethodInfo method = new MethodInfo
+				(
+					"public",
+					"void",
+					$"Remove{child.ClassName}",
+					$"Removes a <see cref=\"{child.ClassName}\"/> from <see cref=\"{propName}\"/>."
+				);
+
+				method.Parameters.Add(new ParameterInfo
+				(
+					child.ClassName,
+					"item",
+					$"<see cref=\"{child.ClassName}\"/> to be removed.",
+					true
+				));
+
+				method.CodeLines.Add("if (item == null) return;");
+				method.CodeLines.Add(string.Empty);
+				method.CodeLines.Add($"var list = new List<{child.ClassName}>({propName});");
+				method.CodeLines.Add("list.Remove(item);");
+				method.CodeLines.Add($"{propName} = list.ToArray();");
+
+				list.Add(method);
+			}
+			return list.ToArray();
+		}
+
+		private MethodInfo[] GenerateAddMethods()
+		{
+			var list = new List<MethodInfo>();
+			foreach (ElementInfo child in Children)
+			{
+				string propName = GenerateChildArrayNameProperty(child.ClassName);
+
+				MethodInfo method = new MethodInfo
+				(
+					"public",
+					"void",
+					$"Add{child.ClassName}",
+					$"Adds a <see cref=\"{child.ClassName}\"/> to <see cref=\"{propName}\"/>."
+				);
+
+				method.Parameters.Add(new ParameterInfo
+				(
+					child.ClassName,
+					"item",
+					$"<see cref=\"{child.ClassName}\"/> to be added. If null, then no changes will occur.",
+					true
+				));
+
+				method.CodeLines.Add("if (item == null) return;");
+				method.CodeLines.Add(string.Empty);
+				method.CodeLines.Add("// Compute the maximum index used on any child items.");
+				method.CodeLines.Add("int maxIndex = 0;");
+				method.CodeLines.Add($"foreach({child.ClassName} child in {propName})");
+				method.CodeLines.Add("{");
+				method.CodeLines.Add("	if (child.Ordinal >= maxIndex)");
+				method.CodeLines.Add("		maxIndex = child.Ordinal + 1; // Set to first index after this index.");
+				method.CodeLines.Add("}");
+				method.CodeLines.Add(string.Empty);
+				method.CodeLines.Add($"var list = new List<{child.ClassName}>({propName});");
+				method.CodeLines.Add("list.Add(item);");
+				method.CodeLines.Add("item.Ordinal = maxIndex;");
+				method.CodeLines.Add($"{propName} = list.ToArray();");
+
+				list.Add(method);
+			}
+			return list.ToArray();
 		}
 
 		private MethodInfo GenerateCreateElementMethod()
@@ -526,9 +607,90 @@ namespace XMLToDataClass.Data
 		}
 
 		/// <summary>
+		///   Generates a class constructor with empty child elements.
+		/// </summary>
+		/// <returns><see cref="ConstructorInfo"/> object representing the constructor.</returns>
+		private ConstructorInfo GenerateEmptyDataClassConstructor()
+		{
+			// Determine if method is internal or public.
+			string accessibility = "public";
+			foreach (ElementInfo eInfo in Children)
+			{
+				if (eInfo.Accessibility != Access.Public)
+				{
+					accessibility = "internal";
+					break;
+				}
+			}
+
+			string summary = string.Format("Instantiates a new <see cref=\"{0}\"/> empty object.", ClassName);
+			ConstructorInfo cInfo = new ConstructorInfo(accessibility, ClassName, summary);
+
+			// Add parameters for each property.
+			if (Text.Include)
+			{
+				string name = StringUtility.GetLowerCamelCase(Text.Info.PropertyName, true);
+				bool? canBeNull = DetermineDataConstructorNullCheck(Text.Info);
+				bool? canBeEmpty = DetermineDataContructorEmptyCheck(Text.Info);
+				cInfo.Parameters.Add(new ParameterInfo
+				(
+					Text.Info.GetDataTypeString(),
+					name,
+					"Child Text element value.",
+					canBeNull,
+					canBeEmpty
+				));
+				cInfo.CodeLines.Add(string.Format("{0} = {1};", Text.Info.PropertyName, name));
+			}
+
+			if (CDATA.Include)
+			{
+				string name = StringUtility.GetLowerCamelCase(CDATA.Info.PropertyName, true);
+				bool? canBeNull = DetermineDataConstructorNullCheck(CDATA.Info);
+				bool? canBeEmpty = DetermineDataContructorEmptyCheck(CDATA.Info);
+				cInfo.Parameters.Add(new ParameterInfo
+				(
+					CDATA.Info.GetDataTypeString(),
+					name,
+					"Child CDATA element value.",
+					canBeNull,
+					canBeEmpty
+				));
+				cInfo.CodeLines.Add(string.Format("{0} = {1};", CDATA.Info.PropertyName, name));
+			}
+
+			// Add parameters for each attribute.
+			foreach (AttributeInfo attrib in Attributes)
+			{
+				string name = StringUtility.GetLowerCamelCase(attrib.Info.PropertyName, true);
+				bool? canBeNull = DetermineDataConstructorNullCheck(attrib.Info);
+				bool? canBeEmpty = DetermineDataContructorEmptyCheck(attrib.Info);
+				cInfo.Parameters.Add(new ParameterInfo
+				(
+					attrib.Info.GetDataTypeString(),
+					name,
+					string.Format("\'{0}\' {1} attribute contained in the XML element.", attrib.Info.Name, attrib.Info.SelectedDataTypeObject.DisplayName),
+					canBeNull,
+					canBeEmpty
+				));
+				cInfo.CodeLines.Add(string.Format("{0} = {1};", attrib.Info.PropertyName, name));
+			}
+
+			// Add code for empty elements.
+			foreach (ElementInfo eInfo in Children)
+			{
+				string propertyName = GenerateChildArrayNameProperty(eInfo.ClassName);
+				cInfo.CodeLines.Add($"{propertyName} = new {eInfo.ClassName}[0];");
+			}
+
+			cInfo.CodeLines.Add("Ordinal = -1;");
+			return cInfo;
+		}
+
+		/// <summary>
 		///   Generates a class constructor from the element information.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns><see cref="ConstructorInfo"/> object representing the constructor.</returns>
 		private ConstructorInfo GenerateDataClassConstructor()
 		{
 			// Determine if method is internal or public.
@@ -737,7 +899,7 @@ namespace XMLToDataClass.Data
 			info.Exceptions.Add(new ExceptionInfo("ArgumentException", string.Format("<paramref name=\"node\"/> does not correspond to a {0} node.", Name)));
 			info.Exceptions.Add(new ExceptionInfo("InvalidDataException", "An error occurred while reading the data into the node, or one of it's child nodes."));
 
-			info.CodeLines.Add(string.Format("if(string.Compare(node.Name, \"{0}\", false) != 0)", Name));
+			info.CodeLines.Add(string.Format("if(string.Compare(node.Name, \"{0}\", false) != 0)", FullName));
 			info.CodeLines.Add(string.Format("	throw new ArgumentException(\"node does not correspond to a {0} node.\");", Name));
 
 			string textName = StringUtility.GetLowerCamelCase(Text.Info.PropertyName, true);

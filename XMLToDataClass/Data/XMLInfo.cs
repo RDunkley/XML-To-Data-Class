@@ -605,8 +605,8 @@ namespace XMLToDataClass.Data
 			method.CodeLines.Add("XmlElement root = doc.DocumentElement;");
 			method.CodeLines.Add("if(root.NodeType != XmlNodeType.Element)");
 			method.CodeLines.Add("	throw new InvalidDataException(\"The root node is not an element node.\");");
-			method.CodeLines.Add(string.Format("if(string.Compare(root.Name, \"{0}\", false) != 0)", RootNode.Name));
-			method.CodeLines.Add(string.Format("	throw new InvalidDataException(string.Format(\"The root element name is not the one expected (Actual: '{{0}}', Expected: '{0}').\", root.Name));", RootNode.Name));
+			method.CodeLines.Add(string.Format("if(string.Compare(root.Name, \"{0}\", false) != 0)", RootNode.FullName));
+			method.CodeLines.Add(string.Format("	throw new InvalidDataException(string.Format(\"The root element name is not the one expected (Actual: '{{0}}', Expected: '{0}').\", root.Name));", RootNode.FullName));
 			method.CodeLines.Add(string.Empty);
 			method.CodeLines.Add("ParseXmlNode(root, 0);");
 			return method;

@@ -91,8 +91,8 @@ namespace XMLToDataClass.Data.Types
 		/// <exception cref="InvalidOperationException">The minimum number of characters is set larger than the maximum number of characters.</exception>
 		public override EnumInfo[] GenerateAdditionalEnums()
 		{
-			if (MaximumLength > 0 && MinimumLength >= MaximumLength)
-				throw new InvalidOperationException("An attempt was made to generate a string attribute parsing method, but the minimum number of characters in the string is set to more than or equal to the maximum number of characters.");
+			if (MaximumLength > 0 && MinimumLength > MaximumLength)
+				throw new InvalidOperationException("An attempt was made to generate a string attribute parsing method, but the minimum number of characters in the string is set to more than the maximum number of characters.");
 			return new EnumInfo[0];
 		}
 
@@ -104,8 +104,8 @@ namespace XMLToDataClass.Data.Types
 		/// <exception cref="InvalidOperationException">The minimum number of characters is set larger than the maximum number of characters.</exception>
 		public override PropertyInfo[] GenerateAdditionalProperties()
 		{
-			if (MaximumLength > 0 && MinimumLength >= MaximumLength)
-				throw new InvalidOperationException("An attempt was made to generate a string attribute parsing method, but the minimum number of characters in the string is set to more than or equal to the maximum number of characters.");
+			if (MaximumLength > 0 && MinimumLength > MaximumLength)
+				throw new InvalidOperationException("An attempt was made to generate a string attribute parsing method, but the minimum number of characters in the string is set to more than the maximum number of characters.");
 			return new PropertyInfo[0];
 		}
 
@@ -116,8 +116,8 @@ namespace XMLToDataClass.Data.Types
 		/// <exception cref="InvalidOperationException">The minimum number of characters is set larger than the maximum number of characters.</exception>
 		public override string[] GenerateExportMethodCode()
 		{
-			if (MaximumLength > 0 && MinimumLength >= MaximumLength)
-				throw new InvalidOperationException("An attempt was made to generate a string attribute parsing method, but the minimum number of characters in the string is set to more than or equal to the maximum number of characters.");
+			if (MaximumLength > 0 && MinimumLength > MaximumLength)
+				throw new InvalidOperationException("An attempt was made to generate a string attribute parsing method, but the minimum number of characters in the string is set to more than the maximum number of characters.");
 
 			List<string> codeLines = new List<string>();
 			codeLines.Add(string.Format("return {0};", mInfo.PropertyName));
@@ -131,8 +131,8 @@ namespace XMLToDataClass.Data.Types
 		/// <exception cref="InvalidOperationException">The minimum number of characters is set larger than the maximum number of characters.</exception>
 		public override string[] GenerateImportMethodCode()
 		{
-			if(MaximumLength > 0 && MinimumLength >= MaximumLength)
-				throw new InvalidOperationException("An attempt was made to generate a string attribute parsing method, but the minimum number of characters in the string is set to more than or equal to the maximum number of characters.");
+			if(MaximumLength > 0 && MinimumLength > MaximumLength)
+				throw new InvalidOperationException("An attempt was made to generate a string attribute parsing method, but the minimum number of characters in the string is set to more than the maximum number of characters.");
 
 			List<string> codeLines = new List<string>();
 			codeLines.Add("if(value == null)");
